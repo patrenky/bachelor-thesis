@@ -14,5 +14,9 @@ export default StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   }
 });
