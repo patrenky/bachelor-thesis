@@ -40,3 +40,11 @@
         int R = (color >> 16) & 0xff;
         int G = (color >>  8) & 0xff;
         int B = (color      ) & 0xff;
+
+
+AndroidManifest large android memory
+https://stackoverflow.com/questions/32244851/androidjava-lang-outofmemoryerror-failed-to-allocate-a-23970828-byte-allocatio
+https://developer.android.com/studio/intro/studio-config.html
+
+ * luminance: https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
+ * histogram: http://hdr-photographer.com/2014/03/tutorial-understanding-histogram/
