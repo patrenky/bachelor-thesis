@@ -18,6 +18,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.IOException;
 import java.io.InputStream;
 
+import xmicha65.bp_app.Controller.Debevec;
 import xmicha65.bp_app.Model.Image;
 
 public class Main extends AppCompatActivity {
@@ -36,7 +37,6 @@ public class Main extends AppCompatActivity {
 
     /**
      * Init OpenCV before using
-     * https://stackoverflow.com/questions/35090838/no-implementation-found-for-long-org-opencv-core-mat-n-mat-error-using-opencv
      */
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -60,11 +60,14 @@ public class Main extends AppCompatActivity {
             // OpenCV loaded
             // new HDRCV(this.images, this.expTimes);
 
-            // Debevec debevec = new Debevec(this.images);
-            // debevec.solveG();
+            Debevec debevec = new Debevec(this.images);
+            debevec.solveG();
 
-            displayHistogram(this.index);
-            displayImageWithPoints(this.index);
+            displayDebevec(debevec.getG());
+            // displayDebevec(debevec.getLnE());
+
+            // displayHistogram(this.index);
+            // displayImageWithPoints(this.index);
         }
     }
 
@@ -100,8 +103,9 @@ public class Main extends AppCompatActivity {
         int[] fiftyShades = this.images[idx].getFiftyShades();
         int magic = 3;
         int width = 256 * magic;
-        Mat his = new Mat(500, width, CvType.CV_8UC3);
-        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, 500), new Scalar(255, 255, 255), width);
+        int height = 500;
+        Mat his = new Mat(height, width, CvType.CV_8UC3);
+        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(255, 255, 255), width);
 
         for (int i = 0; i < 256; i++) {
             Point pt1 = new Point(width - i * magic - magic, 0);
@@ -142,5 +146,27 @@ public class Main extends AppCompatActivity {
 
         ImageView iv = (ImageView) findViewById(R.id.imageView0);
         iv.setImageBitmap(bm);
+    }
+
+    /**
+     * Display debevec curve in graph
+     */
+    public void displayDebevec(double[] array) {
+        int height = 200;
+        int width = array.length;
+        Mat his = new Mat(height, width, CvType.CV_8UC3);
+        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(200, 200, 200), width);
+
+        for (int i = 0; i < width; i++) {
+            Point pt1 = new Point(width - i, array[i] * 100 + height / 2);
+            Imgproc.circle(his, pt1, 1, new Scalar(0, 0, 0), 1);
+        }
+
+        Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(his, bm);
+
+        ImageView iv = (ImageView) findViewById(R.id.imageView1);
+        iv.setImageBitmap(bm);
+        iv.setRotation(180);
     }
 }

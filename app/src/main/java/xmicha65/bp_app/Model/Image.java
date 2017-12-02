@@ -66,6 +66,7 @@ public class Image {
         }
     }
 
+    // TODO ratat histogram a 50 shades iba pre middle obrazok
     private void updateHistogram() {
         this.histogram = new int[256];
         if (this.luminance.length > 0) {

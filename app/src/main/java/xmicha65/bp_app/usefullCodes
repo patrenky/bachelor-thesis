@@ -48,3 +48,6 @@ https://developer.android.com/studio/intro/studio-config.html
 
  * luminance: https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
  * histogram: http://hdr-photographer.com/2014/03/tutorial-understanding-histogram/
+
+ init openCV
+ https://stackoverflow.com/questions/35090838/no-implementation-found-for-long-org-opencv-core-mat-n-mat-error-using-opencv
