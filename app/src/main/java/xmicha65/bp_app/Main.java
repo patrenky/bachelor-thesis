@@ -18,7 +18,8 @@ import org.opencv.imgproc.Imgproc;
 import java.io.IOException;
 import java.io.InputStream;
 
-import xmicha65.bp_app.Controller.Debevec;
+import xmicha65.bp_app.Controller.HDR;
+import xmicha65.bp_app.Controller.SolveG;
 import xmicha65.bp_app.Model.Image;
 
 public class Main extends AppCompatActivity {
@@ -32,7 +33,7 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initImages();
-        displayImage(this.index);
+        displayImage(this.images[this.index].getRgbImg());
     }
 
     /**
@@ -58,14 +59,19 @@ public class Main extends AppCompatActivity {
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
             // OpenCV loaded
-            // new HDRCV(this.images, this.expTimes);
+            /** HDRCV */
+//            HDRCV hdrcv = new HDRCV(this.images, this.expTimes);
+//            displayCurve(hdrcv.getResponse(2));
+//            displayImage(hdrcv.getLdrImage());
 
-            Debevec debevec = new Debevec(this.images);
-            debevec.solveG();
+            /** SolveG */
+            HDR algorithm = new HDR(this.images);
 
-            displayDebevec(debevec.getG());
-            // displayDebevec(debevec.getLnE());
+//            displayCurves(algorithm.getRedG(), algorithm.getGreenG(), algorithm.getBlueG());
+//            displayCurve(algorithm.getRedG());
+//            displayCurve(algorithm.getLnE());
 
+            /** 50 shades */
             // displayHistogram(this.index);
             // displayImageWithPoints(this.index);
         }
@@ -89,8 +95,7 @@ public class Main extends AppCompatActivity {
     /**
      * Display bitmap image
      */
-    public void displayImage(int idx) {
-        Bitmap img = this.images[idx].getGrayscaleImg();
+    public void displayImage(Bitmap img) {
         ImageView iv = (ImageView) findViewById(R.id.imageView0);
         iv.setImageBitmap(img);
     }
@@ -151,15 +156,47 @@ public class Main extends AppCompatActivity {
     /**
      * Display debevec curve in graph
      */
-    public void displayDebevec(double[] array) {
-        int height = 200;
+    public void displayCurve(double[] array) {
+        int height = 400;
         int width = array.length;
         Mat his = new Mat(height, width, CvType.CV_8UC3);
         Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(200, 200, 200), width);
 
         for (int i = 0; i < width; i++) {
-            Point pt1 = new Point(width - i, array[i] * 100 + height / 2);
+            Point pt1 = new Point(width - i, array[i] * 100 + height / 2); // * 100 + height / 2
             Imgproc.circle(his, pt1, 1, new Scalar(0, 0, 0), 1);
+        }
+
+        Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(his, bm);
+
+        ImageView iv = (ImageView) findViewById(R.id.imageView1);
+        iv.setImageBitmap(bm);
+        iv.setRotation(180);
+    }
+
+    /**
+     * Display RGB curves in graph
+     */
+    public void displayCurves(double[] red, double[] green, double[] blue) {
+        int height = 400;
+        int width = red.length;
+        Mat his = new Mat(height, width, CvType.CV_8UC3);
+        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(200, 200, 200), width);
+
+        for (int i = 0; i < width; i++) {
+            Point pt1 = new Point(width - i, red[i] * 100 + height / 2);
+            Imgproc.circle(his, pt1, 1, new Scalar(255, 0, 0), 1);
+        }
+
+        for (int i = 0; i < width; i++) {
+            Point pt1 = new Point(width - i, green[i] * 100 + height / 2);
+            Imgproc.circle(his, pt1, 1, new Scalar(0, 255, 0), 1);
+        }
+
+        for (int i = 0; i < width; i++) {
+            Point pt1 = new Point(width - i, blue[i] * 100 + height / 2);
+            Imgproc.circle(his, pt1, 1, new Scalar(0, 0, 255), 1);
         }
 
         Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);

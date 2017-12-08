@@ -5,7 +5,8 @@ import android.graphics.Bitmap;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfDouble;
+import org.opencv.core.MatOfFloat;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.photo.Photo;
 
 import java.util.ArrayList;
@@ -18,12 +19,18 @@ import xmicha65.bp_app.Model.Image;
  * HDR with only OpenCV methods
  */
 public class HDRCV {
-    Image[] inImages;
-    double[] expTimes;
+    private Image[] inImages;
+    private float[] expTimes;
+
+    private Mat response = new Mat();
+    private Mat ldrImage = new Mat();
 
     public HDRCV(Image[] images, double[] times) {
         this.inImages = images;
-        this.expTimes = times;
+        this.expTimes = new float[times.length];
+        for (int i = 0; i < times.length; i++) {
+            this.expTimes[i] = (float) times[i];
+        }
 
         fullAlg();
     }
@@ -34,29 +41,51 @@ public class HDRCV {
         List<Mat> cvimages = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             Bitmap bmp32 = inImages[i].getRgbImg().copy(Bitmap.Config.ARGB_8888, true);
-            Mat tmpImg = new Mat(bmp32.getHeight(), bmp32.getWidth(), CvType.CV_8UC3);
-            Utils.bitmapToMat(bmp32, tmpImg);
-            cvimages.add(tmpImg);
+            Mat tmpBGRA = new Mat(bmp32.getHeight(), bmp32.getWidth(), CvType.CV_8UC4);
+            Mat tmpBGR = new Mat();
+            Utils.bitmapToMat(bmp32, tmpBGRA);
+            Imgproc.cvtColor(tmpBGRA, tmpBGR, Imgproc.COLOR_BGRA2BGR);
+            cvimages.add(tmpBGR);
         }
 
-        Mat expTimes = new MatOfDouble(this.expTimes);
+        Mat mExpTimes = new MatOfFloat(this.expTimes);
         Mat hdrImage = new Mat();
-        Mat ldrImage = new Mat();
 
-        Photo.createMergeDebevec().process(cvimages, hdrImage, expTimes);
-        Photo.createTonemapReinhard().process(hdrImage, ldrImage);
+        try {
+            Photo.createCalibrateDebevec().process(cvimages, this.response, mExpTimes);
+            Photo.createMergeDebevec().process(cvimages, hdrImage, mExpTimes, this.response);
+            Photo.createTonemapReinhard().process(hdrImage, this.ldrImage);
+//            Photo.createTonemapDurand().process(hdrImage, this.ldrImage);
+        } catch (Exception e) {
+            System.out.println("chyba opencv " + e.getMessage());
+        }
 
         System.out.println("img: " + Arrays.toString(cvimages.get(0).get(0, 10)));
+        System.out.println("res: " + Arrays.toString(this.response.get(10, 0)));
         System.out.println("hdr: " + Arrays.toString(hdrImage.get(0, 10)));
-        System.out.println("ldr: " + Arrays.toString(ldrImage.get(0, 10)));
-
-//        try {
-//            Bitmap bm = Bitmap.createBitmap(hdrImage.cols(), hdrImage.rows(), Bitmap.Config.ARGB_8888);
-//            Utils.matToBitmap(ldrImage, bm);
-//        } catch (Exception e) {
-//            System.out.println("chyba mat to bitmap");
-//        }
+        System.out.println("ldr: " + Arrays.toString(this.ldrImage.get(0, 10)));
 
         System.out.println("------------------------------ END ------------------------------");
+    }
+
+    public double[] getResponse(int color) {
+        double[] res = new double[this.response.rows()];
+        for (int i = 0; i < this.response.rows(); i++) {
+            res[i] = this.response.get(i, 0)[color];
+        }
+        return res;
+    }
+
+    public Bitmap getLdrImage() {
+        try {
+            Mat tmpRGBA = new Mat();
+            this.ldrImage.convertTo(tmpRGBA, CvType.CV_8UC4, 255);
+            Bitmap bm = Bitmap.createBitmap(tmpRGBA.cols(), tmpRGBA.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(tmpRGBA, bm);
+            return bm;
+        } catch (Exception e) {
+            System.out.println("chyba mat to bitmap " + e.getMessage());
+        }
+        return null;
     }
 }

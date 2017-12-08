@@ -120,6 +120,10 @@ public class Image {
         }
     }
 
+    public int getPixel(int idx) {
+        return this.pixels[idx];
+    }
+
     public Bitmap getRgbImg() {
         return this.rgbImg;
     }

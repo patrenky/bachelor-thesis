@@ -4,52 +4,33 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-import xmicha65.bp_app.Model.Image;
-
 /**
  * Debevec & Malik
  */
-public class Debevec {
-    private Image[] images;         // input images array
-
+public class SolveG {
     private int[][] Z;              // Z_ij pixel values of pixel i in image j
     private int N;                  // num of pixels to process (Z_i - 50 shades)
     private int P;                  // num of images (Z_j)
 
-    private double lambda = 50;     // smoothness scaling factor
-    private double lnT[];           // B(j)
+    private double lambda;          // smoothness scaling factor
+    private double[] w;             // weighting function
+    private double lnT[];           // log delta t for image j (B(j))
 
     private double[] g;             // log response curve
     private double[] lnE;           // log irradiance map
 
-    public Debevec(Image[] images) {
-        this.images = images;
-        this.P = images.length;
-        initZij(this.images);
-        initLnT(this.images);
+    public SolveG(int[][] Zij, double[] lnT, double lambda, double[] weights) {
+        this.Z = Zij;
+        this.lnT = lnT;
+        this.lambda = lambda;
+        this.w = weights;
+        this.P = Z[0].length;
+        this.N = Z.length;
+
+        solve();
     }
 
-    private void initZij(Image[] images) {
-        int middleOne = Math.round(images.length / 2);
-        int[] fiftyPositions = images[middleOne].getfiftyPositions();
-        this.N = fiftyPositions.length;
-        this.Z = new int[this.N][this.P];
-
-        for (int i = 0; i < this.N; i++) {
-            for (int j = 0; j < this.P; j++) {
-                this.Z[i][j] = images[j].getValue(fiftyPositions[i]);
-            }
-        }
-    }
-
-    private void initLnT(Image[] images) {
-        lnT = new double[this.P];
-        for (int i = 0; i < this.P; i++) {
-            lnT[i] = Math.log(images[i].getExposure());
-        }
-    }
-
-    public void solveG() {
+    public void solve() {
         try {
             int n = 256;
             int mrows = this.N * this.P + n + 1;
@@ -63,11 +44,11 @@ public class Debevec {
             int k = 0;
             for (int i = 0; i < this.N; i++) {
                 for (int j = 0; j < this.P; j++) {
-                    double wij = w(this.Z[i][j] + 1);
+                    double wij = this.w[this.Z[i][j]]; // Z_ij + 1
 
                     A[k][this.Z[i][j] + 1] = wij;
                     A[k][n + i] = -wij;
-                    b[k] = wij * lnT[j];
+                    b[k] = wij * this.lnT[j];
 
                     k++;
                 }
@@ -78,10 +59,10 @@ public class Debevec {
             k++;
 
             // smoothness equations
-            for (int i = 0; i < n - 1; i++) {
-                A[k][i] = this.lambda * w(i + 2);
-                A[k][i + 1] = -2 * this.lambda * w(i + 2);
-                A[k][i + 2] = this.lambda * w(i + 2);
+            for (int i = 0; i < n - 2; i++) { // n - 1
+                A[k][i] = this.lambda * this.w[i + 1]; // + 2
+                A[k][i + 1] = -2 * this.lambda * this.w[i + 1]; // + 2
+                A[k][i + 2] = this.lambda * this.w[i + 1]; // + 2
                 k++;
             }
 
@@ -103,6 +84,13 @@ public class Debevec {
             Mat solved = new Mat(mrows, 1, CvType.CV_64F);
             Core.solve(Amat, bmat, solved, Core.DECOMP_SVD);
 
+//            System.out.println("declared for solved: " + mrows + " (N * P + n + 1) ");
+//            System.out.println("where N=" + this.N + " P=" + this.P);
+//            System.out.println("solved have: " + solved.rows());
+//            System.out.println("counted to lnE: " + (solved.rows() - n));
+//            System.out.println("counted to g: " + (n));
+//            System.out.println("g + lnE: " + (n + solved.rows() - n));
+
             // init g
             this.g = new double[n];
             for (int i = 0; i < n; i++) {
@@ -122,17 +110,9 @@ public class Debevec {
     }
 
     /**
-     * weighting function w(Z_ij)
-     */
-    private double w(double z) {
-        double w0 = z <= 127 ? z : 255 - z;
-        // double w1 =  Math.max((z <= 127) ? z + 1 : 256 - z, 0.0001);
-        return w0;
-    }
-
-    /**
      * GETTERS
      */
+
     public double[] getG() {
         return this.g;
     }
