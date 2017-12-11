@@ -23,8 +23,9 @@ import xmicha65.bp_app.Controller.SolveG;
 import xmicha65.bp_app.Model.Image;
 
 public class Main extends AppCompatActivity {
-    Image[] images = new Image[4];
-    double[] expTimes = {0.125, 0.25, 0.5, 1};
+    Image[] images;
+//    double[] expTimes = {0.125, 0.25, 0.5, 1}; // stLuis
+    double[] expTimes = {0.001, 0.0166, 0.25, 8}; // lampicka
     int index = 2;
 
     @Override
@@ -65,7 +66,7 @@ public class Main extends AppCompatActivity {
 //            displayImage(hdrcv.getLdrImage());
 
             /** SolveG */
-            HDR algorithm = new HDR(this.images);
+//            HDR algorithm = new HDR(this.images);
 
 //            displayCurves(algorithm.getRedG(), algorithm.getGreenG(), algorithm.getBlueG());
 //            displayCurve(algorithm.getRedG());
@@ -81,10 +82,11 @@ public class Main extends AppCompatActivity {
      * TMP init 4 images from assets
      */
     public void initImages() {
+        this.images = new Image[4];
         for (int i = 0; i < 4; i++) {
             try {
                 // nacitanie obrazku z assets do inp streamu
-                InputStream ins = getAssets().open(String.format("stlouis/stlouis%d-sm.jpg", i));
+                InputStream ins = getAssets().open(String.format("room/lampicka%d.jpg", i));
                 this.images[i] = new Image(ins, this.expTimes[i]);
             } catch (IOException e) {
                 System.out.println("chyba nacitania obrazku z assets");
@@ -100,61 +102,61 @@ public class Main extends AppCompatActivity {
         iv.setImageBitmap(img);
     }
 
+//    /**
+//     * Display histogram
+//     */
+//    public void displayHistogram(int idx) {
+//        int[] histogram = this.images[idx].getHistogram();
+//        int[] fiftyShades = this.images[idx].getFiftyShades();
+//        int magic = 3;
+//        int width = 256 * magic;
+//        int height = 500;
+//        Mat his = new Mat(height, width, CvType.CV_8UC3);
+//        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(255, 255, 255), width);
+//
+//        for (int i = 0; i < 256; i++) {
+//            Point pt1 = new Point(width - i * magic - magic, 0);
+//            Point pt2 = new Point(width - i * magic - magic, histogram[i] / 30);
+//            Imgproc.line(his, pt1, pt2, new Scalar(18, 131, 223), magic);
+//            if (this.images[idx].findIndex(fiftyShades, i) > -1) {
+//                Imgproc.circle(his, pt1, magic, new Scalar(0, 0, 0), magic);
+//            }
+//        }
+//
+//        Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);
+//        Utils.matToBitmap(his, bm);
+//
+//        ImageView iv = (ImageView) findViewById(R.id.imageView1);
+//        iv.setImageBitmap(bm);
+//        iv.setRotation(180);
+//    }
+
+//    /**
+//     * Display bitmap image with selected values
+//     */
+//    public void displayImageWithPoints(int idx) {
+//        Bitmap bmp32 = this.images[idx].getGrayscaleImg().copy(Bitmap.Config.ARGB_8888, true);
+//        Mat matImg = new Mat(bmp32.getHeight(), bmp32.getWidth(), CvType.CV_8UC3);
+//        Utils.bitmapToMat(bmp32, matImg);
+//
+//        int[] fiftyPositions = this.images[idx].getfiftyPositions();
+//        int width = matImg.width();
+//
+//        for (int i = 0; i < fiftyPositions.length; i++) {
+//            int row = fiftyPositions[i] / width;
+//            int col = fiftyPositions[i] % width;
+//            Imgproc.circle(matImg, new Point(row, col), width / 50, new Scalar(255, 255, 255), width / 300);
+//        }
+//
+//        Bitmap bm = Bitmap.createBitmap(matImg.cols(), matImg.rows(), Bitmap.Config.ARGB_8888);
+//        Utils.matToBitmap(matImg, bm);
+//
+//        ImageView iv = (ImageView) findViewById(R.id.imageView0);
+//        iv.setImageBitmap(bm);
+//    }
+
     /**
-     * Display histogram
-     */
-    public void displayHistogram(int idx) {
-        int[] histogram = this.images[idx].getHistogram();
-        int[] fiftyShades = this.images[idx].getFiftyShades();
-        int magic = 3;
-        int width = 256 * magic;
-        int height = 500;
-        Mat his = new Mat(height, width, CvType.CV_8UC3);
-        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(255, 255, 255), width);
-
-        for (int i = 0; i < 256; i++) {
-            Point pt1 = new Point(width - i * magic - magic, 0);
-            Point pt2 = new Point(width - i * magic - magic, histogram[i] / 30);
-            Imgproc.line(his, pt1, pt2, new Scalar(18, 131, 223), magic);
-            if (this.images[idx].findIndex(fiftyShades, i) > -1) {
-                Imgproc.circle(his, pt1, magic, new Scalar(0, 0, 0), magic);
-            }
-        }
-
-        Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(his, bm);
-
-        ImageView iv = (ImageView) findViewById(R.id.imageView1);
-        iv.setImageBitmap(bm);
-        iv.setRotation(180);
-    }
-
-    /**
-     * Display bitmap image with selected values
-     */
-    public void displayImageWithPoints(int idx) {
-        Bitmap bmp32 = this.images[idx].getGrayscaleImg().copy(Bitmap.Config.ARGB_8888, true);
-        Mat matImg = new Mat(bmp32.getHeight(), bmp32.getWidth(), CvType.CV_8UC3);
-        Utils.bitmapToMat(bmp32, matImg);
-
-        int[] fiftyPositions = this.images[idx].getfiftyPositions();
-        int width = matImg.width();
-
-        for (int i = 0; i < fiftyPositions.length; i++) {
-            int row = fiftyPositions[i] / width;
-            int col = fiftyPositions[i] % width;
-            Imgproc.circle(matImg, new Point(row, col), width / 50, new Scalar(255, 255, 255), width / 300);
-        }
-
-        Bitmap bm = Bitmap.createBitmap(matImg.cols(), matImg.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(matImg, bm);
-
-        ImageView iv = (ImageView) findViewById(R.id.imageView0);
-        iv.setImageBitmap(bm);
-    }
-
-    /**
-     * Display debevec curve in graph
+     * Display response curve in graph
      */
     public void displayCurve(double[] array) {
         int height = 400;
@@ -176,7 +178,7 @@ public class Main extends AppCompatActivity {
     }
 
     /**
-     * Display RGB curves in graph
+     * Display RGB response curves in graph
      */
     public void displayCurves(double[] red, double[] green, double[] blue) {
         int height = 400;

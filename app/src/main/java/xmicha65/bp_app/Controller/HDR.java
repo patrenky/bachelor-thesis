@@ -39,10 +39,7 @@ public class HDR {
         this.solveBlue = new SolveG(ZijBlue, this.lnT, this.lambda, this.weights);
 
         // compute hdr radiance map
-        new Merge(ZijRed,
-                ZijGreen,
-                ZijBlue,
-                this.solveRed.getG(),
+        new Merge(this.solveRed.getG(),
                 this.solveGreen.getG(),
                 this.solveBlue.getG(),
                 this.weights,
@@ -82,9 +79,11 @@ public class HDR {
     public double[] getRedG() {
         return this.solveRed.getG();
     }
+
     public double[] getGreenG() {
         return this.solveGreen.getG();
     }
+
     public double[] getBlueG() {
         return this.solveBlue.getG();
     }

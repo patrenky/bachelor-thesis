@@ -6,16 +6,12 @@ import xmicha65.bp_app.Model.Image;
  *
  */
 public class Merge {
-    private int[][] ZijRed;
-    private int[][] ZijGreen;
-    private int[][] ZijBlue;
     private double[] gRed;
     private double[] gGreen;
     private double[] gBlue;
     private double[] w;
     private double[] lnT;
     private int numExposures;
-    private int numValues;
     private int numPixels;
     private Image[] images;
 
@@ -24,10 +20,7 @@ public class Merge {
     private double[] lnEGreen;
     private double[] lnEBlue;
 
-    public Merge(int[][] ZijRed,
-                 int[][] ZijGreen,
-                 int[][] ZijBlue,
-                 double[] gRed,
+    public Merge(double[] gRed,
                  double[] gGreen,
                  double[] gBlue,
                  double[] weights,
@@ -35,10 +28,6 @@ public class Merge {
                  int exposures,
                  int pixels,
                  Image[] images) {
-        this.ZijRed = ZijRed;
-        this.ZijGreen = ZijGreen;
-        this.ZijBlue = ZijBlue;
-
         this.gRed = gRed;
         this.gGreen = gGreen;
         this.gBlue = gBlue;
@@ -46,14 +35,8 @@ public class Merge {
         this.w = weights;
         this.lnT = lnT;
         this.numExposures = exposures;
-        this.numValues = ZijRed.length;
         this.numPixels = pixels;
         this.images = images;
-
-        this.lnE = new double[numValues];
-        this.lnERed = new double[numValues];
-        this.lnEGreen = new double[numValues];
-        this.lnEBlue = new double[numValues];
 
         computeRed();
         computeGreen();
@@ -62,32 +45,46 @@ public class Merge {
 
 
     private void computeRed() {
-        this.lnERed = debevecLnE(this.ZijRed, this.gRed);
+        this.lnERed = new double[this.numPixels];
+        this.lnERed = debevecLnE(this.gRed, 0);
     }
 
     private void computeGreen() {
-        this.lnEGreen = debevecLnE(this.ZijGreen, this.gGreen);
+        this.lnEGreen = new double[this.numPixels];
+        this.lnEGreen = debevecLnE(this.gGreen, 1);
     }
 
     private void computeBlue() {
-        this.lnEBlue = debevecLnE(this.ZijBlue, this.gBlue);
+        this.lnEBlue = new double[this.numPixels];
+        this.lnEBlue = debevecLnE(this.gBlue, 2);
     }
 
-    /**
-     * Debevec's constructing HDR radiance map
-     */
-    private double[] debevecLnE(int[][] Z, double[] g) {
-        double[] lnE = new double[numPixels];
+    private double[] debevecLnE(double[] g, int color) {
+        double[] lnE = new double[this.numPixels];
         double numerator;
         double denominator;
 
         try {
-            for (int i = 0; i < this.numValues; i++) {
+            for (int i = 0; i < this.numPixels; i++) {
                 numerator = 0;
                 denominator = 0;
                 for (int j = 0; j < this.numExposures; j++) {
-                    numerator += this.w[Z[i][j]] * (g[Z[i][j]] - this.lnT[j]);
-                    denominator += this.w[Z[i][j]];
+                    int value = 0;
+                    switch (color) {
+                        case 0:
+                            value = images[j].getPixelRed(i);
+                            break;
+                        case 1:
+                            value = images[j].getPixelGreen(i);
+                            break;
+                        case 2:
+                            value = images[j].getPixelBlue(i);
+                            break;
+                        default:
+                            break;
+                    }
+                    numerator += this.w[value] * (g[value] - this.lnT[j]);
+                    denominator += this.w[value];
                 }
                 lnE[i] = numerator / denominator;
             }
@@ -97,8 +94,4 @@ public class Merge {
 
         return lnE;
     }
-
-//    private void createLnE() {
-//
-//    }
 }

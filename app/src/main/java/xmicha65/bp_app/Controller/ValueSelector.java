@@ -20,8 +20,8 @@ public class ValueSelector {
         this.numExposures = images.length;
 
         int middleOne = Math.round(images.length / 2);
-        this.fiftyPositions = images[middleOne].getfiftyPositions(); // best idx 3
-        this.numValues = this.fiftyPositions.length;
+//        this.fiftyPositions = images[middleOne].getfiftyPositions(); // best idx 3
+//        this.numValues = this.fiftyPositions.length;
 
         initValues();
     }
@@ -40,7 +40,6 @@ public class ValueSelector {
             }
         }
     }
-
 
 
     public int[][] getRed() {
