@@ -6,13 +6,13 @@ import xmicha65.bp_app.Model.Image;
  * HDR main algorithm
  */
 public class HDR {
+    private double lambda = 50;     // smoothness scaling factor
+    private double[] weights;       // weighting function
+    private double[] lnT;           // log delta t for image j (B(j))
+
     private Image[] images;         // input images array
     private int numPixels;          // num of pixels (i)
     private int numExposures;       // num of exposures (j)
-
-    private double lambda = 50;     // smoothness scaling factor
-    private double[] weights;       // weighting function
-    private double lnT[];           // log delta t for image j (B(j))
 
     // objects
     private SolveG solveRed;
@@ -49,13 +49,6 @@ public class HDR {
                 this.images);
     }
 
-    private void initWeights() {
-        this.weights = new double[256];
-        for (int i = 0; i < this.weights.length; i++) {
-            this.weights[i] = w(i);
-        }
-    }
-
     private double w(int z) {
         int zmin = 0;
         int zmax = 255;
@@ -63,6 +56,13 @@ public class HDR {
 //        double w0 = z <= 127 ? z : 255 - z;
 //        double w1 = Math.max((z <= 127) ? z + 1 : 256 - z, 0.0001);
 //        double w2 = z <= 127 ? z / 128 : (256 - z) / 128;
+    }
+
+    private void initWeights() {
+        this.weights = new double[256];
+        for (int i = 0; i < this.weights.length; i++) {
+            this.weights[i] = w(i);
+        }
     }
 
     private void initLnT() {

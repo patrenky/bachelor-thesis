@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import xmicha65.bp_app.Controller.HDR;
-import xmicha65.bp_app.Controller.SolveG;
+import xmicha65.bp_app.Controller.HDRCV;
 import xmicha65.bp_app.Model.Image;
 
 public class Main extends AppCompatActivity {
@@ -61,9 +61,9 @@ public class Main extends AppCompatActivity {
 
             // OpenCV loaded
             /** HDRCV */
-//            HDRCV hdrcv = new HDRCV(this.images, this.expTimes);
-//            displayCurve(hdrcv.getResponse(2));
-//            displayImage(hdrcv.getLdrImage());
+            HDRCV hdrcv = new HDRCV(this.images, this.expTimes);
+            displayHdrcvCurve(hdrcv.getResponse(1));
+            displayImage(hdrcv.getLdrImage());
 
             /** SolveG */
 //            HDR algorithm = new HDR(this.images);
@@ -199,6 +199,25 @@ public class Main extends AppCompatActivity {
         for (int i = 0; i < width; i++) {
             Point pt1 = new Point(width - i, blue[i] * 100 + height / 2);
             Imgproc.circle(his, pt1, 1, new Scalar(0, 0, 255), 1);
+        }
+
+        Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(his, bm);
+
+        ImageView iv = (ImageView) findViewById(R.id.imageView1);
+        iv.setImageBitmap(bm);
+        iv.setRotation(180);
+    }
+
+    private void displayHdrcvCurve(double[] array) {
+        int height = 300;
+        int width = array.length;
+        Mat his = new Mat(height, width, CvType.CV_8UC3);
+        Imgproc.line(his, new Point(width / 2, 0), new Point(width / 2, height), new Scalar(200, 200, 200), width);
+
+        for (int i = 0; i < width; i++) {
+            Point pt1 = new Point(width - i, array[i] * 100); // * 100 + height / 2
+            Imgproc.circle(his, pt1, 1, new Scalar(0, 0, 0), 1);
         }
 
         Bitmap bm = Bitmap.createBitmap(his.cols(), his.rows(), Bitmap.Config.ARGB_8888);

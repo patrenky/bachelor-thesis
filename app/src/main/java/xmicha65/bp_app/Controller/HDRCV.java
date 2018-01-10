@@ -32,10 +32,6 @@ public class HDRCV {
             this.expTimes[i] = (float) times[i];
         }
 
-        fullAlg();
-    }
-
-    public void fullAlg() {
         System.out.println("----------------------------- START ------------------------------");
 
         List<Mat> cvimages = new ArrayList<>();
@@ -55,7 +51,6 @@ public class HDRCV {
             Photo.createCalibrateDebevec().process(cvimages, this.response, mExpTimes);
             Photo.createMergeDebevec().process(cvimages, hdrImage, mExpTimes, this.response);
             Photo.createTonemapReinhard().process(hdrImage, this.ldrImage);
-//            Photo.createTonemapDurand().process(hdrImage, this.ldrImage);
         } catch (Exception e) {
             System.out.println("chyba opencv " + e.getMessage());
         }
