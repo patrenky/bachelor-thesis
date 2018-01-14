@@ -16,9 +16,9 @@ public class Image {
     private double exposureTime = -1;       // exposure time of image
     private int width;                      // image width
     private int height;                     // image height
+    private int[] pixels;                   // raw argb android color
     private Bitmap rgbImg;                  // RGB bitmap
 //    private Bitmap grayImg;                 // grayImg bitmap
-    private int[] pixels;                   // raw argb android color
 //    private int[] luminance;                // avg rgb values (0-255)
 //    private int[] histogram = new int[256]; // histogram of luminance
 //    private int[] fiftyShades;              // (max) 50 selected values from histogram (0-255)

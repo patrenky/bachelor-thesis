@@ -50,7 +50,13 @@ public class HDRCV {
         try {
             Photo.createCalibrateDebevec().process(cvimages, this.response, mExpTimes);
             Photo.createMergeDebevec().process(cvimages, hdrImage, mExpTimes, this.response);
+//            Photo.createCalibrateRobertson().process(cvimages, this.response, mExpTimes);
+//            Photo.createMergeRobertson().process(cvimages, hdrImage, mExpTimes, this.response);
+
             Photo.createTonemapReinhard().process(hdrImage, this.ldrImage);
+//            Photo.createTonemapDrago().process(hdrImage, this.ldrImage);
+//            Photo.createTonemapDurand().process(hdrImage, this.ldrImage);
+//            Photo.createTonemapMantiuk().process(hdrImage, this.ldrImage);
         } catch (Exception e) {
             System.out.println("chyba opencv " + e.getMessage());
         }

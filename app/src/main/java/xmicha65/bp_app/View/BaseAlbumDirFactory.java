@@ -4,6 +4,14 @@ import java.io.File;
 
 import android.os.Environment;
 
+/**
+ * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+ * 		mAlbumStorageDirFactory = new FroyoAlbumDirFactory(); // FIND THIS
+ * } else {
+ * 		mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+ * }
+ */
+
 public final class BaseAlbumDirFactory extends AlbumStorageDirFactory {
 
 	// Standard storage location for digital camera files
