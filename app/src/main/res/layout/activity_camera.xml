@@ -11,14 +11,40 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
+    <ImageView
+        android:id="@+id/cameraImageView0"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/control"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@android:color/background_light" />
+
+    <ImageView
+        android:id="@+id/cameraImageView1"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/control"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/background_light" />
+
+    <ImageView
+        android:id="@+id/cameraImageView2"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/control"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/background_light" />
+
     <FrameLayout
         android:id="@+id/control"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
         android:background="#cc4285f4"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <Button
             android:id="@+id/capture"

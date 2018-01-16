@@ -38,6 +38,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -54,6 +55,11 @@ import xmicha65.bp_app.R;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraFragment extends Fragment
         implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+
+    private ImageView iv0;
+//    private ImageView iv1;
+//    private ImageView iv2;
+//    private int photoIndex = 0;
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -253,7 +259,7 @@ public class CameraFragment extends Fragment
     };
 
     /**
-     * OK (callback)
+     * OK (callback) work here
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
@@ -263,7 +269,7 @@ public class CameraFragment extends Fragment
         @Override
         public void onImageAvailable(ImageReader reader) {
             // mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
-            mBackgroundHandler.post(new ShowImage(reader.acquireNextImage()));
+            mBackgroundHandler.post(new ShowImage(iv0, reader.acquireNextImage()));
         }
 
     };
@@ -368,19 +374,22 @@ public class CameraFragment extends Fragment
         return inflater.inflate(R.layout.activity_camera, container, false);
     }
 
-    /** OK (init) */
+    /** OK (init) work here */
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.capture).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        iv0 = (ImageView) view.findViewById(R.id.cameraImageView0);
+//        iv1 = (ImageView) view.findViewById(R.id.cameraImageView1);
+//        iv2 = (ImageView) view.findViewById(R.id.cameraImageView2);
     }
 
     /** OK (init) work here */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO output file(s)
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        // output file(s)
+        // mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     /** OK (init) */
@@ -748,7 +757,6 @@ public class CameraFragment extends Fragment
     private void takePicture() {
         System.out.println("#### ----- taking picture -----");
         lockFocus();
-        // TODO HERE FNs
     }
 
     /**
@@ -821,8 +829,8 @@ public class CameraFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
+                    // showToast("Saved: " + mFile);
+                    // Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
             };
