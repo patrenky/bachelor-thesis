@@ -17,7 +17,7 @@ import android.support.v4.content.FileProvider;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class MainPhoto extends Activity {
+public class _MainExtPhoto extends Activity {
 
     private static final int IMAGE_CAPTURE = 1;
     private ImageView mImageView;

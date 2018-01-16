@@ -1,4 +1,4 @@
-package xmicha65.bp_app;
+package xmicha65.bp_app.View;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -33,6 +33,7 @@ public class AutoFitTextureView extends TextureView {
      * @param height Relative vertical size
      */
     public void setAspectRatio(int width, int height) {
+        // System.out.println("#### AutoFit setAspectRatio");
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Size cannot be negative.");
         }
@@ -43,6 +44,7 @@ public class AutoFitTextureView extends TextureView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // System.out.println("#### AutoFit onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);

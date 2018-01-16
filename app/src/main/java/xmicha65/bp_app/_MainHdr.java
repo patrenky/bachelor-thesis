@@ -17,7 +17,7 @@ import xmicha65.bp_app.Controller.HDRCV;
 import xmicha65.bp_app.Model.Image;
 import xmicha65.bp_app.View.Histogram;
 
-public class MainMy extends AppCompatActivity {
+public class _MainHdr extends AppCompatActivity {
     private Image[] images;
     private ImageView ivUp;
     private ImageView ivDown;

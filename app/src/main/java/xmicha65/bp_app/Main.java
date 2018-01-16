@@ -5,16 +5,19 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 
+import xmicha65.bp_app.View.CameraFragment;
+
 public class Main extends AppCompatActivity {
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_main_camera);
         if (null == savedInstanceState) {
+            // System.out.println("#### MAIN open camera fragment");
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2BasicFragment.newInstance())
+                    .replace(R.id.container, new CameraFragment())
                     .commit();
         }
     }
