@@ -14,6 +14,7 @@ public class ShowImage implements Runnable {
     private final Image image;
 
     public ShowImage(ImageView siv, Image simage) {
+        System.out.println("#### captured: " + simage);
         image = simage;
         iv = siv;
     }
@@ -21,6 +22,18 @@ public class ShowImage implements Runnable {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
+//        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+//        byte[] bytes = new byte[buffer.capacity()];
+//        buffer.get(bytes);
+//        Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+//
+//        try {
+//            iv.setImageBitmap(bitmapImage);
+//        } catch (Exception e) {}
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void display() {
         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
         byte[] bytes = new byte[buffer.capacity()];
         buffer.get(bytes);
@@ -30,5 +43,4 @@ public class ShowImage implements Runnable {
             iv.setImageBitmap(bitmapImage);
         } catch (Exception e) {}
     }
-
 }

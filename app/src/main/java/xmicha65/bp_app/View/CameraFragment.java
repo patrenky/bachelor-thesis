@@ -20,6 +20,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,9 +58,18 @@ public class CameraFragment extends Fragment
         implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private ImageView iv0;
-//    private ImageView iv1;
+    private ImageView iv1;
 //    private ImageView iv2;
-//    private int photoIndex = 0;
+//
+//    private Image image0;
+//    private Image image1;
+//    private Image image2;
+//
+    private int photoIndex = 0;
+
+    ShowImage shI0;
+    ShowImage shI1;
+
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -269,7 +279,13 @@ public class CameraFragment extends Fragment
         @Override
         public void onImageAvailable(ImageReader reader) {
             // mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
-            mBackgroundHandler.post(new ShowImage(iv0, reader.acquireNextImage()));
+            // mBackgroundHandler.post(new ShowImage(iv0, reader.acquireNextImage()));
+            if (photoIndex == 0) {
+                mBackgroundHandler.post(shI0 = new ShowImage(iv0, reader.acquireNextImage()));
+            } else {
+                mBackgroundHandler.post(shI1 = new ShowImage(iv1, reader.acquireNextImage()));
+            }
+            photoIndex++;
         }
 
     };
@@ -293,6 +309,7 @@ public class CameraFragment extends Fragment
                     // TODO uncomment for mobile
 //                    if (afState == null) {
                         captureStillPicture();
+                        mState = STATE_PICTURE_TAKEN; // remove this line
 //                    } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
 //                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
 //                        // CONTROL_AE_STATE can be null on some devices
@@ -380,7 +397,7 @@ public class CameraFragment extends Fragment
         view.findViewById(R.id.capture).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         iv0 = (ImageView) view.findViewById(R.id.cameraImageView0);
-//        iv1 = (ImageView) view.findViewById(R.id.cameraImageView1);
+        iv1 = (ImageView) view.findViewById(R.id.cameraImageView1);
 //        iv2 = (ImageView) view.findViewById(R.id.cameraImageView2);
     }
 
@@ -723,7 +740,7 @@ public class CameraFragment extends Fragment
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
-                                setAutoFlash(mPreviewRequestBuilder);
+//                                setAutoFlash(mPreviewRequestBuilder);
 
                                 // Finally, we start displaying the camera preview.
                                 mPreviewRequest = mPreviewRequestBuilder.build();
@@ -798,46 +815,70 @@ public class CameraFragment extends Fragment
     }
 
     /**
+     * OK work here
      * Capture a still picture. This method should be called when we get a response in
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
     private void captureStillPicture() {
-        System.out.println("#### captureStillPicture");
+        shI0 = null;
+        shI1 = null;
         try {
             final Activity activity = getActivity();
             if (null == activity || null == mCameraDevice) {
                 return;
             }
-            // This is the CaptureRequest.Builder that we use to take a picture.
-            final CaptureRequest.Builder captureBuilder =
-                    mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
-            captureBuilder.addTarget(mImageReader.getSurface());
 
-            // Use the same AE and AF modes as the preview.
-            captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            setAutoFlash(captureBuilder);
+            List<CaptureRequest> captureBuildersList = new ArrayList<>();
 
-            // Orientation
-            int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
+//            long second = 1000000000; // nanoseconds
+            long minNs = 99000;
+            long maxNs = 101000000;
+            long minStep = -3;
+            long maxStep = 6;
+            long expDiv = minStep;
+            for(int i = 0; i < 2; i ++) {
+                // CaptureRequest.Builder that we use to take a picture
+                CaptureRequest.Builder captureBuilder =
+                        mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+                captureBuilder.addTarget(mImageReader.getSurface());
 
+                // Orientation
+                int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+                captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
+
+//                captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
+                captureBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
+
+                // Sensor exposure time
+                long ev = expDiv;
+                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, ev);
+//                captureBuilder.set(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, (int) ev);
+                expDiv = maxStep;
+
+//            setAutoFlash(captureBuilder);
+
+                System.out.println("#### captureStillPicture with EV: " + ev);
+                captureBuildersList.add(captureBuilder.build());
+            }
+
+            // On capture complete
             CameraCaptureSession.CaptureCallback CaptureCallback
                     = new CameraCaptureSession.CaptureCallback() {
 
                 @Override
-                public void onCaptureCompleted(@NonNull CameraCaptureSession session,
-                                               @NonNull CaptureRequest request,
-                                               @NonNull TotalCaptureResult result) {
-                    // showToast("Saved: " + mFile);
-                    // Log.d(TAG, mFile.toString());
+                public void onCaptureCompleted(CameraCaptureSession session,
+                                               CaptureRequest request,
+                                               TotalCaptureResult result) {
+                    // super.onCaptureCompleted(session, request, result);
                     unlockFocus();
                 }
             };
 
             mCaptureSession.stopRepeating();
             mCaptureSession.abortCaptures();
-            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
+            mCaptureSession.captureBurst(captureBuildersList, CaptureCallback, null);
+//            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -854,7 +895,7 @@ public class CameraFragment extends Fragment
             // Reset the auto-focus trigger
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-            setAutoFlash(mPreviewRequestBuilder);
+//            setAutoFlash(mPreviewRequestBuilder);
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.
@@ -863,6 +904,11 @@ public class CameraFragment extends Fragment
                     mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
+        }
+        if (photoIndex > 1) {
+            System.out.println("#### displaying");
+            shI0.display();
+            shI1.display();
         }
     }
 
@@ -905,15 +951,15 @@ public class CameraFragment extends Fragment
         }
     }
 
-    /**
-     * OK (util)
-     */
-    private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
-        if (mFlashSupported) {
-            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-        }
-    }
+//    /**
+//     * OK (util)
+//     */
+//    private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
+//        if (mFlashSupported) {
+//            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+//                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+//        }
+//    }
 
     /**
      * OK (util)
