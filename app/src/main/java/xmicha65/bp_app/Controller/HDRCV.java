@@ -53,7 +53,13 @@ public class HDRCV {
 //            Photo.createCalibrateRobertson().process(cvimages, this.response, mExpTimes);
 //            Photo.createMergeRobertson().process(cvimages, hdrImage, mExpTimes, this.response);
 
-            Photo.createTonemapReinhard().process(hdrImage, this.ldrImage);
+            float gamma = 2.2f;
+            float intensity = 0.0f; // [-8, 8]
+            float light_adapt = 0.0f; // [0, 1]
+            float color_adapt = 0.0f; // [0, 1]
+
+            Photo.createTonemapReinhard(gamma, intensity, light_adapt, color_adapt).process(hdrImage, this.ldrImage);
+//            Photo.createTonemapReinhard().process(hdrImage, this.ldrImage);
 //            Photo.createTonemapDrago().process(hdrImage, this.ldrImage);
 //            Photo.createTonemapDurand().process(hdrImage, this.ldrImage);
 //            Photo.createTonemapMantiuk().process(hdrImage, this.ldrImage);

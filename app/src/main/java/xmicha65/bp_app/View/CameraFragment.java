@@ -847,13 +847,13 @@ public class CameraFragment extends Fragment
                 captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
 //                captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
+                captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
                 captureBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
 
                 // Sensor exposure time
                 long ev = expDiv;
-                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, ev);
-//                captureBuilder.set(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, (int) ev);
+                // captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, ev);
+                captureBuilder.set(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, (int) ev);
                 expDiv = maxStep;
 
 //            setAutoFlash(captureBuilder);

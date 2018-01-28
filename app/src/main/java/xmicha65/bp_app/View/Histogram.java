@@ -16,7 +16,7 @@ public class Histogram {
      * Display RGB response curves in graph
      * (ImageView) findViewById(R.id.imageView1)
      */
-    public void displayCurves(ImageView iv, double[] red, double[] green, double[] blue) {
+    public static void displayCurves(ImageView iv, double[] red, double[] green, double[] blue) {
         int height = 400;
         int width = red.length;
         Mat his = new Mat(height, width, CvType.CV_8UC3);
@@ -47,7 +47,7 @@ public class Histogram {
     /**
      * Display response curve in graph
      */
-    public void displayCurve(ImageView iv, double[] array) {
+    public static void displayCurve(ImageView iv, double[] array) {
         int height = 400;
         int width = array.length;
         Mat his = new Mat(height, width, CvType.CV_8UC3);

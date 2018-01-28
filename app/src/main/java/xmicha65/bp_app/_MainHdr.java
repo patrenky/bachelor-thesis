@@ -12,7 +12,7 @@ import org.opencv.android.OpenCVLoader;
 import java.io.IOException;
 import java.io.InputStream;
 
-//import xmicha65.bp_app.Controller.HDR;
+import xmicha65.bp_app.Controller.HDR;
 import xmicha65.bp_app.Controller.HDRCV;
 import xmicha65.bp_app.Model.Image;
 import xmicha65.bp_app.View.Histogram;
@@ -68,8 +68,8 @@ public class _MainHdr extends AppCompatActivity {
             /** SolveG */
 //            HDR algorithm = new HDR(this.images);
 
-//            displayCurves(algorithm.getRedG(), algorithm.getGreenG(), algorithm.getBlueG());
-//            displayCurve(algorithm.getRedG());
+//            Histogram.displayCurves(this.ivDown, algorithm.getRedG(), algorithm.getGreenG(), algorithm.getBlueG());
+//            Histogram.displayCurve(this.ivDown, algorithm.getRedG());
 //            displayCurve(algorithm.getLnE());
 
             /** 50 shades */
