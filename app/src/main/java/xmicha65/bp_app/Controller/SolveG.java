@@ -5,7 +5,8 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 /**
- * Debevec & Malik
+ * Solve CRF algorithm by P. E. Debevec and J. Malik
+ * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
  */
 public class SolveG {
     private int[][] Z;              // Z_ij pixel values of pixel i in image j

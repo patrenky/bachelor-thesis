@@ -3,7 +3,9 @@ package xmicha65.bp_app.Controller;
 import xmicha65.bp_app.Model.Image;
 
 /**
- *
+ * Constructing the High Dynamic Range Radiance Map algorithm
+ * by P. E. Debevec and J. Malik
+ * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
  */
 public class Merge {
     private double[] gRed;

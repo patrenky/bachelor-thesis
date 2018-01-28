@@ -3,7 +3,7 @@ package xmicha65.bp_app.Controller;
 import xmicha65.bp_app.Model.Image;
 
 /**
- * HDR main algorithm
+ * HDR algorithm main controller
  */
 public class HDR {
     private double lambda = 50;     // smoothness scaling factor

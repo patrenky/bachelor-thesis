@@ -3,7 +3,7 @@ package xmicha65.bp_app.Controller;
 import xmicha65.bp_app.Model.Image;
 
 /**
- *
+ * Select 50 values for SolveG algorithm
  */
 public class ValueSelector {
     private Image[] images;

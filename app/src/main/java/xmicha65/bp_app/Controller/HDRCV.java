@@ -16,7 +16,8 @@ import java.util.List;
 import xmicha65.bp_app.Model.Image;
 
 /**
- * HDR with only OpenCV methods
+ * Creating HDR with OpenCV methods
+ * https://docs.opencv.org/3.2.0/d3/db7/tutorial_hdr_imaging.html
  */
 public class HDRCV {
     private Image[] inImages;
