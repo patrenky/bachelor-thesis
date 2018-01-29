@@ -4,8 +4,9 @@ import xmicha65.bp_app.Model.Image;
 
 /**
  * HDR algorithm main controller
+ * @author xmicha65
  */
-public class HDR {
+public class BuildHDR {
     private double lambda = 50;     // smoothness scaling factor
     private double[] weights;       // weighting function
     private double[] lnT;           // log delta t for image j (B(j))
@@ -15,11 +16,11 @@ public class HDR {
     private int numExposures;       // num of exposures (j)
 
     // objects
-    private SolveG solveRed;
-    private SolveG solveGreen;
-    private SolveG solveBlue;
+    private RecoverCRF solveRed;
+    private RecoverCRF solveGreen;
+    private RecoverCRF solveBlue;
 
-    public HDR(Image[] images) {
+    public BuildHDR(Image[] images) {
         this.images = images;
         this.numPixels = images[0].getLength();
         this.numExposures = images.length;
@@ -27,19 +28,19 @@ public class HDR {
         initWeights();
         initLnT();
 
-        // select channel values
+        // select samples for algorithm
         ValueSelector valueSelector = new ValueSelector(this.images);
         int[][] ZijRed = valueSelector.getRed();
         int[][] ZijGreen = valueSelector.getGreen();
         int[][] ZijBlue = valueSelector.getBlue();
 
-        // gsolve for each color channel
-        this.solveRed = new SolveG(ZijRed, this.lnT, this.lambda, this.weights);
-        this.solveGreen = new SolveG(ZijGreen, this.lnT, this.lambda, this.weights);
-        this.solveBlue = new SolveG(ZijBlue, this.lnT, this.lambda, this.weights);
+        // recover CRF for each color channel
+        this.solveRed = new RecoverCRF(ZijRed, this.lnT, this.lambda, this.weights);
+        this.solveGreen = new RecoverCRF(ZijGreen, this.lnT, this.lambda, this.weights);
+        this.solveBlue = new RecoverCRF(ZijBlue, this.lnT, this.lambda, this.weights);
 
-        // compute hdr radiance map
-        new Merge(this.solveRed.getG(),
+        // merge exposures into HDR
+        new MergeExposures(this.solveRed.getG(),
                 this.solveGreen.getG(),
                 this.solveBlue.getG(),
                 this.weights,
@@ -49,10 +50,16 @@ public class HDR {
                 this.images);
     }
 
+    /**
+     * Weighting function
+     * source: Debevec, P.; Malik, J.: Recovering High Dynamic Range Radiance Maps from Photographs
+     * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
+     */
     private double w(int z) {
         int zmin = 0;
         int zmax = 255;
         return z <= (zmin + zmax) / 2 ? (z - zmin) + 1 : (zmax - z) + 1;
+        // other possible forms of function (source: internet)
 //        double w0 = z <= 127 ? z : 255 - z;
 //        double w1 = Math.max((z <= 127) ? z + 1 : 256 - z, 0.0001);
 //        double w2 = z <= 127 ? z / 128 : (256 - z) / 128;

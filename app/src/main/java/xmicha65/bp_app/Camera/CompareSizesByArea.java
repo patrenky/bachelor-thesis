@@ -1,4 +1,4 @@
-package xmicha65.bp_app.CameraComponents;
+package xmicha65.bp_app.Camera;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -8,6 +8,7 @@ import java.util.Comparator;
 
 /**
  * Compares two {@code Size}s based on their areas.
+ * @author https://github.com/googlesamples
  */
 public class CompareSizesByArea implements Comparator<Size> {
     @Override

@@ -27,12 +27,4 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView0"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <Button
-        android:id="@+id/btnOpenCamera"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/btnIntend"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="0dp" />
 </android.support.constraint.ConstraintLayout>

@@ -5,10 +5,13 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 /**
- * Solve CRF algorithm by P. E. Debevec and J. Malik
+ * Recover Camera Response Function
+ * @author xmicha65
+ * source: Debevec, P.; Malik, J.: Recovering High Dynamic Range Radiance Maps from Photographs
  * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
+ * Result of algorithm is CRF curve double[] g
  */
-public class SolveG {
+public class RecoverCRF {
     private int[][] Z;              // Z_ij pixel values of pixel i in image j
     private int N;                  // num of pixels to process (Z_i - 50 shades)
     private int P;                  // num of images (Z_j)
@@ -20,7 +23,7 @@ public class SolveG {
     private double[] g;             // log response curve
     private double[] lnE;           // log irradiance map
 
-    public SolveG(int[][] Zij, double[] lnT, double lambda, double[] weights) {
+    public RecoverCRF(int[][] Zij, double[] lnT, double lambda, double[] weights) {
         this.Z = Zij;
         this.lnT = lnT;
         this.lambda = lambda;
@@ -28,10 +31,13 @@ public class SolveG {
         this.P = Z[0].length;
         this.N = Z.length;
 
-        solve();
+        createCRF();
     }
 
-    public void solve() {
+    /**
+     * Solving quadratic objective function
+     */
+    public void createCRF() {
         try {
             int n = 256;
             int mrows = this.N * this.P + n + 1;
@@ -81,16 +87,9 @@ public class SolveG {
                 bmat.put(i, 0, b[i]);
             }
 
-            // solve using SVD
+            // createCRF using OpenCV SVD
             Mat solved = new Mat(mrows, 1, CvType.CV_64F);
             Core.solve(Amat, bmat, solved, Core.DECOMP_SVD);
-
-//            System.out.println("declared for solved: " + mrows + " (N * P + n + 1) ");
-//            System.out.println("where N=" + this.N + " P=" + this.P);
-//            System.out.println("solved have: " + solved.rows());
-//            System.out.println("counted to lnE: " + (solved.rows() - n));
-//            System.out.println("counted to g: " + (n));
-//            System.out.println("g + lnE: " + (n + solved.rows() - n));
 
             // init g
             this.g = new double[n];

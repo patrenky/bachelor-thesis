@@ -12,6 +12,10 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 
+/**
+ * Image class with attributes
+ * @author xmicha65
+ */
 public class Image {
     private double exposureTime = -1;       // exposure time of image
     private int width;                      // image width
@@ -19,10 +23,10 @@ public class Image {
     private int[] pixels;                   // raw argb android color
     private Bitmap rgbImg;                  // RGB bitmap
 //    private Bitmap grayImg;                 // grayImg bitmap
-//    private int[] luminance;                // avg rgb values (0-255)
-//    private int[] histogram = new int[256]; // histogram of luminance
-//    private int[] fiftyShades;              // (max) 50 selected values from histogram (0-255)
-//    private int[] fiftyPositions;           // positions of 50 shades in luminance array
+    private int[] luminance;                // avg rgb values (0-255)
+    private int[] histogram = new int[256]; // histogram of luminance
+    private int[] fiftyShades;              // (max) 50 selected values from histogram (0-255)
+    private int[] fiftyPositions;           // positions of 50 shades in luminance array
 
     public Image(InputStream ins, double exposition) {
         this.exposureTime = exposition;
@@ -37,12 +41,12 @@ public class Image {
         this.pixels = new int[this.width * this.height];
         this.rgbImg.getPixels(this.pixels, 0, this.width, 0, 0, this.width, this.height);
 
-//        this.luminance = new int[this.width * this.height];
+        this.luminance = new int[this.width * this.height];
 
-//        getLuminance();
-//        updateHistogram();
-//        getFiftyMostFrequented();
-//        getFiftyPositions();
+        getLuminance();
+        updateHistogram();
+        getFiftyMostFrequented();
+        getFiftyPositions();
     }
 
 //    private void readMetadata(InputStream ins) {
@@ -67,64 +71,70 @@ public class Image {
 //        return bmpGrayscale;
 //    }
 
-//    private int getLuminanceValue(int r, int g, int b) {
-//        return (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
-//    }
-//
-//    private void getLuminance() {
-//        for (int i = 0; i < this.pixels.length; i++) {
-//            int r = (this.pixels[i] >> 16) & 0xff;
-//            int g = (this.pixels[i] >> 8) & 0xff;
-//            int b = (this.pixels[i]) & 0xff;
-//            this.luminance[i] = getLuminanceValue(r, g, b);
-//        }
-//    }
+    private int getLuminanceValue(int r, int g, int b) {
+        return (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+    }
 
-//    private void updateHistogram() {
-//        this.histogram = new int[256];
-//        if (this.luminance.length > 0) {
-//            for (int i = 0; i < this.luminance.length; i++) {
-//                this.histogram[this.luminance[i]] += 1;
-//            }
-//        }
-//    }
+    /**
+     * Get luminance value for each pixel
+     */
+    private void getLuminance() {
+        for (int i = 0; i < this.pixels.length; i++) {
+            int r = (this.pixels[i] >> 16) & 0xff;
+            int g = (this.pixels[i] >> 8) & 0xff;
+            int b = (this.pixels[i]) & 0xff;
+            this.luminance[i] = getLuminanceValue(r, g, b);
+        }
+    }
 
-//    /**
-//     * init 50 (max) most frequented values of luminance in image
-//     */
-//    private void getFiftyMostFrequented() {
-//        int[] sorted = this.histogram.clone();
-//        Arrays.sort(sorted);
-//        int size = sorted.length < 50 ? sorted.length : 50;
-//        this.fiftyShades = new int[size];
-//        for (int i = 0; i < size; i++) {
-//            int value = findIndex(this.histogram, sorted[sorted.length - i - 1]);
-//            this.fiftyShades[i] = value;
-//        }
-//    }
+    /**
+     * Update histogram of luminance values
+     */
+    private void updateHistogram() {
+        this.histogram = new int[256];
+        if (this.luminance.length > 0) {
+            for (int i = 0; i < this.luminance.length; i++) {
+                this.histogram[this.luminance[i]] += 1;
+            }
+        }
+    }
 
-//    /**
-//     * find positions of fifty shades values in luminance array
-//     */
-//    private void getFiftyPositions() {
-//        int size = this.fiftyShades.length;
-//        this.fiftyPositions = new int[size];
-//        for (int i = 0; i < size; i++) {
-//            int value = findIndex(this.luminance, this.fiftyShades[i]);
-//            this.fiftyPositions[i] = value;
-//        }
-//    }
+    /**
+     * init 50 most frequented values of luminance in image
+     */
+    private void getFiftyMostFrequented() {
+        int[] sorted = this.histogram.clone();
+        Arrays.sort(sorted);
+        int size = sorted.length < 50 ? sorted.length : 50;
+        this.fiftyShades = new int[size];
+        for (int i = 0; i < size; i++) {
+            int value = findIndex(this.histogram, sorted[sorted.length - i - 1]);
+            this.fiftyShades[i] = value;
+        }
+    }
+
+    /**
+     * find positions of fifty shades values in luminance array
+     */
+    private void getFiftyPositions() {
+        int size = this.fiftyShades.length;
+        this.fiftyPositions = new int[size];
+        for (int i = 0; i < size; i++) {
+            int value = findIndex(this.luminance, this.fiftyShades[i]);
+            this.fiftyPositions[i] = value;
+        }
+    }
 
     /**
      * GETTERS
      */
-//    public int getValue(int i) {
-//        if (luminance != null && i >= 0 && i < width * height) {
-//            return luminance[i];
-//        } else {
-//            return -1;
-//        }
-//    }
+    public int getValue(int i) {
+        if (luminance != null && i >= 0 && i < width * height) {
+            return luminance[i];
+        } else {
+            return -1;
+        }
+    }
 
     public int getPixel(int idx) {
         return this.pixels[idx];
@@ -166,20 +176,23 @@ public class Image {
         return width;
     }
 
-//    public int[] getHistogram() {
-//        return this.histogram;
-//    }
+    public int[] getHistogram() {
+        return this.histogram;
+    }
 
-//    public int[] getFiftyShades() {
-//        return this.fiftyShades;
-//    }
+    public int[] getFiftyShades() {
+        return this.fiftyShades;
+    }
 
-//    public int[] getfiftyPositions() {
-//        return this.fiftyPositions;
-//    }
+    public int[] getfiftyPositions() {
+        return this.fiftyPositions;
+    }
 
     /**
      * UTILS
+     *
+     * Find index of value in array
+     * Returns first index found
      */
     public int findIndex(int[] array, int value) {
         for (int i = 0; i < array.length; i++)

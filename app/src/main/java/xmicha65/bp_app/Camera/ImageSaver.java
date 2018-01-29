@@ -1,4 +1,4 @@
-package xmicha65.bp_app.CameraComponents;
+package xmicha65.bp_app.Camera;
 
 import android.media.Image;
 import android.os.Build;
@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Saves a JPEG {@link Image} into the specified {@link File}.
+ * @author https://github.com/googlesamples
  */
 public class ImageSaver implements Runnable {
 

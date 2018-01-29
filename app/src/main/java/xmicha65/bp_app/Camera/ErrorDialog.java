@@ -1,4 +1,4 @@
-package xmicha65.bp_app.CameraComponents;
+package xmicha65.bp_app.Camera;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 
 /**
  * Shows an error message dialog.
+ * @author https://github.com/googlesamples
  */
 public class ErrorDialog extends DialogFragment {
 

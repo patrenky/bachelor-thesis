@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import xmicha65.bp_app.View.CameraFragment;
 
+/**
+ * Temporary Main for working with Camera2 API
+ * @author https://github.com/googlesamples
+ */
 public class Main extends AppCompatActivity {
 
     @Override

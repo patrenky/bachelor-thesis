@@ -12,19 +12,25 @@ import org.opencv.android.OpenCVLoader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import xmicha65.bp_app.Controller.HDR;
-import xmicha65.bp_app.Controller.HDRCV;
+import xmicha65.bp_app.Controller.BuildHDR;
+import xmicha65.bp_app.Controller.OpencvHDR;
 import xmicha65.bp_app.Model.Image;
 import xmicha65.bp_app.View.Histogram;
 
-public class _MainHdr extends AppCompatActivity {
+/**
+ * Main class
+ * init images from assets, OpenCV library and call BuildHDR algorithm
+ * @author xmicha65
+ * Source of async OpenCV initialization, methods mLoaderCallback() and onResume() statement:
+ * https://github.com/opencv/opencv/blob/master/samples/android/tutorial-1-camerapreview/src/org/opencv/samples/tutorial1/Tutorial1Activity.java
+ */
+public class MainHdr extends AppCompatActivity {
     private Image[] images;
     private ImageView ivUp;
     private ImageView ivDown;
-    //   private double[] expTimes = {0.125, 0.25, 0.5, 1}; // stLuis
-    private double[] expTimes = {0.001, 0.0166, 0.25, 8}; // lampicka
-    int index = 2;
-
+    private double[] expTimes = {0.125, 0.25, 0.5, 1}; // stLuis
+//    private double[] expTimes = {0.001, 0.0166, 0.25, 8}; // lampicka
+    int index = 2; // index of showed image on ImageView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +44,7 @@ public class _MainHdr extends AppCompatActivity {
     }
 
     /**
-     * Init OpenCV before using
+     * Init OpenCV callback
      */
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -60,33 +66,28 @@ public class _MainHdr extends AppCompatActivity {
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
             // OpenCV loaded
-            /** HDRCV */
-            HDRCV hdrcv = new HDRCV(this.images, this.expTimes);
-            Histogram.displayHdrcvCurve(this.ivDown, hdrcv.getResponse(1));
-            displayImage(hdrcv.getLdrImage());
+            /** OpencvHDR */
+//            OpencvHDR opencvHDR = new OpencvHDR(this.images, this.expTimes);
+//            Histogram.displayHdrcvCurve(this.ivDown, opencvHDR.getCRF(1));
+//            displayImage(opencvHDR.getLdrImage());
 
-            /** SolveG */
-//            HDR algorithm = new HDR(this.images);
+            /** BuildHDR */
+            BuildHDR algorithm = new BuildHDR(this.images);
 
-//            Histogram.displayCurves(this.ivDown, algorithm.getRedG(), algorithm.getGreenG(), algorithm.getBlueG());
+            Histogram.displayCurves(this.ivDown, algorithm.getRedG(), algorithm.getGreenG(), algorithm.getBlueG());
 //            Histogram.displayCurve(this.ivDown, algorithm.getRedG());
-//            displayCurve(algorithm.getLnE());
-
-            /** 50 shades */
-            // displayHistogram(this.index);
-            // displayImageWithPoints(this.index);
         }
     }
 
     /**
-     * TMP init 4 images from assets
+     * Temporary method for init 4 images from assets
      */
     public void initImages() {
         this.images = new Image[4];
         for (int i = 0; i < 4; i++) {
             try {
                 // nacitanie obrazku z assets do inp streamu
-                InputStream ins = getAssets().open(String.format("room/lampicka%d.jpg", i));
+                InputStream ins = getAssets().open(String.format("stlouis/stlouis%d-sm.jpg", i));
                 this.images[i] = new Image(ins, this.expTimes[i]);
             } catch (IOException e) {
                 System.out.println("chyba nacitania obrazku z assets");

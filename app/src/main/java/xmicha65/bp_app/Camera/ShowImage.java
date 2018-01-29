@@ -1,4 +1,4 @@
-package xmicha65.bp_app.CameraComponents;
+package xmicha65.bp_app.Camera;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +9,10 @@ import android.widget.ImageView;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Temporary class for displaying captured images on ImageView
+ * @author xmicha65
+ */
 public class ShowImage implements Runnable {
     private final ImageView iv;
     private final Image image;

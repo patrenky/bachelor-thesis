@@ -4,10 +4,11 @@ import xmicha65.bp_app.Model.Image;
 
 /**
  * Constructing the High Dynamic Range Radiance Map algorithm
- * by P. E. Debevec and J. Malik
+ * @author xmicha65
+ * source: Debevec, P.; Malik, J.: Recovering High Dynamic Range Radiance Maps from Photographs
  * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
  */
-public class Merge {
+public class MergeExposures {
     private double[] gRed;
     private double[] gGreen;
     private double[] gBlue;
@@ -22,14 +23,14 @@ public class Merge {
     private double[] lnEGreen;
     private double[] lnEBlue;
 
-    public Merge(double[] gRed,
-                 double[] gGreen,
-                 double[] gBlue,
-                 double[] weights,
-                 double[] lnT,
-                 int exposures,
-                 int pixels,
-                 Image[] images) {
+    public MergeExposures(double[] gRed,
+                          double[] gGreen,
+                          double[] gBlue,
+                          double[] weights,
+                          double[] lnT,
+                          int exposures,
+                          int pixels,
+                          Image[] images) {
         this.gRed = gRed;
         this.gGreen = gGreen;
         this.gBlue = gBlue;
@@ -40,6 +41,7 @@ public class Merge {
         this.numPixels = pixels;
         this.images = images;
 
+        // compute for each RGB color
         computeRed();
         computeGreen();
         computeBlue();
@@ -48,20 +50,20 @@ public class Merge {
 
     private void computeRed() {
         this.lnERed = new double[this.numPixels];
-        this.lnERed = debevecLnE(this.gRed, 0);
+        this.lnERed = createHDR(this.gRed, 0);
     }
 
     private void computeGreen() {
         this.lnEGreen = new double[this.numPixels];
-        this.lnEGreen = debevecLnE(this.gGreen, 1);
+        this.lnEGreen = createHDR(this.gGreen, 1);
     }
 
     private void computeBlue() {
         this.lnEBlue = new double[this.numPixels];
-        this.lnEBlue = debevecLnE(this.gBlue, 2);
+        this.lnEBlue = createHDR(this.gBlue, 2);
     }
 
-    private double[] debevecLnE(double[] g, int color) {
+    private double[] createHDR(double[] g, int color) {
         double[] lnE = new double[this.numPixels];
         double numerator;
         double denominator;
@@ -91,7 +93,7 @@ public class Merge {
                 lnE[i] = numerator / denominator;
             }
         } catch (Exception e) {
-            System.out.println("chyba debevecLnE: " + e.getMessage());
+            System.out.println("chyba createHDR: " + e.getMessage());
         }
 
         return lnE;

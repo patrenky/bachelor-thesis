@@ -1,4 +1,4 @@
-package xmicha65.bp_app.CameraComponents;
+package xmicha65.bp_app.Camera;
 
 import android.Manifest;
 import android.app.Activity;
@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 
 /**
  * Shows OK/Cancel confirmation dialog about camera permission.
+ * @author https://github.com/googlesamples
  */
 public class ConfirmationDialog extends DialogFragment {
 

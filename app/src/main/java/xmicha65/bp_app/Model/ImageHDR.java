@@ -1,11 +1,16 @@
 package xmicha65.bp_app.Model;
 
-public class HDRImage {
+/**
+ * Prepared class for HDR content of merged exposures
+ * This class will have methods for saving HDR content into HDR formats
+ * @author xmicha65
+ */
+public class ImageHDR {
     private double[] E; // radiance map
-    private int w;
-    private int h;
+    private int w;      // width
+    private int h;      // height
 
-    public HDRImage(double[] E, int width, int height) {
+    public ImageHDR(double[] E, int width, int height) {
         this.E = E;
         this.w = width;
         this.h = height;

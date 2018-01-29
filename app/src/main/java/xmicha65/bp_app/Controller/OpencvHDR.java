@@ -17,24 +17,26 @@ import xmicha65.bp_app.Model.Image;
 
 /**
  * Creating HDR with OpenCV methods
+ * source: OpenCV tutorial
  * https://docs.opencv.org/3.2.0/d3/db7/tutorial_hdr_imaging.html
  */
-public class HDRCV {
+public class OpencvHDR {
     private Image[] inImages;
     private float[] expTimes;
 
-    private Mat response = new Mat();
-    private Mat ldrImage = new Mat();
+    private Mat response = new Mat(); // CRF curve
+    private Mat ldrImage = new Mat(); // result of tonemapping
 
-    public HDRCV(Image[] images, double[] times) {
+    public OpencvHDR(Image[] images, double[] times) {
         this.inImages = images;
+
+        // init float exposure times
         this.expTimes = new float[times.length];
         for (int i = 0; i < times.length; i++) {
             this.expTimes[i] = (float) times[i];
         }
 
-        System.out.println("----------------------------- START ------------------------------");
-
+        // init List of image Mat
         List<Mat> cvimages = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             Bitmap bmp32 = inImages[i].getRgbImg().copy(Bitmap.Config.ARGB_8888, true);
@@ -49,16 +51,19 @@ public class HDRCV {
         Mat hdrImage = new Mat();
 
         try {
+            // merge HDR methods
             Photo.createCalibrateDebevec().process(cvimages, this.response, mExpTimes);
             Photo.createMergeDebevec().process(cvimages, hdrImage, mExpTimes, this.response);
 //            Photo.createCalibrateRobertson().process(cvimages, this.response, mExpTimes);
 //            Photo.createMergeRobertson().process(cvimages, hdrImage, mExpTimes, this.response);
 
-            float gamma = 2.2f;
-            float intensity = 0.0f; // [-8, 8]
-            float light_adapt = 0.0f; // [0, 1]
-            float color_adapt = 0.0f; // [0, 1]
+            // tonemap Reinhard params
+            float gamma = 2.2f; // for most displays
+            float intensity = 0.0f; // range [-8, 8]
+            float light_adapt = 0.0f; // range [0, 1]
+            float color_adapt = 0.0f; // range [0, 1]
 
+            // tonemapping methods
             Photo.createTonemapReinhard(gamma, intensity, light_adapt, color_adapt).process(hdrImage, this.ldrImage);
 //            Photo.createTonemapReinhard().process(hdrImage, this.ldrImage);
 //            Photo.createTonemapDrago().process(hdrImage, this.ldrImage);
@@ -67,16 +72,12 @@ public class HDRCV {
         } catch (Exception e) {
             System.out.println("chyba opencv " + e.getMessage());
         }
-
-        System.out.println("img: " + Arrays.toString(cvimages.get(0).get(0, 10)));
-        System.out.println("res: " + Arrays.toString(this.response.get(10, 0)));
-        System.out.println("hdr: " + Arrays.toString(hdrImage.get(0, 10)));
-        System.out.println("ldr: " + Arrays.toString(this.ldrImage.get(0, 10)));
-
-        System.out.println("------------------------------ END ------------------------------");
     }
 
-    public double[] getResponse(int color) {
+    /**
+     * Get CRF from createMergeDebevec
+     */
+    public double[] getCRF(int color) {
         double[] res = new double[this.response.rows()];
         for (int i = 0; i < this.response.rows(); i++) {
             res[i] = this.response.get(i, 0)[color];
@@ -84,6 +85,9 @@ public class HDRCV {
         return res;
     }
 
+    /**
+     * Get result image of HDR algorithm
+     */
     public Bitmap getLdrImage() {
         try {
             Mat tmpRGBA = new Mat();

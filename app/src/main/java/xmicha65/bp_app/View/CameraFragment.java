@@ -36,7 +36,6 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,13 +65,16 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import xmicha65.bp_app.CameraComponents.*;
+import xmicha65.bp_app.Camera.*;
 import xmicha65.bp_app.R;
 
 /**
  * Working with Android camera using Camera2 API
- * by https://developers.google.com/
- * Updates: captureBurst with deifferent exposures
+ * @author https://github.com/googlesamples
+ * xmicha65 updated methods:
+ * onImageAvailable()
+ * onViewCreated()
+ * captureStillPicture()
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraFragment extends Fragment
@@ -387,6 +389,7 @@ public class CameraFragment extends Fragment
 
     /**
      * OK (callback)
+     * Error dialog shown when camera permission was not granted
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -443,7 +446,7 @@ public class CameraFragment extends Fragment
         }
     }
 
-    /** ? */
+    /** OK */
     @Override
     public void onPause() {
         System.out.println("#### onPause");
@@ -482,7 +485,20 @@ public class CameraFragment extends Fragment
      */
 
     /**
-     * OK
+     * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
+     * is at least as large as the respective texture view size, and that is at most as large as the
+     * respective max size, and whose aspect ratio matches with the specified value. If such size
+     * doesn't exist, choose the largest one that is at most as large as the respective max size,
+     * and whose aspect ratio matches with the specified value.
+     *
+     * @param choices           The list of sizes that the camera supports for the intended output
+     *                          class
+     * @param textureViewWidth  The width of the texture view relative to sensor coordinate
+     * @param textureViewHeight The height of the texture view relative to sensor coordinate
+     * @param maxWidth          The maximum width that can be chosen
+     * @param maxHeight         The maximum height that can be chosen
+     * @param aspectRatio       The aspect ratio
+     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
     private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
                                           int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
@@ -839,6 +855,8 @@ public class CameraFragment extends Fragment
      * OK work here
      * Capture a still picture. This method should be called when we get a response in
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
+     * CaptureRequest documentation:
+     * https://developer.android.com/reference/android/hardware/camera2/CaptureRequest.html
      */
     private void captureStillPicture() {
         shI0 = null;
@@ -939,6 +957,7 @@ public class CameraFragment extends Fragment
 
     /**
      * OK work here
+     * UI onClick listeners
      */
     @Override
     public void onClick(View view) {

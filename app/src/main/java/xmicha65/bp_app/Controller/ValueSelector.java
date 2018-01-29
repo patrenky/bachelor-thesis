@@ -3,7 +3,13 @@ package xmicha65.bp_app.Controller;
 import xmicha65.bp_app.Model.Image;
 
 /**
- * Select 50 values for SolveG algorithm
+ * Select 50 values for RecoverCRF algorithm
+ * Methods to be implemented for experiment:
+ * - random values (source: shortly mentioned in the book E. Reinhard, HDR Imaging)
+ * - regularly arranged pixels (source: own idea)
+ * - selecting samples with histogram (source: own idea) (implemented)
+ * - matching samples over exposures (source: E. Reinhard, HDR Imaging)
+ * @author xmicha65
  */
 public class ValueSelector {
     private Image[] images;
@@ -19,13 +25,15 @@ public class ValueSelector {
         this.images = images;
         this.numExposures = images.length;
 
-        int middleOne = Math.round(images.length / 2);
-//        this.fiftyPositions = images[middleOne].getfiftyPositions(); // best idx 3
-//        this.numValues = this.fiftyPositions.length;
+        this.fiftyPositions = images[3].getfiftyPositions();
+        this.numValues = this.fiftyPositions.length;
 
         initValues();
     }
 
+    /**
+     * Init values for each RGB color
+     */
     private void initValues() {
         this.valuesR = new int[this.numValues][this.numExposures];
         this.valuesG = new int[this.numValues][this.numExposures];

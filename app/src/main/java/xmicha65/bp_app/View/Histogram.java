@@ -10,10 +10,15 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Temporary class for displaying histograms and CRF curves on ImageView
+ * Uses OpenCV {@link Mat} for drawing
+ * @author xmicha65
+ */
 public class Histogram {
 
     /**
-     * Display RGB response curves in graph
+     * Display RGB response curves on ImageView
      * (ImageView) findViewById(R.id.imageView1)
      */
     public static void displayCurves(ImageView iv, double[] red, double[] green, double[] blue) {
@@ -45,7 +50,7 @@ public class Histogram {
     }
 
     /**
-     * Display response curve in graph
+     * Display response curve on ImageView
      */
     public static void displayCurve(ImageView iv, double[] array) {
         int height = 400;
@@ -66,7 +71,7 @@ public class Histogram {
     }
 
     /**
-     * HDRCV krivka je na y osi posunuta
+     * Display CRF from OpenCV
      */
     public static void displayHdrcvCurve(ImageView iv, double[] array) {
         int height = 300;
@@ -87,7 +92,7 @@ public class Histogram {
     }
 
 //    /**
-//     * Display histogram
+//     * Display histogram on ImageView
 //     */
 //    public void displayHistogram(ImageView iv, Image image) {
 //        int[] histogram = image.getHistogram();
