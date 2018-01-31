@@ -14,7 +14,7 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_camera);
+        setContentView(R.layout.activity_camera_main);
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new CameraFragment())
