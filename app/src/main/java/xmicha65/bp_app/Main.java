@@ -10,6 +10,7 @@ import xmicha65.bp_app.View.CameraFragment;
  * @author https://github.com/googlesamples
  */
 public class Main extends AppCompatActivity {
+    CameraFragment camera = new CameraFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +18,7 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_camera_main);
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new CameraFragment())
+                    .replace(R.id.container, camera)
                     .commit();
         }
     }

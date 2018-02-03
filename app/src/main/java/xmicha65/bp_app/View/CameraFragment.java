@@ -48,6 +48,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.Range;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -72,10 +73,6 @@ import xmicha65.bp_app.R;
 /**
  * Working with Android camera using Camera2 API
  * @author https://github.com/googlesamples
- * xmicha65 updated methods:
- * onImageAvailable()
- * onViewCreated()
- * captureStillPicture()
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraFragment extends Fragment
@@ -214,24 +211,26 @@ public class CameraFragment extends Fragment
 
     /**
      * MY PLAYGROUND START ------------------
+     * @author xmicha65
      */
 
     private static final long MICRO_SECOND = 1000;
-    private static final long MILLI_SECOND = MICRO_SECOND * 1000;
-    private static final long ONE_SECOND = MILLI_SECOND * 1000;
+    private static final long MILI_SECOND = MICRO_SECOND * 1000;
+    private static final long ONE_SECOND = MILI_SECOND * 1000;
 
-    private long step = 200 * MILLI_SECOND;
-    private long mExposure = ONE_SECOND / 33 - step;
+    private long exposureMin;
+    private long exposureMax;
+    // TODO exposureStep
+
+//    private long mExposure = ONE_SECOND / 33;
+
+    private int iso = 1600;
 
     private int photoIndex = 0;
 
     private ImageView iv0;
     private ImageView iv1;
     private ImageView iv2;
-
-//    private Image image0;
-//    private Image image1;
-//    private Image image2;
 
     ShowImage shI0 = null;
     ShowImage shI1 = null;
@@ -280,10 +279,9 @@ public class CameraFragment extends Fragment
 
     /**
      * work here
-     * Capture a still picture. This method should be called when we get a response in
+     * Capture 3 pictures with different exposures.
+     * This method should be called when we get a response in
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
-     * CaptureRequest documentation:
-     * https://developer.android.com/reference/android/hardware/camera2/CaptureRequest.html
      */
     private void captureStillPicture() {
         try {
@@ -294,11 +292,6 @@ public class CameraFragment extends Fragment
 
             List<CaptureRequest> captureBuildersList = new ArrayList<>();
 
-//            long minNs = 99000;
-//            long stepNs = 50450500;
-//            long maxNs = 101000000;
-//            long startStep = -3;
-//            long incremenStep = 4;
             for(int i = 0; i < 3; i ++) {
                 // CaptureRequest.Builder that we use to take a picture
                 CaptureRequest.Builder captureBuilder =
@@ -309,24 +302,34 @@ public class CameraFragment extends Fragment
                 int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
                 captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
-                // Control modes
+                // Control modes off
                 // captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                 captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
                 captureBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
 
+                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, iso);
+                switch (i) {
+                    case 0:
+                        captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMin);
+                        break;
+                    case 1:
+                        captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMin + MILI_SECOND);
+                        break;
+                    case 2:
+                        captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMax);
+                        break;
+                }
+
                 // Sensor ISO
-                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 1600);
+//                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 1600);
+                // Max frame rate
 //                captureBuilder.set(CaptureRequest.SENSOR_FRAME_DURATION, ONE_SECOND / 30);
 
                 // Sensor exposure time
-                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, mExposure);
-                // Max frame rate
-//                captureBuilder.set(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, (int) startStep);
+//                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, mExposure);
 
-                System.out.println("#### captureStillPicture with ns: " + mExposure);
-//                startStep += incremenStep;
-//                minNs += stepNs;
-                mExposure += step;
+//                System.out.println("#### captureStillPicture with ns: " + exposureMin + " " + exposureMax);
+//                mExposure += step;
                 captureBuildersList.add(captureBuilder.build());
             }
 
@@ -346,7 +349,6 @@ public class CameraFragment extends Fragment
             mCaptureSession.stopRepeating();
             mCaptureSession.abortCaptures();
             mCaptureSession.captureBurst(captureBuildersList, CaptureCallback, null);
-            // mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -623,6 +625,11 @@ public class CameraFragment extends Fragment
             for (String cameraId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics
                         = manager.getCameraCharacteristics(cameraId);
+
+                // get exposure time range of camera
+                Range exposureRange = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE);
+                exposureMin = (long) exposureRange.getLower();
+                exposureMax = (long) exposureRange.getUpper();
 
                 // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
