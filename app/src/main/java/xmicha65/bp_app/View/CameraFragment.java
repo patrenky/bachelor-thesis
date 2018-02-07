@@ -239,11 +239,11 @@ public class CameraFragment extends Fragment
     /** work here */
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.capture).setOnClickListener(this);
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        iv0 = (ImageView) view.findViewById(R.id.cameraImageView0);
-        iv1 = (ImageView) view.findViewById(R.id.cameraImageView1);
-        iv2 = (ImageView) view.findViewById(R.id.cameraImageView2);
+        view.findViewById(R.id.camera_capture).setOnClickListener(this);
+        mTextureView = (AutoFitTextureView) view.findViewById(R.id.camera_texture);
+        iv0 = (ImageView) view.findViewById(R.id.camera_img0);
+        iv1 = (ImageView) view.findViewById(R.id.camera_img1);
+        iv2 = (ImageView) view.findViewById(R.id.camera_img2);
     }
 
     /** work here */
@@ -261,7 +261,7 @@ public class CameraFragment extends Fragment
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.capture: {
+            case R.id.camera_capture: {
                 takePicture();
                 break;
             }
@@ -397,7 +397,7 @@ public class CameraFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_camera_fragment, container, false);
+        return inflater.inflate(R.layout.activity_frag_camera, container, false);
     }
 
     @Override

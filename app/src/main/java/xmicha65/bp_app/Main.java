@@ -10,16 +10,17 @@ import xmicha65.bp_app.View.CameraFragment;
  * @author https://github.com/googlesamples
  */
 public class Main extends AppCompatActivity {
-    CameraFragment camera = new CameraFragment();
-
+    /** Activity is created */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera_main);
+        setContentView(R.layout.activity_main);
+
         if (null == savedInstanceState) {
+            CameraFragment camera = new CameraFragment();
+
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, camera)
-                    .commit();
+                    .replace(R.id.container, camera).commit();
         }
     }
 }

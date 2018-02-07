@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <xmicha65.bp_app.Camera.AutoFitTextureView
+        android:id="@+id/camera_texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ImageView
+        android:id="@+id/camera_img0"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:background="@android:color/background_light"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="52dp" />
+
+    <ImageView
+        android:id="@+id/camera_img1"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:background="@android:color/background_light"
+        app:layout_constraintLeft_toRightOf="@+id/camera_img0"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/camera_controls"
+        app:layout_constraintRight_toLeftOf="@+id/camera_img2"
+        android:layout_marginRight="0dp" />
+
+    <ImageView
+        android:id="@+id/camera_img2"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:background="@android:color/background_light"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="52dp" />
+
+    <FrameLayout
+        android:id="@+id/camera_controls"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/camera_texture"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/camera_capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="capture"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="463dp" />
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

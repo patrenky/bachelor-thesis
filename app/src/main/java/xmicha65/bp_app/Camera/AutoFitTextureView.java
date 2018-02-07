@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xmicha65.bp_app.View;
+package xmicha65.bp_app.Camera;
 
 import android.content.Context;
 import android.util.AttributeSet;

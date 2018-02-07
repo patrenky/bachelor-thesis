@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import xmicha65.bp_app.Controller.BuildHDR;
-import xmicha65.bp_app.Controller.OpencvHDR;
 import xmicha65.bp_app.Model.Image;
 import xmicha65.bp_app.View.Histogram;
 
@@ -35,7 +34,7 @@ public class MainHdr extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_tmp);
         this.ivUp = (ImageView) findViewById(R.id.imageView0);
         this.ivDown = (ImageView) findViewById(R.id.imageView1);
 
