@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.media.MediaMetadataRetriever;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 
@@ -206,5 +207,15 @@ public class Image {
         for (int i = 0; i < a.length; i++)
             System.out.print(a[i] + " ");
         System.out.println("\n----------------");
+    }
+
+    public byte[] bitmapToByte(Bitmap bmp) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public Bitmap byteToBitmap(byte[] byteArray) {
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
 }
