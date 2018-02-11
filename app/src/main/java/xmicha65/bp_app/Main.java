@@ -3,6 +3,9 @@ package xmicha65.bp_app;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.List;
+
+import xmicha65.bp_app.Model.ImageLDR;
 import xmicha65.bp_app.View.CameraFragment;
 import xmicha65.bp_app.View.EditFragment;
 import xmicha65.bp_app.View.HomeFragment;
@@ -30,6 +33,9 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    /**
+     * Home fragment handler
+     */
     public void homeSelectCapture() {
         CameraFragment cameraScreen = new CameraFragment();
 
@@ -37,12 +43,22 @@ public class Main extends AppCompatActivity {
                 .replace(R.id.fragment_container, cameraScreen).commit();
     }
 
-    public void cameraAfterCaptured(byte[] capturedImage0) {
+    /**
+     * Camera fragment handler
+     */
+    public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
+        System.out.println("##@ list:" + capturedImages);
+    }
+
+    /**
+     * Display edit screen, start tone mapping
+     */
+    private void startToneMap(double[] hdr) {
         EditFragment editScreen = new EditFragment();
 
-        // passing captured images into edit screen
+        // passing hdr format into edit screen
         Bundle args = new Bundle();
-        args.putByteArray(EditFragment.ARG_IMAGE0, capturedImage0);
+        args.putDoubleArray(EditFragment.ARG_HDR, hdr);
         editScreen.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()

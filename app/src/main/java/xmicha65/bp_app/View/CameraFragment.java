@@ -59,7 +59,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,10 +67,13 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import xmicha65.bp_app.Camera.*;
+import xmicha65.bp_app.Main;
+import xmicha65.bp_app.Model.ImageLDR;
 import xmicha65.bp_app.R;
 
 /**
  * Working with Android camera using Camera2 API
+ *
  * @author https://github.com/googlesamples
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -158,10 +160,10 @@ public class CameraFragment extends Fragment
      */
     private ImageReader mImageReader;
 
-    /**
-     * This is the output file for our picture.
-     */
-    private File mFile;
+//    /**
+//     * This is the output file for our picture.
+//     */
+//    private File mFile;
 
     /**
      * {@link CaptureRequest.Builder} for the camera preview
@@ -185,9 +187,9 @@ public class CameraFragment extends Fragment
      */
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
 
-    /**
-     * Whether the current camera device supports Flash or not.
-     */
+//    /**
+//     * Whether the current camera device supports Flash or not.
+//     */
     // private boolean mFlashSupported;
 
     /**
@@ -211,6 +213,7 @@ public class CameraFragment extends Fragment
 
     /**
      * MY PLAYGROUND START ------------------
+     *
      * @author xmicha65
      */
 
@@ -232,11 +235,18 @@ public class CameraFragment extends Fragment
     private ImageView iv1;
     private ImageView iv2;
 
-    ShowImage shI0 = null;
-    ShowImage shI1 = null;
-    ShowImage shI2 = null;
+    private ImageLDR image0;
+    private ImageLDR image1;
+    private ImageLDR image2;
 
-    /** work here */
+    // TODO get double exposure time
+    private double exp0 = 0.125;
+    private double exp1 = 0.25;
+    private double exp2 = 0.5;
+
+    /**
+     * work here
+     */
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.camera_capture).setOnClickListener(this);
@@ -246,7 +256,9 @@ public class CameraFragment extends Fragment
         iv2 = (ImageView) view.findViewById(R.id.camera_img2);
     }
 
-    /** work here */
+    /**
+     * work here
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -292,7 +304,7 @@ public class CameraFragment extends Fragment
 
             List<CaptureRequest> captureBuildersList = new ArrayList<>();
 
-            for(int i = 0; i < 3; i ++) {
+            for (int i = 0; i < 3; i++) {
                 // CaptureRequest.Builder that we use to take a picture
                 CaptureRequest.Builder captureBuilder =
                         mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
@@ -357,35 +369,48 @@ public class CameraFragment extends Fragment
     /**
      * (callback) work here
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
-     * still image is ready to be saved.
+     * still image is ready to be processed.
      */
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            // mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
-            // mBackgroundHandler.post(new ShowImage(iv0, reader.acquireNextImage()));
             Image im = reader.acquireNextImage();
             switch (photoIndex) {
                 case 0:
+                    ShowImage shI0;
                     mBackgroundHandler.post(shI0 = new ShowImage(iv0, im));
                     shI0.display();
+                    image0 = new ImageLDR(im, exp0);
                     break;
                 case 1:
+                    ShowImage shI1;
                     mBackgroundHandler.post(shI1 = new ShowImage(iv1, im));
                     shI1.display();
+                    image1 = new ImageLDR(im, exp1);
                     break;
                 case 2:
+                    ShowImage shI2;
                     mBackgroundHandler.post(shI2 = new ShowImage(iv2, im));
                     shI2.display();
+                    image2 = new ImageLDR(im, exp2);
+                    processImages();
                     break;
             }
             im.close();
             photoIndex++;
         }
-
     };
+
+    private void processImages() {
+//        List<ImageLDR> capturedImages = new ArrayList<>();
+//        capturedImages.add(image0);
+//        capturedImages.add(new ImageLDR(image1, exp1));
+//        capturedImages.add(new ImageLDR(image2, exp2));
+//
+//        ((Main) getActivity()).cameraAfterCaptured(capturedImages);
+    }
 
     /**
      * MY PLAYGROUND END --------------------
@@ -837,7 +862,8 @@ public class CameraFragment extends Fragment
         }
 
         @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture texture) {}
+        public void onSurfaceTextureUpdated(SurfaceTexture texture) {
+        }
 
     };
 
@@ -891,8 +917,8 @@ public class CameraFragment extends Fragment
                 case STATE_WAITING_LOCK: {
 //                    Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
 //                    if (afState == null) {
-                        captureStillPicture();
-                        mState = STATE_PICTURE_TAKEN; // remove this line
+                    captureStillPicture();
+                    mState = STATE_PICTURE_TAKEN; // remove this line
 //                    } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
 //                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
 //                        // CONTROL_AE_STATE can be null on some devices
