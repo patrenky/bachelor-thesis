@@ -235,9 +235,7 @@ public class CameraFragment extends Fragment
     private ImageView iv1;
     private ImageView iv2;
 
-    private ImageLDR image0;
-    private ImageLDR image1;
-    private ImageLDR image2;
+    private List<ImageLDR> capturedImages = new ArrayList<>();
 
     // TODO get double exposure time
     private double exp0 = 0.125;
@@ -376,40 +374,36 @@ public class CameraFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            Image im = reader.acquireNextImage();
+            Image image = reader.acquireNextImage();
+
             switch (photoIndex) {
                 case 0:
                     ShowImage shI0;
-                    mBackgroundHandler.post(shI0 = new ShowImage(iv0, im));
+                    mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
                     shI0.display();
-                    image0 = new ImageLDR(im, exp0);
+                    capturedImages.add(new ImageLDR(image, exp0));
                     break;
                 case 1:
                     ShowImage shI1;
-                    mBackgroundHandler.post(shI1 = new ShowImage(iv1, im));
+                    mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
                     shI1.display();
-                    image1 = new ImageLDR(im, exp1);
+                    capturedImages.add(new ImageLDR(image, exp1));
                     break;
                 case 2:
                     ShowImage shI2;
-                    mBackgroundHandler.post(shI2 = new ShowImage(iv2, im));
+                    mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
                     shI2.display();
-                    image2 = new ImageLDR(im, exp2);
+                    capturedImages.add(new ImageLDR(image, exp2));
                     processImages();
                     break;
             }
-            im.close();
+            image.close();
             photoIndex++;
         }
     };
 
     private void processImages() {
-//        List<ImageLDR> capturedImages = new ArrayList<>();
-//        capturedImages.add(image0);
-//        capturedImages.add(new ImageLDR(image1, exp1));
-//        capturedImages.add(new ImageLDR(image2, exp2));
-//
-//        ((Main) getActivity()).cameraAfterCaptured(capturedImages);
+        ((Main) getActivity()).cameraAfterCaptured(capturedImages);
     }
 
     /**

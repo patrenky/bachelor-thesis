@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 /**
  * Image class with attributes
+ * Temporary old class (new ImageLDR)
  * @author xmicha65
  */
 public class Image {

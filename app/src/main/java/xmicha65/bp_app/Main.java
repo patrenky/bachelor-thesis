@@ -31,6 +31,7 @@ public class Main extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, homeScreen).commit();
         }
+        homeSelectCapture();
     }
 
     /**
@@ -47,7 +48,7 @@ public class Main extends AppCompatActivity {
      * Camera fragment handler
      */
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
-        System.out.println("##@ list:" + capturedImages);
+        // make HDR format & post to TMO
     }
 
     /**
