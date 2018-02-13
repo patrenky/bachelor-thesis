@@ -1,6 +1,6 @@
-package xmicha65.bp_app.Controller;
+package xmicha65.bp_app.controller;
 
-import xmicha65.bp_app.Model.Image;
+import xmicha65.bp_app.model.Image;
 
 /**
  * HDR algorithm main controller

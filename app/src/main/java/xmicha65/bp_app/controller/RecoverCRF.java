@@ -1,4 +1,4 @@
-package xmicha65.bp_app.Controller;
+package xmicha65.bp_app.controller;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

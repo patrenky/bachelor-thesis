@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xmicha65.bp_app.View;
+package xmicha65.bp_app.view;
 
 import android.Manifest;
 import android.app.Activity;
@@ -66,9 +66,9 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import xmicha65.bp_app.Camera.*;
+import xmicha65.bp_app.controller.camera.*;
 import xmicha65.bp_app.Main;
-import xmicha65.bp_app.Model.ImageLDR;
+import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.R;
 
 /**

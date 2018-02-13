@@ -1,4 +1,4 @@
-package xmicha65.bp_app.Camera;
+package xmicha65.bp_app.controller.camera;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

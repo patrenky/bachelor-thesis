@@ -1,4 +1,4 @@
-package xmicha65.bp_app.Controller;
+package xmicha65.bp_app.controller;
 
 import android.graphics.Bitmap;
 
@@ -10,10 +10,9 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.photo.Photo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import xmicha65.bp_app.Model.Image;
+import xmicha65.bp_app.model.Image;
 
 /**
  * Creating HDR with OpenCV methods

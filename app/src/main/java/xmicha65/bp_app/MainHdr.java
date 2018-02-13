@@ -12,12 +12,12 @@ import org.opencv.android.OpenCVLoader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import xmicha65.bp_app.Controller.BuildHDR;
-import xmicha65.bp_app.Model.Image;
-import xmicha65.bp_app.View.Histogram;
+import xmicha65.bp_app.controller.BuildHDR;
+import xmicha65.bp_app.model.Image;
+import xmicha65.bp_app.view.Histogram;
 
 /**
- * Main class
+ * Temporary main class
  * init images from assets, OpenCV library and call BuildHDR algorithm
  * @author xmicha65
  * Source of async OpenCV initialization, methods mLoaderCallback() and onResume() statement:

@@ -1,4 +1,4 @@
-package xmicha65.bp_app.View;
+package xmicha65.bp_app.view;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;

@@ -1,4 +1,4 @@
-package xmicha65.bp_app.Model;
+package xmicha65.bp_app.model;
 
 /**
  * Prepared class for HDR content of merged exposures

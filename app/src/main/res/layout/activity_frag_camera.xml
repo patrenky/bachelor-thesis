@@ -7,7 +7,7 @@
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
-    <xmicha65.bp_app.Camera.AutoFitTextureView
+    <xmicha65.bp_app.controller.camera.AutoFitTextureView
         android:id="@+id/camera_texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package xmicha65.bp_app.Model;
+package xmicha65.bp_app.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

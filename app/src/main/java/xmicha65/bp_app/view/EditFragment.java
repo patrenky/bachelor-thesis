@@ -1,4 +1,4 @@
-package xmicha65.bp_app.View;
+package xmicha65.bp_app.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
