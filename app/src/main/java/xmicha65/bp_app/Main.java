@@ -1,14 +1,19 @@
 package xmicha65.bp_app;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 
+import java.io.Serializable;
 import java.util.List;
 
+import xmicha65.bp_app.controller.hdr.HDRController;
+import xmicha65.bp_app.controller.tmo.TMOReinhard;
 import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.view.CameraFragment;
 import xmicha65.bp_app.view.EditFragment;
@@ -59,32 +64,42 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    private CameraFragment cameraScreen;
+
     /**
      * Home fragment handler
      */
     public void homeSelectCapture() {
-        CameraFragment cameraScreen = new CameraFragment();
+        cameraScreen = new CameraFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, cameraScreen).commit();
     }
 
+    private Mat hdrImage;
+//    private TMOReinhard tonemapper;
+
     /**
      * Camera fragment handler
      */
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
-        // make HDR format & post to TMO
+        HDRController hdrController = new HDRController(capturedImages, true);
+        hdrImage = hdrController.getOpencvHDR();
+        startToneMap();
     }
 
     /**
      * Display edit screen, start tone mapping
      */
-    private void startToneMap(double[] hdr) {
+    private void startToneMap() {
+//        tonemapper = new TMOReinhard(hdrImage);
+
         EditFragment editScreen = new EditFragment();
 
-        // passing hdr format into edit screen
+        // passing hdr image to edit screen
         Bundle args = new Bundle();
-        args.putDoubleArray(EditFragment.ARG_HDR, hdr);
+        // TODO org.opencv.core.Mat cannot be cast to java.io.Serializable
+        args.putSerializable(EditFragment.ARG_HDR, (Serializable) hdrImage);
         editScreen.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()

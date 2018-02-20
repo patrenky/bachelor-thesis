@@ -77,4 +77,20 @@ public class ImageLDR {
         Imgproc.cvtColor(matBGRA, matBGR, Imgproc.COLOR_BGRA2BGR);
         return matBGR;
     }
+
+    public Mat bitmapToMat() {
+        return bitmapToMat(this.bmpImg);
+    }
+
+    /**
+     * GETTERS
+     */
+
+    public double getExposureTime() {
+        return this.exposureTime;
+    }
+
+    public Bitmap getBmpImg() {
+        return this.bmpImg;
+    }
 }

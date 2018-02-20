@@ -249,8 +249,8 @@ public class CameraFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.camera_capture).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.camera_texture);
-        iv0 = (ImageView) view.findViewById(R.id.camera_img0);
         iv1 = (ImageView) view.findViewById(R.id.camera_img1);
+        iv0 = (ImageView) view.findViewById(R.id.camera_img0);
         iv2 = (ImageView) view.findViewById(R.id.camera_img2);
     }
 
@@ -378,21 +378,21 @@ public class CameraFragment extends Fragment
 
             switch (photoIndex) {
                 case 0:
-                    ShowImage shI0;
-                    mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
-                    shI0.display();
+//                    ShowImage shI0;
+//                    mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
+//                    shI0.display();
                     capturedImages.add(new ImageLDR(image, exp0));
                     break;
                 case 1:
-                    ShowImage shI1;
-                    mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
-                    shI1.display();
+//                    ShowImage shI1;
+//                    mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
+//                    shI1.display();
                     capturedImages.add(new ImageLDR(image, exp1));
                     break;
                 case 2:
-                    ShowImage shI2;
-                    mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
-                    shI2.display();
+//                    ShowImage shI2;
+//                    mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
+//                    shI2.display();
                     capturedImages.add(new ImageLDR(image, exp2));
                     processImages();
                     break;
