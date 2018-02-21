@@ -66,10 +66,13 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import xmicha65.bp_app.controller.camera.*;
 import xmicha65.bp_app.Main;
-import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.R;
+import xmicha65.bp_app.controller.camera.AutoFitTextureView;
+import xmicha65.bp_app.controller.camera.CompareSizesByArea;
+import xmicha65.bp_app.controller.camera.ConfirmationDialog;
+import xmicha65.bp_app.controller.camera.ErrorDialog;
+import xmicha65.bp_app.model.ImageLDR;
 
 /**
  * Working with Android camera using Camera2 API
