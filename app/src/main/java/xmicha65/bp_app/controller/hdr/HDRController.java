@@ -28,37 +28,38 @@ public class HDRController {
     private CameraCRF responseCurves;
     private ImageHDR hdrImage;
 
-    private Mat cvHdrImage; // openCV
-
     public HDRController(List<ImageLDR> captImages, boolean opencv) {
-        float[] expTimes;
+        this.capturedImages = captImages;
+
+        if (opencv) opencvHDR();
+    }
+
+    private void opencvHDR() {
+        Mat cvHdrImage = new Mat();
         Mat response = new Mat();
-        int numImages = captImages.size();
+
+        int numImages = capturedImages.size();
 
         // init float exposure times
-        expTimes = new float[numImages];
+        float[] expTimes = new float[numImages];
         for (int i = 0; i < numImages; i++) {
-            expTimes[i] = (float) captImages.get(i).getExposureTime();
+            expTimes[i] = (float) capturedImages.get(i).getExposureTime();
         }
+        Mat mExpTimes = new MatOfFloat(expTimes);
 
         // init List of image Mat
         List<Mat> cvimages = new ArrayList<>();
         for (int i = 0; i < numImages; i++) {
-            cvimages.add(captImages.get(i).getMatImg());
+            cvimages.add(capturedImages.get(i).getMatImg());
         }
-
-        Mat mExpTimes = new MatOfFloat(expTimes);
-        cvHdrImage = new Mat();
 
         Photo.createCalibrateDebevec().process(cvimages, response, mExpTimes);
         Photo.createMergeDebevec().process(cvimages, cvHdrImage, mExpTimes, response);
+
+        this.hdrImage = new ImageHDR(cvHdrImage);
     }
 
-    public Mat getOpencvHDR() {
-        return this.cvHdrImage;
-    }
-
-    public HDRController(List<ImageLDR> captImages) {
-
+    public ImageHDR getHdrImage() {
+        return this.hdrImage;
     }
 }
