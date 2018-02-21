@@ -89,16 +89,4 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         // save current state in case we need to recreate the fragment
         outState.putSerializable(ARG_HDR, (Serializable) hdrImage);
     }
-
-    public Mat byteToMat(byte[] bytes) {
-        Mat mat = new Mat();
-        mat.put(0, 0, bytes);
-        return mat;
-    }
-
-    public byte[] matToByte(Mat mat) {
-        byte[] bytes = new byte[(int) (mat.total() * mat.channels())];
-        mat.get(0, 0, bytes);
-        return bytes;
-    }
 }

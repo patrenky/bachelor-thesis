@@ -1,12 +1,7 @@
 package xmicha65.bp_app.controller.hdr;
 
-import android.graphics.Bitmap;
-
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
-import org.opencv.imgproc.Imgproc;
 import org.opencv.photo.Photo;
 
 import java.util.ArrayList;
@@ -49,7 +44,7 @@ public class HDRController {
         // init List of image Mat
         List<Mat> cvimages = new ArrayList<>();
         for (int i = 0; i < numImages; i++) {
-            cvimages.add(captImages.get(i).bitmapToMat());
+            cvimages.add(captImages.get(i).getMatImg());
         }
 
         Mat mExpTimes = new MatOfFloat(expTimes);
