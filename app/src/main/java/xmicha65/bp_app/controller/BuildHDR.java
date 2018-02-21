@@ -1,6 +1,6 @@
 package xmicha65.bp_app.controller;
 
-import xmicha65.bp_app.model.Image;
+import xmicha65.bp_app.model.ImageLDR;
 
 /**
  * HDR algorithm main controller
@@ -11,7 +11,7 @@ public class BuildHDR {
     private double[] weights;       // weighting function
     private double[] lnT;           // log delta t for image j (B(j))
 
-    private Image[] images;         // input images array
+    private ImageLDR[] images;         // input images array
     private int numPixels;          // num of pixels (i)
     private int numExposures;       // num of exposures (j)
 
@@ -20,7 +20,7 @@ public class BuildHDR {
     private RecoverCRF solveGreen;
     private RecoverCRF solveBlue;
 
-    public BuildHDR(Image[] images) {
+    public BuildHDR(ImageLDR[] images) {
         this.images = images;
         this.numPixels = images[0].getLength();
         this.numExposures = images.length;
@@ -28,26 +28,26 @@ public class BuildHDR {
         initWeights();
         initLnT();
 
-        // select samples for algorithm
-        ValueSelector valueSelector = new ValueSelector(this.images);
-        int[][] ZijRed = valueSelector.getRed();
-        int[][] ZijGreen = valueSelector.getGreen();
-        int[][] ZijBlue = valueSelector.getBlue();
-
-        // recover CRF for each color channel
-        this.solveRed = new RecoverCRF(ZijRed, this.lnT, this.lambda, this.weights);
-        this.solveGreen = new RecoverCRF(ZijGreen, this.lnT, this.lambda, this.weights);
-        this.solveBlue = new RecoverCRF(ZijBlue, this.lnT, this.lambda, this.weights);
-
-        // merge exposures into HDR
-        new MergeExposures(this.solveRed.getG(),
-                this.solveGreen.getG(),
-                this.solveBlue.getG(),
-                this.weights,
-                this.lnT,
-                this.numExposures,
-                this.numPixels,
-                this.images);
+//        // select samples for algorithm
+//        ValueSelector valueSelector = new ValueSelector(this.images);
+//        int[][] ZijRed = valueSelector.getRed();
+//        int[][] ZijGreen = valueSelector.getGreen();
+//        int[][] ZijBlue = valueSelector.getBlue();
+//
+//        // recover CRF for each color channel
+//        this.solveRed = new RecoverCRF(ZijRed, this.lnT, this.lambda, this.weights);
+//        this.solveGreen = new RecoverCRF(ZijGreen, this.lnT, this.lambda, this.weights);
+//        this.solveBlue = new RecoverCRF(ZijBlue, this.lnT, this.lambda, this.weights);
+//
+//        // merge exposures into HDR
+//        new MergeExposures(this.solveRed.getG(),
+//                this.solveGreen.getG(),
+//                this.solveBlue.getG(),
+//                this.weights,
+//                this.lnT,
+//                this.numExposures,
+//                this.numPixels,
+//                this.images);
     }
 
     /**

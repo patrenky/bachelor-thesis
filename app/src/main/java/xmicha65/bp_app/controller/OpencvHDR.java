@@ -12,7 +12,7 @@ import org.opencv.photo.Photo;
 import java.util.ArrayList;
 import java.util.List;
 
-import xmicha65.bp_app.model.Image;
+import xmicha65.bp_app.model.ImageLDR;
 
 /**
  * Creating HDR with OpenCV methods
@@ -20,13 +20,13 @@ import xmicha65.bp_app.model.Image;
  * https://docs.opencv.org/3.2.0/d3/db7/tutorial_hdr_imaging.html
  */
 public class OpencvHDR {
-    private Image[] inImages;
+    private ImageLDR[] inImages;
     private float[] expTimes;
 
     private Mat response = new Mat(); // CRF curve
     private Mat ldrImage = new Mat(); // result of tonemapping
 
-    public OpencvHDR(Image[] images, double[] times) {
+    public OpencvHDR(ImageLDR[] images, double[] times) {
         this.inImages = images;
 
         // init float exposure times
@@ -38,7 +38,7 @@ public class OpencvHDR {
         // init List of image Mat
         List<Mat> cvimages = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            Bitmap bmp32 = inImages[i].getRgbImg().copy(Bitmap.Config.ARGB_8888, true);
+            Bitmap bmp32 = inImages[i].getBmpImg().copy(Bitmap.Config.ARGB_8888, true);
             Mat tmpBGRA = new Mat(bmp32.getHeight(), bmp32.getWidth(), CvType.CV_8UC4);
             Mat tmpBGR = new Mat();
             Utils.bitmapToMat(bmp32, tmpBGRA);
