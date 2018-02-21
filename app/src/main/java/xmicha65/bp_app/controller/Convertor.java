@@ -49,16 +49,4 @@ public class Convertor {
         Imgproc.cvtColor(matBGRA, matBGR, Imgproc.COLOR_BGRA2BGR);
         return matBGR;
     }
-
-    public static Mat byteToMat(byte[] bytes) {
-        Mat mat = new Mat();
-        mat.put(0, 0, bytes);
-        return mat;
-    }
-
-    public static byte[] matToByte(Mat mat) {
-        byte[] bytes = new byte[(int) (mat.total() * mat.channels())];
-        mat.get(0, 0, bytes);
-        return bytes;
-    }
 }

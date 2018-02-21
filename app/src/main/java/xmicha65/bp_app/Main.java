@@ -6,15 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Mat;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import xmicha65.bp_app.controller.hdr.HDRController;
+import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.view.CameraFragment;
 import xmicha65.bp_app.view.EditFragment;
@@ -65,13 +64,11 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private CameraFragment cameraScreen;
-
     /**
      * Home fragment handler
      */
     public void homeSelectCapture() {
-//        cameraScreen = new CameraFragment();
+//        CameraFragment cameraScreen = new CameraFragment();
 //
 //        getSupportFragmentManager().beginTransaction()
 //                .replace(R.id.fragment_container, cameraScreen).commit();
@@ -79,30 +76,24 @@ public class Main extends AppCompatActivity {
         initImages();
     }
 
-    private Mat hdrImage;
-//    private TMOReinhard tonemapper;
-
     /**
      * Camera fragment handler
      */
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
         HDRController hdrController = new HDRController(capturedImages, true);
-        hdrImage = hdrController.getOpencvHDR();
-        startToneMap();
+        startToneMap(hdrController.getHdrImage());
     }
 
     /**
      * Display edit screen, start tone mapping
      */
-    private void startToneMap() {
-//        tonemapper = new TMOReinhard(hdrImage);
+    private void startToneMap(ImageHDR hdrImage) {
 
         EditFragment editScreen = new EditFragment();
 
         // passing hdr image to edit screen
         Bundle args = new Bundle();
-        // TODO org.opencv.core.Mat cannot be cast to java.io.Serializable
-        args.putSerializable(EditFragment.ARG_HDR, (Serializable) hdrImage);
+        args.putSerializable(EditFragment.ARG_HDR, hdrImage );
         editScreen.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -114,20 +105,18 @@ public class Main extends AppCompatActivity {
      */
     public void initImages() {
         double[] expTimes = {0.001, 0.0166, 0.25, 8};
-        List<ImageLDR> capturedImages = new ArrayList<>();
+        List<ImageLDR> loadedImages = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             try {
                 // nacitanie obrazku z assets do inp streamu
                 InputStream ins = getAssets().open(String.format("room/lampicka%d.jpg", i));
-                capturedImages.add(new ImageLDR(ins, expTimes[i]));
-            } catch (IOException e) {
-                System.out.println("chyba nacitania obrazku z assets");
-            }
+                loadedImages.add(new ImageLDR(ins, expTimes[i]));
+            } catch (IOException ignored) {}
         }
 
-        HDRController hdrController = new HDRController(capturedImages, true);
-        hdrImage = hdrController.getOpencvHDR();
-        startToneMap();
+        HDRController hdrController = new HDRController(loadedImages, true);
+        ImageHDR hdrImage = hdrController.getHdrImage();
+        startToneMap(hdrImage);
     }
 }
