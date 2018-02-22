@@ -21,6 +21,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.home_capture).setOnClickListener(this);
         view.findViewById(R.id.home_load).setOnClickListener(this);
         view.findViewById(R.id.home_settings).setOnClickListener(this);
+        view.findViewById(R.id.home_init).setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +35,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.home_settings: {
+                break;
+            }
+            case R.id.home_init: {
+                ((Main) getActivity()).homeSelectinitImages();
                 break;
             }
         }

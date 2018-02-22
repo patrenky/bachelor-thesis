@@ -27,6 +27,7 @@ import xmicha65.bp_app.view.HomeFragment;
  * @author xmicha65
  */
 public class Main extends AppCompatActivity {
+    private boolean useOpenCVforMerge = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,20 +69,19 @@ public class Main extends AppCompatActivity {
      * Home fragment handler
      */
     public void homeSelectCapture() {
-//        CameraFragment cameraScreen = new CameraFragment();
-//
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragment_container, cameraScreen).commit();
+        CameraFragment cameraScreen = new CameraFragment();
 
-        initImages();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, cameraScreen).commit();
     }
 
     /**
      * Camera fragment handler
      */
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
-        HDRController hdrController = new HDRController(capturedImages, true);
-        startToneMap(hdrController.getHdrImage());
+        HDRController hdrController = new HDRController(capturedImages, useOpenCVforMerge);
+        System.out.println("### starting TMO");
+//        startToneMap(hdrController.getHdrImage());
     }
 
     /**
@@ -103,7 +103,7 @@ public class Main extends AppCompatActivity {
     /**
      * Temporary method for init 4 images from assets
      */
-    public void initImages() {
+    public void homeSelectinitImages() {
         double[] expTimes = {0.001, 0.0166, 0.25, 8};
         List<ImageLDR> loadedImages = new ArrayList<>();
 
@@ -115,8 +115,6 @@ public class Main extends AppCompatActivity {
             } catch (IOException ignored) {}
         }
 
-        HDRController hdrController = new HDRController(loadedImages, true);
-        ImageHDR hdrImage = hdrController.getHdrImage();
-        startToneMap(hdrImage);
+        cameraAfterCaptured(loadedImages);
     }
 }
