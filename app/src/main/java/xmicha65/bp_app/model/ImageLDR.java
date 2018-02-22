@@ -67,7 +67,20 @@ public class ImageLDR {
         return this.pixels.length;
     }
 
-    public double getExposure() {
-        return this.exposureTime;
+    public int getPixel(int idx) {
+        return this.pixels[idx];
+    }
+
+    public int getPixel(int idx, Color color) {
+        switch (color) {
+            case RED:
+                return (this.pixels[idx] >> 16) & 0xff;
+            case GREEN:
+                return (this.pixels[idx] >> 8) & 0xff;
+            case BLUE:
+                return (this.pixels[idx]) & 0xff;
+            default:
+                return 0;
+        }
     }
 }

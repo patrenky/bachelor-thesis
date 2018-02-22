@@ -5,18 +5,22 @@ import org.opencv.core.Mat;
 import java.io.Serializable;
 
 /**
- * Prepared class for HDR content of merged exposures
- * This class will have methods for saving HDR content into HDR formats
+ * HDR content of merged exposures
+ * todos:
+ * - saving HDR content into HDR formats
+ *
  * @author xmicha65
  */
 public class ImageHDR implements Serializable {
-    private Mat matHdrImg;
-    private double[] E; // radiance map
-    private int w;      // width
-    private int h;      // height
+    private Mat matHdrImage;
+    private double[] hdrImage;
 
-    public ImageHDR(Mat hdrImage) {
-        this.matHdrImg = hdrImage;
+    public ImageHDR(Mat matHdrImage) {
+        this.matHdrImage = matHdrImage;
+    }
+
+    public ImageHDR(double[] E) {
+        this.hdrImage = E;
     }
 
     /**
@@ -24,6 +28,6 @@ public class ImageHDR implements Serializable {
      */
 
     public Mat getMatHdrImg() {
-        return this.matHdrImg;
+        return this.matHdrImage;
     }
 }
