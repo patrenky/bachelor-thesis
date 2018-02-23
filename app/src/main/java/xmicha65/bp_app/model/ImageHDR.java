@@ -13,14 +13,9 @@ import java.io.Serializable;
  */
 public class ImageHDR implements Serializable {
     private Mat matHdrImage;
-    private double[] hdrImage;
 
     public ImageHDR(Mat matHdrImage) {
         this.matHdrImage = matHdrImage;
-    }
-
-    public ImageHDR(double[] E) {
-        this.hdrImage = E;
     }
 
     /**

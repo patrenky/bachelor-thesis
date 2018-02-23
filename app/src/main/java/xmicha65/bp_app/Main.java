@@ -81,7 +81,7 @@ public class Main extends AppCompatActivity {
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
         HDRController hdrController = new HDRController(capturedImages, useOpenCVforMerge);
         System.out.println("### starting TMO");
-//        startToneMap(hdrController.getHdrImage());
+        startToneMap(hdrController.getHdrImage());
     }
 
     /**

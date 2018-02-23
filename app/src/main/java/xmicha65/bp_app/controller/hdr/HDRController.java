@@ -5,6 +5,7 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.photo.Photo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import xmicha65.bp_app.model.CameraCRF;
@@ -48,13 +49,13 @@ public class HDRController {
         Mat mExpTimes = new MatOfFloat(expTimes);
 
         // init List of image Mat
-        List<Mat> cvimages = new ArrayList<>();
+        List<Mat> matImages = new ArrayList<>();
         for (int i = 0; i < numImages; i++) {
-            cvimages.add(capturedImages.get(i).getMatImg());
+            matImages.add(capturedImages.get(i).getMatImg());
         }
 
-        Photo.createCalibrateDebevec().process(cvimages, matCrf, mExpTimes);
-        Photo.createMergeDebevec().process(cvimages, matHdrImage, mExpTimes, matCrf);
+        Photo.createCalibrateDebevec().process(matImages, matCrf, mExpTimes);
+        Photo.createMergeDebevec().process(matImages, matHdrImage, mExpTimes, matCrf);
 
         this.hdrImage = new ImageHDR(matHdrImage);
     }
@@ -81,7 +82,10 @@ public class HDRController {
         HDRMerge hdrMerge = new HDRMerge(cameraCRF, weights, lnT, numPixels, numExposures, capturedImages);
 
         System.out.println("### HDRend");
-        // TODO hdrImage = new ImageHDR(lnE);
+        this.hdrImage = hdrMerge.getHdrImage();
+        // TODO najst problem
+        System.out.println("### mat opencv hdr: [1.2115336656570435, 0.8641960024833679, 0.35805967450141907]");
+        System.out.println("### mat my hdr: " + Arrays.toString(hdrImage.getMatHdrImg().get(0, 0)));
     }
 
     /**

@@ -1,5 +1,8 @@
 package xmicha65.bp_app.controller.hdr;
 
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+
 import java.util.List;
 
 import xmicha65.bp_app.model.CameraCRF;
@@ -34,8 +37,7 @@ public class HDRMerge {
         double[] lnEBlue = createHDR(cameraCRF.getCrfBlue(), Color.BLUE);
 
         // merge hdr content
-        double[] lnE = mergeHDR(lnERed, lnEGreen, lnEBlue);
-        // TODO return this.lnE
+        mergeHDR(lnERed, lnEGreen, lnEBlue);
     }
 
     /**
@@ -66,10 +68,26 @@ public class HDRMerge {
     }
 
     /**
-     * Merge HDR content channels into double[]
+     * Merge HDR content channels into Mat
      */
-    private double[] mergeHDR(double[] lnERed, double[] lnEGreen, double[] lnEBlue) {
-        return null;
-        // TODO double [ pixel ] [ channel ]
+    private void mergeHDR(double[] lnERed, double[] lnEGreen, double[] lnEBlue) {
+        System.out.println("### starting merging");
+        int width = images.get(0).getBmpImg().getWidth();
+        int height = images.get(0).getBmpImg().getHeight();
+        Mat matHdrImage = new Mat(height, width, CvType.CV_32FC3);
+
+        int idx = 0;
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                matHdrImage.put(row, col, lnEBlue[idx] + 1, lnEGreen[idx] + 1, lnERed[idx]+ 1);
+                idx++;
+            }
+        }
+
+        this.hdrImage = new ImageHDR(matHdrImage);
+    }
+
+    public ImageHDR getHdrImage() {
+        return hdrImage;
     }
 }
