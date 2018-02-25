@@ -83,9 +83,11 @@ public class HDRController {
 
         System.out.println("### HDRend");
         this.hdrImage = hdrMerge.getHdrImage();
-        // TODO najst problem
-        System.out.println("### mat opencv hdr: [1.2115336656570435, 0.8641960024833679, 0.35805967450141907]");
-        System.out.println("### mat my hdr: " + Arrays.toString(hdrImage.getMatHdrImg().get(0, 0)));
+
+//        System.out.println("### opencv crf: [0.002659457502886653, 0.0028577358461916447, 0.000794318737462163]");
+//        System.out.println("### my crf: [" + cameraCRF.getCrfBlue()[0] + ", " + cameraCRF.getCrfGreen()[0] + ", " + cameraCRF.getCrfRed()[0] + "]");
+        System.out.println("### opencv hdr: [1.2115336656570435, 0.8641960024833679, 0.35805967450141907]");
+        System.out.println("### my hdr: " + Arrays.toString(hdrImage.getMatHdrImg().get(0, 0)));
     }
 
     /**

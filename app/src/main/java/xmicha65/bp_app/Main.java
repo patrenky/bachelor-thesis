@@ -58,10 +58,12 @@ public class Main extends AppCompatActivity {
         } else {
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
-            HomeFragment homeScreen = new HomeFragment();
+//            HomeFragment homeScreen = new HomeFragment();
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragment_container, homeScreen).commit();
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, homeScreen).commit();
+            homeSelectinitImages(); // tmp
         }
     }
 

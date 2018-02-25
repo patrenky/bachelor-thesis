@@ -83,4 +83,12 @@ public class ImageLDR {
                 return 0;
         }
     }
+
+    public double[] getPixelChannels(int idx) {
+        return new double[]{
+                (pixels[idx] >> 16) & 0xff,
+                (pixels[idx] >> 8) & 0xff,
+                (pixels[idx]) & 0xff
+        };
+    }
 }

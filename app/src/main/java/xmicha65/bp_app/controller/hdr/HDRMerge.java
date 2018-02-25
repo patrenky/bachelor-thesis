@@ -79,7 +79,7 @@ public class HDRMerge {
         int idx = 0;
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                matHdrImage.put(row, col, lnEBlue[idx] + 1, lnEGreen[idx] + 1, lnERed[idx]+ 1);
+                matHdrImage.put(row, col, lnEBlue[idx], lnEGreen[idx], lnERed[idx]);
                 idx++;
             }
         }
