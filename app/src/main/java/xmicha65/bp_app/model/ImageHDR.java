@@ -18,6 +18,10 @@ public class ImageHDR implements Serializable {
         this.matHdrImage = matHdrImage;
     }
 
+    public void save(String filename) {
+        System.out.println("### filename: " + filename);
+    }
+
     /**
      * GETTERS
      */

@@ -1,5 +1,6 @@
 package xmicha65.bp_app.view;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -72,7 +73,8 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         // buttons
         view.findViewById(R.id.edit_back).setOnClickListener(this);
         view.findViewById(R.id.edit_reset).setOnClickListener(this);
-        view.findViewById(R.id.edit_save).setOnClickListener(this);
+        view.findViewById(R.id.edit_save_hdr).setOnClickListener(this);
+        view.findViewById(R.id.edit_save_jpg).setOnClickListener(this);
         // seekBars
         barGama = (SeekBar) view.findViewById(R.id.edit_bar0);
         barIntensity = (SeekBar) view.findViewById(R.id.edit_bar1);
@@ -94,7 +96,12 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 displayResult();
                 break;
             }
-            case R.id.edit_save: {
+            case R.id.edit_save_hdr: {
+                DialogFragment saveDialog = SaveDialog.newInstance(hdrImage);
+                saveDialog.show(getActivity().getFragmentManager(), "saveHdrDialog");
+                break;
+            }
+            case R.id.edit_save_jpg: {
                 break;
             }
         }

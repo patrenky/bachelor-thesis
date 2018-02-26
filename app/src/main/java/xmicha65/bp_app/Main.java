@@ -27,7 +27,7 @@ import xmicha65.bp_app.view.HomeFragment;
  * @author xmicha65
  */
 public class Main extends AppCompatActivity {
-    private boolean useOpenCVforMerge = false;
+    private boolean useOpenCVforMerge = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
