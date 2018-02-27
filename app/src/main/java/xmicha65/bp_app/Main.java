@@ -17,6 +17,7 @@ import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.view.CameraFragment;
 import xmicha65.bp_app.view.EditFragment;
+import xmicha65.bp_app.view.FilesFragment;
 import xmicha65.bp_app.view.HomeFragment;
 
 /**
@@ -58,12 +59,12 @@ public class Main extends AppCompatActivity {
         } else {
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
-//            HomeFragment homeScreen = new HomeFragment();
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragment_container, homeScreen).commit();
+            HomeFragment homeScreen = new HomeFragment();
 
-            homeSelectinitImages(); // tmp
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, homeScreen).commit();
+
+//            homeSelectinitImages(); // tmp
         }
     }
 
@@ -118,5 +119,15 @@ public class Main extends AppCompatActivity {
         }
 
         cameraAfterCaptured(loadedImages);
+    }
+
+    /**
+     * Home fragment handler
+     */
+    public void homeSelectLoadHdr() {
+        FilesFragment filesScreen = new FilesFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, filesScreen).commit();
     }
 }

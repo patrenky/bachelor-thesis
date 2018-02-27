@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.home_load: {
+                ((Main) getActivity()).homeSelectLoadHdr();
                 break;
             }
             case R.id.home_settings: {
