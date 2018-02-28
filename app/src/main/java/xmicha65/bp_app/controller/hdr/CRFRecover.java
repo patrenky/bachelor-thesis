@@ -13,7 +13,6 @@ import xmicha65.bp_app.model.CameraCRF;
  * @author xmicha65
  */
 public class CRFRecover {
-    private SamplesSelector samples;
     private int N;                  // num of samples to process
     private int P;                  // num of exposures (Zj)
 
@@ -24,7 +23,6 @@ public class CRFRecover {
     private CameraCRF cameraCRF;    // response curves of device camera
 
     public CRFRecover(double lambda, double[] weights, double[] lnT, SamplesSelector samples) {
-        this.samples = samples;
         this.lambda = lambda;
         this.w = weights;
         this.lnT = lnT;

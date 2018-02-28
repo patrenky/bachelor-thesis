@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 import xmicha65.bp_app.controller.tmo.TMOReinhard;
 import xmicha65.bp_app.model.ImageHDR;
@@ -89,6 +90,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.edit_back: {
+                ((Main) getActivity()).goHome();
                 break;
             }
             case R.id.edit_reset: {

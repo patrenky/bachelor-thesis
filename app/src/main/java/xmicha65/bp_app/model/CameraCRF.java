@@ -4,6 +4,7 @@ package xmicha65.bp_app.model;
  * todos:
  * - save device CRF
  * - load device CRF
+ * - zlogaritmovat vysledky crf
  *
  * @author xmicha65
  */

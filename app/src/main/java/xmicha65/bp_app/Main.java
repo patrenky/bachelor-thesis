@@ -59,10 +59,7 @@ public class Main extends AppCompatActivity {
         } else {
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
-            HomeFragment homeScreen = new HomeFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, homeScreen).commit();
+            goHome();
 
 //            homeSelectinitImages(); // tmp
         }
@@ -90,13 +87,13 @@ public class Main extends AppCompatActivity {
     /**
      * Display edit screen, start tone mapping
      */
-    private void startToneMap(ImageHDR hdrImage) {
+    public void startToneMap(ImageHDR hdrImage) {
 
         EditFragment editScreen = new EditFragment();
 
         // passing hdr image to edit screen
         Bundle args = new Bundle();
-        args.putSerializable(EditFragment.ARG_HDR, hdrImage );
+        args.putSerializable(EditFragment.ARG_HDR, hdrImage);
         editScreen.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -115,7 +112,8 @@ public class Main extends AppCompatActivity {
                 // nacitanie obrazku z assets do inp streamu
                 InputStream ins = getAssets().open(String.format("room/lampicka%d.jpg", i));
                 loadedImages.add(new ImageLDR(ins, expTimes[i]));
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         cameraAfterCaptured(loadedImages);
@@ -129,5 +127,12 @@ public class Main extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, filesScreen).commit();
+    }
+
+    public void goHome() {
+        HomeFragment homeScreen = new HomeFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, homeScreen).commit();
     }
 }
