@@ -13,11 +13,13 @@ import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 import xmicha65.bp_app.controller.tmo.TMOReinhard;
 import xmicha65.bp_app.model.ImageHDR;
+import xmicha65.bp_app.model.ImageType;
 
 public class EditFragment extends Fragment implements View.OnClickListener {
-    public static String ARG_HDR;
+    public static String ARG_HDR = "ARG_HDR";
     private ImageHDR hdrImage;
     private ImageView imageView;
+    private TMOReinhard tonemapper;
 
     // TMO default values
     private float defaultGamma = 2.2f;
@@ -99,11 +101,14 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.edit_save_hdr: {
-                DialogFragment saveDialog = SaveDialog.newInstance(hdrImage);
+                DialogFragment saveDialog = SaveDialog.newInstance(hdrImage, ImageType.HDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveHdrDialog");
                 break;
             }
             case R.id.edit_save_jpg: {
+                DialogFragment saveDialog = SaveDialog.newInstance(
+                        new ImageHDR(tonemapper.getImageBmp()), ImageType.LDR);
+                saveDialog.show(getActivity().getFragmentManager(), "saveLdrDialog");
                 break;
             }
         }
@@ -181,7 +186,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     }
 
     private void displayResult() {
-        TMOReinhard tonemapper = new TMOReinhard(hdrImage, gamma, intensity, lightAdapt, colorAdapt);
+        tonemapper = new TMOReinhard(hdrImage, gamma, intensity, lightAdapt, colorAdapt);
         imageView.setImageBitmap(tonemapper.getImageBmp());
     }
 

@@ -39,4 +39,16 @@ public class Storages {
         }
         return directory;
     }
+
+    /* Get File into external (images) directory */
+    public static File getPublicImagesFile(String dir, String fileName) {
+        File path = getPublicImagesStorageDir(dir);
+
+        File file = new File(path, fileName);
+        if (file.exists()) {
+            System.out.println("### file exists!");
+            return null;
+        }
+        return file;
+    }
 }
