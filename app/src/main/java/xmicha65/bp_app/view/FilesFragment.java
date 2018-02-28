@@ -12,8 +12,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 import xmicha65.bp_app.controller.Storages;
+import xmicha65.bp_app.model.ImageHDR;
 
 public class FilesFragment extends Fragment {
     private List<String> fileList = new ArrayList<>();
@@ -35,6 +37,10 @@ public class FilesFragment extends Fragment {
         );
 
         listView.setAdapter(listViewAdapter);
+
+        listView.setOnItemClickListener((adapterView, view1, i, l) -> {
+            ((Main) getActivity()).startToneMap(new ImageHDR(fileList.get(i)));
+        });
 
         return view;
     }

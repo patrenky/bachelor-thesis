@@ -18,6 +18,10 @@ import xmicha65.bp_app.controller.Storages;
 public class ImageHDR implements Serializable {
     private Mat matHdrImage;
 
+    public ImageHDR(String path) {
+        open(path);
+    }
+
     public ImageHDR(Mat matHdrImage) {
         this.matHdrImage = matHdrImage;
     }
@@ -32,6 +36,15 @@ public class ImageHDR implements Serializable {
             System.out.println("### HDR saved");
         else
             System.out.println("### HDR not saved!");
+    }
+
+    public void open(String path) {
+        System.out.println("### opening HDR: " + path);
+        matHdrImage = Imgcodecs.imread(path, -1);
+        if (matHdrImage.empty())
+            System.out.println("### HDR not loaded!");
+        else
+            System.out.println("### HDR loaded");
     }
 
     /**
