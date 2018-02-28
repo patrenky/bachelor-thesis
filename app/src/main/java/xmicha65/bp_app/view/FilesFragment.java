@@ -49,7 +49,9 @@ public class FilesFragment extends Fragment {
         File[] files = path.listFiles();
         fileList.clear();
         for (File file : files) {
-            fileList.add(file.getPath());
+            String filePath = file.getPath();
+            if (filePath.endsWith(".hdr"))
+                fileList.add(filePath);
         }
     }
 }
