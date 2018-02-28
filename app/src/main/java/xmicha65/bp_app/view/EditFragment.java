@@ -48,7 +48,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         if (savedInstanceState != null) {
             hdrImage = (ImageHDR) savedInstanceState.getSerializable(ARG_HDR);
         }
-        return inflater.inflate(R.layout.activity_frag_edit, container, false);
+        return inflater.inflate(R.layout.fragment_edit, container, false);
     }
 
     @Override
