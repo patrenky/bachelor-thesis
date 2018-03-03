@@ -58,7 +58,7 @@ public class HDRMerge {
                     numerator += this.w[value] * (crf[value] - this.lnT[j]);
                     denominator += this.w[value];
                 }
-                lnE[i] = numerator / denominator;
+                lnE[i] = Math.exp(numerator / denominator);
             }
         } catch (Exception e) {
             System.out.println("### catch createHDR " + e.getMessage());
@@ -79,7 +79,7 @@ public class HDRMerge {
         int idx = 0;
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                matHdrImage.put(row, col, lnEBlue[idx], lnEGreen[idx], lnERed[idx]);
+                matHdrImage.put(row, col, lnERed[idx], lnEGreen[idx], lnEBlue[idx]);
                 idx++;
             }
         }
