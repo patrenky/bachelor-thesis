@@ -11,7 +11,7 @@
         android:id="@+id/camera_texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <ImageView
@@ -19,38 +19,56 @@
         android:layout_width="120dp"
         android:layout_height="100dp"
         android:background="@android:color/background_light"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="52dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
         android:id="@+id/camera_img1"
         android:layout_width="120dp"
         android:layout_height="100dp"
         android:background="@android:color/background_light"
-        app:layout_constraintLeft_toRightOf="@+id/camera_img0"
-        android:layout_marginLeft="0dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/camera_controls"
-        app:layout_constraintRight_toLeftOf="@+id/camera_img2"
-        android:layout_marginRight="0dp" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/camera_img0"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
         android:id="@+id/camera_img2"
         android:layout_width="120dp"
         android:layout_height="100dp"
         android:background="@android:color/background_light"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/camera_img1"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="52dp" />
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/camera_img3"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:background="@android:color/background_light"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/camera_img2"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/camera_img4"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:background="@android:color/background_light"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/camera_img3"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <FrameLayout
         android:id="@+id/camera_controls"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="60dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="@android:color/transparent"

@@ -72,6 +72,7 @@ import xmicha65.bp_app.controller.camera.AutoFitTextureView;
 import xmicha65.bp_app.controller.camera.CompareSizesByArea;
 import xmicha65.bp_app.controller.camera.ConfirmationDialog;
 import xmicha65.bp_app.controller.camera.ErrorDialog;
+import xmicha65.bp_app.controller.camera.ShowImage;
 import xmicha65.bp_app.model.ImageLDR;
 
 /**
@@ -163,11 +164,6 @@ public class CameraFragment extends Fragment
      */
     private ImageReader mImageReader;
 
-//    /**
-//     * This is the output file for our picture.
-//     */
-//    private File mFile;
-
     /**
      * {@link CaptureRequest.Builder} for the camera preview
      */
@@ -220,30 +216,26 @@ public class CameraFragment extends Fragment
      * @author xmicha65
      */
 
-    private static final long MICRO_SECOND = 1000;
-    private static final long MILI_SECOND = MICRO_SECOND * 1000;
-    private static final long ONE_SECOND = MILI_SECOND * 1000;
+    private long MICRO_SECOND = 1000;
+    private long MILI_SECOND = MICRO_SECOND * 1000;
+    private long ONE_SECOND = MILI_SECOND * 1000;
 
-    private long exposureMin;
-    private long exposureMax;
-    // TODO exposureStep
+    private long exposureMin; // range min from camera characteristics (33 600 ns)
+    private long exposureMax; // range max from camera characteristics (356 732 928 ns)
+    private long exposureStep; // step for capture images in range
+    //    private long[] exposures = {61035, 488281, 3906250, 31250000, 250000000}; // (1/2^14 <-> 1/2^2 ns)
+    private long[] exposures = {61035, 976562, 15625000, 250000000}; // (1/2^14 <-> 1/2^2 ns)
 
-//    private long mExposure = ONE_SECOND / 33;
-
-    private int iso = 1600;
-
+    private int numImages = 4;
     private int photoIndex = 0;
 
     private ImageView iv0;
     private ImageView iv1;
     private ImageView iv2;
+    private ImageView iv3;
+    private ImageView iv4;
 
     private List<ImageLDR> capturedImages = new ArrayList<>();
-
-    // TODO get double exposure time
-    private double exp0 = 0.125;
-    private double exp1 = 0.25;
-    private double exp2 = 0.5;
 
     /**
      * work here
@@ -255,6 +247,8 @@ public class CameraFragment extends Fragment
         iv1 = (ImageView) view.findViewById(R.id.camera_img1);
         iv0 = (ImageView) view.findViewById(R.id.camera_img0);
         iv2 = (ImageView) view.findViewById(R.id.camera_img2);
+        iv3 = (ImageView) view.findViewById(R.id.camera_img3);
+        iv4 = (ImageView) view.findViewById(R.id.camera_img4);
     }
 
     /**
@@ -263,8 +257,6 @@ public class CameraFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // output file(s)
-//         mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     /**
@@ -299,13 +291,17 @@ public class CameraFragment extends Fragment
     private void captureStillPicture() {
         try {
             final Activity activity = getActivity();
-            if (null == activity || null == mCameraDevice) {
+            if (activity == null || mCameraDevice == null) {
                 return;
             }
 
+            int iso = 320;
+            float aperture = (float) 1 / 2;
+//            exposureStep = (exposureMax + exposureMin) / 4;
+
             List<CaptureRequest> captureBuildersList = new ArrayList<>();
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < numImages; i++) {
                 // CaptureRequest.Builder that we use to take a picture
                 CaptureRequest.Builder captureBuilder =
                         mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
@@ -316,33 +312,20 @@ public class CameraFragment extends Fragment
                 captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
                 // Control modes off
-                // captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                 captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
                 captureBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
 
-                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, iso);
-                switch (i) {
-                    case 0:
-                        captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMin);
-                        break;
-                    case 1:
-                        captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMin + MILI_SECOND);
-                        break;
-                    case 2:
-                        captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMax);
-                        break;
-                }
-
                 // Sensor ISO
-//                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 1600);
-                // Max frame rate
-//                captureBuilder.set(CaptureRequest.SENSOR_FRAME_DURATION, ONE_SECOND / 30);
+                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, iso);
 
-                // Sensor exposure time
-//                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, mExposure);
+                // Aperture
+                captureBuilder.set(CaptureRequest.LENS_APERTURE, aperture);
 
-//                System.out.println("#### captureStillPicture with ns: " + exposureMin + " " + exposureMax);
-//                mExposure += step;
+                // Exposure time
+                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposures[i]);
+//                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMin + i * exposureStep);
+
+                // Push settings
                 captureBuildersList.add(captureBuilder.build());
             }
 
@@ -381,31 +364,40 @@ public class CameraFragment extends Fragment
 
             switch (photoIndex) {
                 case 0:
-//                    ShowImage shI0;
-//                    mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
-//                    shI0.display();
-                    capturedImages.add(new ImageLDR(image, exp0));
+                    ShowImage shI0;
+                    mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
+                    shI0.display();
                     break;
                 case 1:
-//                    ShowImage shI1;
-//                    mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
-//                    shI1.display();
-                    capturedImages.add(new ImageLDR(image, exp1));
+                    ShowImage shI1;
+                    mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
+                    shI1.display();
                     break;
                 case 2:
-//                    ShowImage shI2;
-//                    mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
-//                    shI2.display();
-                    capturedImages.add(new ImageLDR(image, exp2));
-                    processImages();
+                    ShowImage shI2;
+                    mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
+                    shI2.display();
+                    break;
+                case 3:
+                    ShowImage shI3;
+                    mBackgroundHandler.post(shI3 = new ShowImage(iv3, image));
+                    shI3.display();
+                    break;
+                case 4:
+                    ShowImage shI4;
+                    mBackgroundHandler.post(shI4 = new ShowImage(iv4, image));
+                    shI4.display();
                     break;
             }
+//            capturedImages.add(new ImageLDR(image, (double) exposures[photoIndex] / ONE_SECOND));
             image.close();
             photoIndex++;
+//            if(photoIndex == numImages) processImages();
         }
     };
 
     private void processImages() {
+        unlockFocus();
         ((Main) getActivity()).cameraAfterCaptured(capturedImages);
     }
 
