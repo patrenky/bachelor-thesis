@@ -16,6 +16,7 @@ import xmicha65.bp_app.controller.hdr.HDRController;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.view.CameraFragment;
+import xmicha65.bp_app.view.CameraFragment2;
 import xmicha65.bp_app.view.EditFragment;
 import xmicha65.bp_app.view.FilesFragment;
 import xmicha65.bp_app.view.HomeFragment;
@@ -69,7 +70,7 @@ public class Main extends AppCompatActivity {
      * Home fragment handler
      */
     public void homeSelectCapture() {
-        CameraFragment cameraScreen = new CameraFragment();
+        CameraFragment2 cameraScreen = new CameraFragment2();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, cameraScreen).commit();
@@ -88,7 +89,6 @@ public class Main extends AppCompatActivity {
      * Display edit screen, start tone mapping
      */
     public void startToneMap(ImageHDR hdrImage) {
-
         EditFragment editScreen = new EditFragment();
 
         // passing hdr image to edit screen
