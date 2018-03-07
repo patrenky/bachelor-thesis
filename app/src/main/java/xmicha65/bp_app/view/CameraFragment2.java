@@ -15,7 +15,6 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.hardware.camera2.params.TonemapCurve;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
@@ -60,8 +59,8 @@ public class CameraFragment2 extends Fragment {
 
     private TextureView textureView;
     private CameraDevice cameraDevice;
-    private CameraCaptureSession cameraCaptureSessions;
-    private CaptureRequest.Builder captureRequestBuilder;
+    private CameraCaptureSession cameraCaptureSessions; // only for preview
+    private CaptureRequest.Builder captureRequestBuilder; // also
     private Size previewSize;
     private ImageReader imageReader;
     private Handler mBackgroundHandler;
@@ -76,18 +75,23 @@ public class CameraFragment2 extends Fragment {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    private int compensationMin;
-    private int compensationMax;
-//    private int[] exposures = {-20, -10, 10, 20}; // compensations
-
     private long exposureMin; // range min from camera characteristics (33 600 ns)
     private long exposureMax; // range max from camera characteristics (356 732 928 ns)
-    private long exposureStep; // step for capture images in range
-    //    private long[] exposures = {61035, 488281, 3906250, 31250000, 250000000}; // (1/2^14 <-> 1/2^2 ns)
-    private long[] exposures = {61035, 976562, 15625000, 250000000}; // (1/2^14 <-> 1/2^2 ns)
+    private long[] exposures = { // range (1/2^14 <-> 1/2^2 ns)
+//            (long) ((1 / (Math.pow(2, 13))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 12))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 11))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 10))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 9))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 8))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 7))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 6))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 5))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 4))) * ONE_SECOND)
+    };
 
     private boolean processImages = true;
-    private int numImages = 4;
+    private int numImages = 5;
     private int photoIndex = 0;
 
     private ImageView iv0;
@@ -210,11 +214,6 @@ public class CameraFragment2 extends Fragment {
             Range exposureRange = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE);
             exposureMin = (long) exposureRange.getLower();
             exposureMax = (long) exposureRange.getUpper();
-
-            // camera exposure compensation range
-            Range<Integer> compensationRange = characteristics.get(CameraCharacteristics.CONTROL_AE_COMPENSATION_RANGE);
-            compensationMin = compensationRange.getLower();
-            compensationMax = compensationRange.getUpper();
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -247,6 +246,13 @@ public class CameraFragment2 extends Fragment {
                     // automatic control mode for preview
                     captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
+                    // control modes off
+//                    captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
+//                    captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
+//                    captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 256);
+//                    captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposures[3]);
+//                    captureRequestBuilder.set(CaptureRequest.CONTROL_AWB_LOCK, true);
+
                     try {
                         // start displaying the camera preview
                         cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
@@ -274,16 +280,15 @@ public class CameraFragment2 extends Fragment {
             return;
         }
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
-        System.out.println("### take pictures");
+        System.out.println("### starting capturing");
 
         try {
             int width = 640;
             int height = 480;
-            int iso = 320;
+            int iso = 256;
             float aperture = (float) 1 / 2;
-//            exposureStep = (exposureMax + exposureMin) / 4;
 
-            // configure image dimensions
+            // configure image dimensions TODO do this before capturing (optimalization)
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
             Size[] jpegSizes;
             jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
@@ -321,13 +326,15 @@ public class CameraFragment2 extends Fragment {
 
                 // exposure time
                 captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposures[i]);
-//                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposureMin + i * exposureStep);
+
+                // lock white balance
+                captureBuilder.set(CaptureRequest.CONTROL_AWB_LOCK, true);
 
                 // push settings
                 captureBuildersList.add(captureBuilder.build());
             }
 
-            // on capture complete return to preview mode
+            // on capture complete return to preview mode // TODO cameraAfterCapture or remove
             CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
                 @Override
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {

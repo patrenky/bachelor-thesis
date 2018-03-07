@@ -80,6 +80,10 @@ public class Main extends AppCompatActivity {
      * Camera fragment handler
      */
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
+        // post process image variables
+        capturedImages.forEach(ImageLDR::postProcess);
+
+        System.out.println("### starting merging");
         HDRController hdrController = new HDRController(capturedImages, useOpenCVforMerge);
         System.out.println("### starting TMO");
         startToneMap(hdrController.getHdrImage());

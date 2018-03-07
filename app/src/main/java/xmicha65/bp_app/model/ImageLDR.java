@@ -28,18 +28,14 @@ public class ImageLDR {
     public ImageLDR(Image image, double exposition) {
         this.exposureTime = exposition;
         this.bmpImg = Convertor.byteToBitmap(Convertor.imageToByte(image));
-
-        this.width = this.bmpImg.getWidth();
-        this.height = this.bmpImg.getHeight();
-
-        this.pixels = new int[this.width * this.height];
-        this.bmpImg.getPixels(this.pixels, 0, this.width, 0, 0, this.width, this.height);
     }
 
     public ImageLDR(InputStream ins, double exposition) {
         this.exposureTime = exposition;
         this.bmpImg = BitmapFactory.decodeStream(ins);
+    }
 
+    public void postProcess() {
         this.width = this.bmpImg.getWidth();
         this.height = this.bmpImg.getHeight();
 
