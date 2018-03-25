@@ -19,6 +19,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     public static String ARG_HDR = "ARG_HDR";
     private ImageHDR hdrImage;
     private ImageView imageView;
+    private float rotation = (float) 0.0;
     private TMOReinhard tonemapper;
 
     // TMO default values
@@ -76,6 +77,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         // buttons
         view.findViewById(R.id.edit_back).setOnClickListener(this);
         view.findViewById(R.id.edit_reset).setOnClickListener(this);
+        view.findViewById(R.id.edit_rotate).setOnClickListener(this);
         view.findViewById(R.id.edit_save_hdr).setOnClickListener(this);
         view.findViewById(R.id.edit_save_jpg).setOnClickListener(this);
         // seekBars
@@ -100,12 +102,17 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 displayResult();
                 break;
             }
+            case R.id.edit_rotate: {
+                rotateView();
+                break;
+            }
             case R.id.edit_save_hdr: {
                 DialogFragment saveDialog = SaveDialog.newInstance(hdrImage, ImageType.HDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveHdrDialog");
                 break;
             }
             case R.id.edit_save_jpg: {
+                tonemapper = new TMOReinhard(hdrImage.getMatHdrImg(), gamma, intensity, lightAdapt, colorAdapt);
                 DialogFragment saveDialog = SaveDialog.newInstance(
                         new ImageHDR(tonemapper.getImageBmp()), ImageType.LDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveLdrDialog");
@@ -118,6 +125,9 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         barGama.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                // TODO for all
+                gamma = (float) seekBar.getProgress() / 50 + 1;
+                displayResult();
             }
 
             @Override
@@ -127,9 +137,8 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // range [1, 3]
-                gamma = (float) seekBar.getProgress() / 50 + 1;
-                System.out.println("#### gamma " + gamma);
-                displayResult();
+//                gamma = (float) seekBar.getProgress() / 50 + 1;
+//                displayResult();
             }
         });
         barIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -145,7 +154,6 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // range [-8, 8]
                 intensity = (float) (seekBar.getProgress() - 50) / (50 / 8);
-                System.out.println("#### intensity " + intensity);
                 displayResult();
             }
         });
@@ -162,7 +170,6 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // range [0, 1]
                 lightAdapt = (float) seekBar.getProgress() / 100;
-                System.out.println("#### lightAdapt " + lightAdapt);
                 displayResult();
             }
         });
@@ -179,14 +186,18 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // range [0, 1]
                 colorAdapt = (float) seekBar.getProgress() / 100;
-                System.out.println("#### colorAdapt " + colorAdapt);
                 displayResult();
             }
         });
     }
 
+    private void rotateView() {
+        rotation += (float) 90.0;
+        imageView.setRotation(rotation);
+    }
+
     private void displayResult() {
-        tonemapper = new TMOReinhard(hdrImage, gamma, intensity, lightAdapt, colorAdapt);
+        tonemapper = new TMOReinhard(hdrImage.getMatHdrTemp(), gamma, intensity, lightAdapt, colorAdapt);
         imageView.setImageBitmap(tonemapper.getImageBmp());
     }
 

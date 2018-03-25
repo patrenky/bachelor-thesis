@@ -3,7 +3,9 @@ package xmicha65.bp_app.model;
 import android.graphics.Bitmap;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,18 +20,27 @@ import xmicha65.bp_app.controller.Storages;
  */
 public class ImageHDR implements Serializable {
     private Mat matHdrImage;
+    private Mat matHdrTemp = new Mat();
     private Bitmap bmpImage;
 
     public ImageHDR(String path) {
         openHdr(path);
+        compressImage();
     }
 
     public ImageHDR(Mat matHdrImage) {
         this.matHdrImage = matHdrImage;
+        compressImage();
     }
 
     public ImageHDR(Bitmap bmp) {
         this.bmpImage = bmp;
+    }
+
+    private void compressImage() {
+        System.out.println("### compressing temp");
+        Size dSize = new Size(matHdrImage.cols() / 5, matHdrImage.rows() / 5);
+        Imgproc.resize(matHdrImage, matHdrTemp, dSize);
     }
 
     public void save(String name, ImageType imageType) {
@@ -82,5 +93,9 @@ public class ImageHDR implements Serializable {
 
     public Mat getMatHdrImg() {
         return this.matHdrImage;
+    }
+
+    public Mat getMatHdrTemp() {
+        return matHdrTemp;
     }
 }
