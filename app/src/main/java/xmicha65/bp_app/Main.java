@@ -76,7 +76,7 @@ public class Main extends AppCompatActivity {
     }
 
     /**
-     * Camera fragment handler
+     * Start HDR process pipeline
      */
     public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
         // post process image variables
@@ -84,6 +84,7 @@ public class Main extends AppCompatActivity {
 
         System.out.println("### starting merging");
         HDRController hdrController = new HDRController(capturedImages, useOpenCVforMerge);
+
         System.out.println("### starting TMO");
         startToneMap(hdrController.getHdrImage());
     }
