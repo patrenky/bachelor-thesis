@@ -42,7 +42,7 @@ import java.util.List;
 
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
-import xmicha65.bp_app.controller.camera.ShowImage;
+import xmicha65.bp_app.controller.camera.ImageSaver;
 import xmicha65.bp_app.model.ImageLDR;
 
 /**
@@ -78,12 +78,13 @@ public class CameraFragment2 extends Fragment {
     private long exposureMin; // range min from camera characteristics (33 600 ns)
     private long exposureMax; // range max from camera characteristics (356 732 928 ns)
     private long[] exposures = { // range (1/2^14 <-> 1/2^2 ns)
-//            (long) ((1 / (Math.pow(2, 13))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 12))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 11))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 10))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 14))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 13))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 12))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 11))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 10))) * ONE_SECOND), // stred svetlej
             (long) ((1 / (Math.pow(2, 9))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 8))) * ONE_SECOND),
+            (long) ((1 / (Math.pow(2, 8))) * ONE_SECOND), // stred tmavej
             (long) ((1 / (Math.pow(2, 7))) * ONE_SECOND),
             (long) ((1 / (Math.pow(2, 6))) * ONE_SECOND),
             (long) ((1 / (Math.pow(2, 5))) * ONE_SECOND),
@@ -91,7 +92,7 @@ public class CameraFragment2 extends Fragment {
     };
 
     private boolean processImages = true;
-    private int numImages = 5;
+    private int numImages = 11;
     private int photoIndex = 0;
 
     private ImageView iv0;
@@ -110,7 +111,8 @@ public class CameraFragment2 extends Fragment {
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.camera2_capture).setOnClickListener(v -> takePicture());
+        view.findViewById(R.id.camera2_save).setOnClickListener(v -> takePicture(false));
+        view.findViewById(R.id.camera2_capture).setOnClickListener(v -> takePicture(true));
         view.findViewById(R.id.camera2_back).setOnClickListener(v -> ((Main) getActivity()).goHome());
         textureView = (TextureView) view.findViewById(R.id.camera2_texture);
         textureView.setSurfaceTextureListener(textureListener);
@@ -246,13 +248,6 @@ public class CameraFragment2 extends Fragment {
                     // automatic control mode for preview
                     captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
-                    // control modes off
-//                    captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
-//                    captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
-//                    captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 256);
-//                    captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposures[3]);
-//                    captureRequestBuilder.set(CaptureRequest.CONTROL_AWB_LOCK, true);
-
                     try {
                         // start displaying the camera preview
                         cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
@@ -274,7 +269,8 @@ public class CameraFragment2 extends Fragment {
     /**
      * Capture sequence of images with specific settings
      */
-    protected void takePicture() {
+    protected void takePicture(boolean process) {
+        this.processImages = process;
         Activity activity = getActivity();
         if (activity == null || cameraDevice == null) {
             return;
@@ -285,7 +281,7 @@ public class CameraFragment2 extends Fragment {
         try {
             int width = 640;
             int height = 480;
-            int iso = 256;
+            int iso = 32;
             float aperture = (float) 1 / 2;
 
             // configure image dimensions TODO do this before capturing (optimalization)
@@ -297,6 +293,7 @@ public class CameraFragment2 extends Fragment {
                 height = jpegSizes[0].getHeight();
             }
 
+            // output instance
             ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
             List<Surface> outputSurfaces = new ArrayList<>(2);
             outputSurfaces.add(reader.getSurface());
@@ -334,12 +331,11 @@ public class CameraFragment2 extends Fragment {
                 captureBuildersList.add(captureBuilder.build());
             }
 
-            // on capture complete return to preview mode // TODO cameraAfterCapture or remove
+            // on capture complete return to preview mode
             CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
                 @Override
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    // createCameraPreview();
                 }
             };
 
@@ -364,38 +360,42 @@ public class CameraFragment2 extends Fragment {
                 Image image = readerResult.acquireNextImage();
 
                 if (!processImages) {
-                    switch (photoIndex) {
-                        case 0:
-                            ShowImage shI0;
-                            mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
-                            shI0.display();
-                            break;
-                        case 1:
-                            ShowImage shI1;
-                            mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
-                            shI1.display();
-                            break;
-                        case 2:
-                            ShowImage shI2;
-                            mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
-                            shI2.display();
-                            break;
-                        case 3:
-                            ShowImage shI3;
-                            mBackgroundHandler.post(shI3 = new ShowImage(iv3, image));
-                            shI3.display();
-                            break;
-                        case 4:
-                            ShowImage shI4;
-                            mBackgroundHandler.post(shI4 = new ShowImage(iv4, image));
-                            shI4.display();
-                            break;
-                    }
+                    // tmp save images
+                    mBackgroundHandler.post(new ImageSaver(image, (double) exposures[photoIndex] / ONE_SECOND));
+
+//                    switch (photoIndex) {
+//                        case 0:
+//                            ShowImage shI0;
+//                            mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
+//                            shI0.display();
+//                            break;
+//                        case 1:
+//                            ShowImage shI1;
+//                            mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
+//                            shI1.display();
+//                            break;
+//                        case 2:
+//                            ShowImage shI2;
+//                            mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
+//                            shI2.display();
+//                            break;
+//                        case 3:
+//                            ShowImage shI3;
+//                            mBackgroundHandler.post(shI3 = new ShowImage(iv3, image));
+//                            shI3.display();
+//                            break;
+//                        case 4:
+//                            ShowImage shI4;
+//                            mBackgroundHandler.post(shI4 = new ShowImage(iv4, image));
+//                            shI4.display();
+//                            break;
+//                    }
                 }
 
-                if (processImages)
+                if (processImages) {
                     capturedImages.add(new ImageLDR(image, (double) exposures[photoIndex] / ONE_SECOND));
-                image.close();
+                    image.close();
+                }
                 photoIndex++;
                 if (processImages && photoIndex == numImages)
                     ((Main) getActivity()).cameraAfterCaptured(capturedImages);

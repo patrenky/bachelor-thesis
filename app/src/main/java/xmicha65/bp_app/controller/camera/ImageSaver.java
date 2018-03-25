@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import xmicha65.bp_app.controller.Storages;
+
 /**
  * Saves a JPEG {@link Image} into the specified {@link File}.
  * @author https://github.com/googlesamples
@@ -24,8 +26,10 @@ public class ImageSaver implements Runnable {
      */
     private final File mFile;
 
-    public ImageSaver(Image image, File file) {
+    public ImageSaver(Image image, double exposure) {
+        System.out.println("### init image saver " + String.format("%.12f.jpg", exposure));
         mImage = image;
+        File file = Storages.getPublicImagesFile("/hdr", String.format("%.12f.jpg", exposure));
         mFile = file;
     }
 

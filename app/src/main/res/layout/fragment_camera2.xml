@@ -80,6 +80,18 @@
         android:text="capture" />
 
     <Button
+        android:id="@+id/camera2_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/camera2_capture"
+        android:layout_alignBottom="@+id/camera2_capture"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:text="save" />
+
+    <Button
         android:id="@+id/camera2_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

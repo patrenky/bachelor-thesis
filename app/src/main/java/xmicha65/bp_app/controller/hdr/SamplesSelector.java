@@ -6,7 +6,7 @@ import java.util.List;
 import xmicha65.bp_app.model.ImageLDR;
 
 /**
- * Select 50 values for RecoverCRF algorithm
+ * Select values for RecoverCRF algorithm
  * Methods to be implemented for experiment:
  * - random values (source: shortly mentioned in the book E. Reinhard, HDR Imaging)
  * - regularly arranged pixels (source: own idea)
