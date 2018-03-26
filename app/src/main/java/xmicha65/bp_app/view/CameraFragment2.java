@@ -398,7 +398,7 @@ public class CameraFragment2 extends Fragment {
                 }
                 photoIndex++;
                 if (processImages && photoIndex == numImages)
-                    ((Main) getActivity()).cameraAfterCaptured(capturedImages);
+                    ((Main) getActivity()).processImages(capturedImages);
             };
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
         } catch (CameraAccessException e) {

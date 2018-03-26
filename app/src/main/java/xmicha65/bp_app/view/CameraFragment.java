@@ -398,7 +398,7 @@ public class CameraFragment extends Fragment
 
     private void processImages() {
         unlockFocus();
-        ((Main) getActivity()).cameraAfterCaptured(capturedImages);
+        ((Main) getActivity()).processImages(capturedImages);
     }
 
     /**

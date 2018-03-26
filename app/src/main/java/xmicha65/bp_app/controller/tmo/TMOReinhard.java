@@ -8,7 +8,7 @@ import org.opencv.photo.Photo;
 import xmicha65.bp_app.controller.Convertor;
 
 /**
- * Tonemapping of HDR content with OpenCV createTonemapReinhard() method
+ * Reinhard global TMO: OpenCV createTonemapReinhard() method
  */
 public class TMOReinhard {
     private Mat ldrImage = new Mat(); // result of tonemapping

@@ -16,9 +16,10 @@ import xmicha65.bp_app.controller.hdr.HDRController;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.view.CameraFragment2;
-import xmicha65.bp_app.view.EditFragment;
+import xmicha65.bp_app.view.EditReinhardFragment;
 import xmicha65.bp_app.view.FilesFragment;
 import xmicha65.bp_app.view.HomeFragment;
+import xmicha65.bp_app.view.TmoFragment;
 
 /**
  * Main class of app
@@ -60,8 +61,6 @@ public class Main extends AppCompatActivity {
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
             goHome();
-
-//            homeSelectinitImages(); // tmp
         }
     }
 
@@ -78,7 +77,7 @@ public class Main extends AppCompatActivity {
     /**
      * Start HDR process pipeline
      */
-    public void cameraAfterCaptured(List<ImageLDR> capturedImages) {
+    public void processImages(List<ImageLDR> capturedImages) {
         // post process image variables
         capturedImages.forEach(ImageLDR::postProcess);
 
@@ -93,11 +92,26 @@ public class Main extends AppCompatActivity {
      * Display edit screen, start tone mapping
      */
     public void startToneMap(ImageHDR hdrImage) {
-        EditFragment editScreen = new EditFragment();
+        TmoFragment tmoScreen = new TmoFragment();
 
-        // passing hdr image to edit screen
+        // passing hdr image to screen
         Bundle args = new Bundle();
-        args.putSerializable(EditFragment.ARG_HDR, hdrImage);
+        args.putSerializable(TmoFragment.ARG_HDR, hdrImage);
+        tmoScreen.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, tmoScreen).commit();
+    }
+
+    /**
+     * Display Reinhard controls
+     */
+    public void tonemapReinhard(ImageHDR hdrImage) {
+        EditReinhardFragment editScreen = new EditReinhardFragment();
+
+        // passing hdr image to screen
+        Bundle args = new Bundle();
+        args.putSerializable(EditReinhardFragment.ARG_HDR, hdrImage);
         editScreen.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -105,7 +119,7 @@ public class Main extends AppCompatActivity {
     }
 
     /**
-     * Home fragment handler
+     * Open list of .hdr files
      */
     public void homeSelectLoadHdr() {
         FilesFragment filesScreen = new FilesFragment();
@@ -114,6 +128,9 @@ public class Main extends AppCompatActivity {
                 .replace(R.id.fragment_container, filesScreen).commit();
     }
 
+    /**
+     * Display Home screen
+     */
     public void goHome() {
         HomeFragment homeScreen = new HomeFragment();
 
@@ -137,7 +154,7 @@ public class Main extends AppCompatActivity {
             }
         }
 
-        cameraAfterCaptured(loadedImages);
+        processImages(loadedImages);
     }
 
     public void homeSelectinitScene(String name) {
@@ -164,6 +181,6 @@ public class Main extends AppCompatActivity {
             }
         }
 
-        cameraAfterCaptured(loadedImages);
+        processImages(loadedImages);
     }
 }
