@@ -16,6 +16,9 @@ import xmicha65.bp_app.controller.hdr.HDRController;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageLDR;
 import xmicha65.bp_app.view.CameraFragment2;
+import xmicha65.bp_app.view.EditDragoFragment;
+import xmicha65.bp_app.view.EditDurandFragment;
+import xmicha65.bp_app.view.EditMantiukFragment;
 import xmicha65.bp_app.view.EditReinhardFragment;
 import xmicha65.bp_app.view.FilesFragment;
 import xmicha65.bp_app.view.HomeFragment;
@@ -104,6 +107,36 @@ public class Main extends AppCompatActivity {
     }
 
     /**
+     * Display Drago controls
+     */
+    public void tonemapDrago(ImageHDR hdrImage) {
+        EditDragoFragment editScreen = new EditDragoFragment();
+
+        // passing hdr image to screen
+        Bundle args = new Bundle();
+        args.putSerializable(EditDragoFragment.ARG_HDR, hdrImage);
+        editScreen.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, editScreen).commit();
+    }
+
+    /**
+     * Display Durand controls
+     */
+    public void tonemapDurand(ImageHDR hdrImage) {
+        EditDurandFragment editScreen = new EditDurandFragment();
+
+        // passing hdr image to screen
+        Bundle args = new Bundle();
+        args.putSerializable(EditDurandFragment.ARG_HDR, hdrImage);
+        editScreen.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, editScreen).commit();
+    }
+
+    /**
      * Display Reinhard controls
      */
     public void tonemapReinhard(ImageHDR hdrImage) {
@@ -112,6 +145,21 @@ public class Main extends AppCompatActivity {
         // passing hdr image to screen
         Bundle args = new Bundle();
         args.putSerializable(EditReinhardFragment.ARG_HDR, hdrImage);
+        editScreen.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, editScreen).commit();
+    }
+
+    /**
+     * Display Mantiuk controls
+     */
+    public void tonemapMantiuk(ImageHDR hdrImage) {
+        EditMantiukFragment editScreen = new EditMantiukFragment();
+
+        // passing hdr image to screen
+        Bundle args = new Bundle();
+        args.putSerializable(EditMantiukFragment.ARG_HDR, hdrImage);
         editScreen.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()

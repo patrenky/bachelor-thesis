@@ -11,32 +11,30 @@ import android.widget.SeekBar;
 
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
-import xmicha65.bp_app.controller.tmo.TMOReinhardGlobal;
+import xmicha65.bp_app.controller.tmo.TMODrago;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageType;
 import xmicha65.bp_app.model.TmoParams;
 
 /**
- * Screen: control params of Reinhard global TMO
+ * Screen: control params of Drago global TMO
  */
-public class EditReinhardFragment extends Fragment implements View.OnClickListener {
+public class EditDragoFragment extends Fragment implements View.OnClickListener {
     public static String ARG_HDR = "ARG_HDR";
     private ImageHDR hdrImage;
     private ImageView imageView;
-    private TMOReinhardGlobal tonemapper;
+    private TMODrago tonemapper;
     private int rotation = 0;
 
     // seekBars
     private SeekBar barGama;
-    private SeekBar barIntensity;
-    private SeekBar barLightAdapt;
-    private SeekBar barColorAdapr;
+    private SeekBar barSaturation;
+    private SeekBar barBias;
 
     // actual values
     private float gamma;
-    private float intensity;
-    private float lightAdapt;
-    private float colorAdapt;
+    private float saturation;
+    private float bias;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +43,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
         if (savedInstanceState != null) {
             hdrImage = (ImageHDR) savedInstanceState.getSerializable(ARG_HDR);
         }
-        return inflater.inflate(R.layout.fragment_edit_reinhard, container, false);
+        return inflater.inflate(R.layout.fragment_edit_drago, container, false);
     }
 
     @Override
@@ -66,18 +64,17 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        imageView = (ImageView) view.findViewById(R.id.reinhard_image);
+        imageView = (ImageView) view.findViewById(R.id.drago_image);
         // buttons
-        view.findViewById(R.id.reinhard_back).setOnClickListener(this);
-        view.findViewById(R.id.reinhard_reset).setOnClickListener(this);
-        view.findViewById(R.id.reinhard_rotate).setOnClickListener(this);
-        view.findViewById(R.id.reinhard_save_hdr).setOnClickListener(this);
-        view.findViewById(R.id.reinhard_save_jpg).setOnClickListener(this);
+        view.findViewById(R.id.drago_back).setOnClickListener(this);
+        view.findViewById(R.id.drago_reset).setOnClickListener(this);
+        view.findViewById(R.id.drago_rotate).setOnClickListener(this);
+        view.findViewById(R.id.drago_save_hdr).setOnClickListener(this);
+        view.findViewById(R.id.drago_save_jpg).setOnClickListener(this);
         // seekBars
-        barGama = (SeekBar) view.findViewById(R.id.reinhard_bar0);
-        barIntensity = (SeekBar) view.findViewById(R.id.reinhard_bar1);
-        barLightAdapt = (SeekBar) view.findViewById(R.id.reinhard_bar2);
-        barColorAdapr = (SeekBar) view.findViewById(R.id.reinhard_bar3);
+        barGama = (SeekBar) view.findViewById(R.id.drago_bar0);
+        barSaturation = (SeekBar) view.findViewById(R.id.drago_bar1);
+        barBias = (SeekBar) view.findViewById(R.id.drago_bar2);
 
         resetTmoValues();
         setSeekBarsListeners();
@@ -86,27 +83,27 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.reinhard_back: {
+            case R.id.drago_back: {
                 ((Main) getActivity()).goHome();
                 break;
             }
-            case R.id.reinhard_reset: {
+            case R.id.drago_reset: {
                 resetTmoValues();
                 displayResult();
                 break;
             }
-            case R.id.reinhard_rotate: {
+            case R.id.drago_rotate: {
                 rotateView();
                 break;
             }
-            case R.id.reinhard_save_hdr: {
+            case R.id.drago_save_hdr: {
                 DialogFragment saveDialog = SaveDialog.newInstance(hdrImage, ImageType.HDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveHdrDialog");
                 break;
             }
-            case R.id.reinhard_save_jpg: {
+            case R.id.drago_save_jpg: {
                 // save original size result
-                tonemapper = new TMOReinhardGlobal(hdrImage.getMatHdrImg(), gamma, intensity, lightAdapt, colorAdapt);
+                tonemapper = new TMODrago(hdrImage.getMatHdrImg(), gamma, saturation, bias);
                 DialogFragment saveDialog = SaveDialog.newInstance(
                         new ImageHDR(tonemapper.getImageBmp()), ImageType.LDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveLdrDialog");
@@ -135,10 +132,10 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
                 System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.gama, seekBar.getProgress()));
             }
         });
-        barIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        barSaturation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                intensity = TmoParams.getProgressValue(TmoParams.rIntensity, progress);
+                saturation = TmoParams.getProgressValue(TmoParams.saturation, progress);
                 displayResult();
             }
 
@@ -148,13 +145,13 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.rIntensity, seekBar.getProgress()));
+                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.saturation, seekBar.getProgress()));
             }
         });
-        barLightAdapt.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        barBias.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                lightAdapt = TmoParams.getProgressValue(TmoParams.rLightAdapt, progress);
+                bias = TmoParams.getProgressValue(TmoParams.dBias, progress);
                 displayResult();
             }
 
@@ -164,24 +161,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.rLightAdapt, seekBar.getProgress()));
-            }
-        });
-        barColorAdapr.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                colorAdapt = TmoParams.getProgressValue(TmoParams.rColorAdapt, progress);
-                displayResult();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.rColorAdapt, seekBar.getProgress()));
+                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.dBias, seekBar.getProgress()));
             }
         });
     }
@@ -198,7 +178,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
      * Tonemap and diplay result
      */
     private void displayResult() {
-        tonemapper = new TMOReinhardGlobal(hdrImage.getMatHdrTemp(), gamma, intensity, lightAdapt, colorAdapt);
+        tonemapper = new TMODrago(hdrImage.getMatHdrTemp(), gamma, saturation, bias);
         imageView.setImageBitmap(tonemapper.getImageBmp());
     }
 
@@ -207,14 +187,12 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
      */
     private void resetTmoValues() {
         gamma = TmoParams.getDefaultValue(TmoParams.gama);
-        intensity = TmoParams.getDefaultValue(TmoParams.rIntensity);
-        lightAdapt = TmoParams.getDefaultValue(TmoParams.rLightAdapt);
-        colorAdapt = TmoParams.getDefaultValue(TmoParams.rColorAdapt);
+        saturation = TmoParams.getDefaultValue(TmoParams.saturation);
+        bias = TmoParams.getDefaultValue(TmoParams.dBias);
 
         barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gama));
-        barIntensity.setProgress(TmoParams.getDefaultProgressValue(TmoParams.rIntensity));
-        barLightAdapt.setProgress(TmoParams.getDefaultProgressValue(TmoParams.rLightAdapt));
-        barColorAdapr.setProgress(TmoParams.getDefaultProgressValue(TmoParams.rColorAdapt));
+        barSaturation.setProgress(TmoParams.getDefaultProgressValue(TmoParams.saturation));
+        barBias.setProgress(TmoParams.getDefaultProgressValue(TmoParams.dBias));
     }
 
     @Override

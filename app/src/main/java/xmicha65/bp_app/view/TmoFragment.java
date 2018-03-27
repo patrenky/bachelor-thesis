@@ -9,7 +9,10 @@ import android.widget.ImageView;
 
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
-import xmicha65.bp_app.controller.tmo.TMOReinhard;
+import xmicha65.bp_app.controller.tmo.TMODrago;
+import xmicha65.bp_app.controller.tmo.TMODurand;
+import xmicha65.bp_app.controller.tmo.TMOMantiuk;
+import xmicha65.bp_app.controller.tmo.TMOReinhardGlobal;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.TmoParams;
 
@@ -18,12 +21,10 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
     private ImageHDR hdrImage;
     private int rotation = 0;
 
-    private ImageView imageView0;
-    private ImageView imageView1;
-    private ImageView imageView2;
-    private ImageView imageView3;
-
-    private TMOReinhard tmoReinhard;
+    private ImageView imageView0; // Mantiuk
+    private ImageView imageView1; // Reinhard
+    private ImageView imageView2; // Durand
+    private ImageView imageView3; // Drago
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +80,19 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.tmo_image0: {
+                ((Main) getActivity()).tonemapMantiuk(hdrImage);
+                break;
+            }
+            case R.id.tmo_image1: {
                 ((Main) getActivity()).tonemapReinhard(hdrImage);
+                break;
+            }
+            case R.id.tmo_image2: {
+                ((Main) getActivity()).tonemapDurand(hdrImage);
+                break;
+            }
+            case R.id.tmo_image3: {
+                ((Main) getActivity()).tonemapDrago(hdrImage);
                 break;
             }
         }
@@ -100,14 +113,40 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
      * Tonemap and diplay results
      */
     private void displayResults() {
-        tmoReinhard = new TMOReinhard(
+        TMOMantiuk tmoMantiuk = new TMOMantiuk(
                 hdrImage.getMatHdrTemp(),
-                TmoParams.getDefaultValue(TmoParams.rGama),
+                TmoParams.getDefaultValue(TmoParams.gama),
+                TmoParams.getDefaultValue(TmoParams.mScale),
+                TmoParams.getDefaultValue(TmoParams.saturation)
+        );
+        imageView0.setImageBitmap(tmoMantiuk.getImageBmp());
+
+        TMOReinhardGlobal tmoReinhard = new TMOReinhardGlobal(
+                hdrImage.getMatHdrTemp(),
+                TmoParams.getDefaultValue(TmoParams.gama),
                 TmoParams.getDefaultValue(TmoParams.rIntensity),
                 TmoParams.getDefaultValue(TmoParams.rLightAdapt),
                 TmoParams.getDefaultValue(TmoParams.rColorAdapt)
         );
-        imageView0.setImageBitmap(tmoReinhard.getImageBmp());
+        imageView1.setImageBitmap(tmoReinhard.getImageBmp());
+
+        TMODurand tmoDurand = new TMODurand(
+                hdrImage.getMatHdrTemp(),
+                TmoParams.getDefaultValue(TmoParams.gama),
+                TmoParams.getDefaultValue(TmoParams.dContrast),
+                TmoParams.getDefaultValue(TmoParams.saturation),
+                TmoParams.getDefaultValue(TmoParams.dSigmaSpace),
+                TmoParams.getDefaultValue(TmoParams.dSigmaColor)
+        );
+        imageView2.setImageBitmap(tmoDurand.getImageBmp());
+
+        TMODrago tmoDrago = new TMODrago(
+                hdrImage.getMatHdrTemp(),
+                TmoParams.getDefaultValue(TmoParams.gama),
+                TmoParams.getDefaultValue(TmoParams.saturation),
+                TmoParams.getDefaultValue(TmoParams.dBias)
+        );
+        imageView3.setImageBitmap(tmoDrago.getImageBmp());
     }
 
     @Override

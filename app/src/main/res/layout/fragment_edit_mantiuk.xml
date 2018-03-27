@@ -9,18 +9,18 @@
     tools:layout_editor_absoluteX="0dp">
 
     <TextView
-        android:id="@+id/reinhard_title"
+        android:id="@+id/mantiuk_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="Reinhard"
+        android:text="Mantiuk"
         android:textColor="@color/colorWhite"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/reinhard_image"
+        android:id="@+id/mantiuk_image"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginEnd="8dp"
@@ -34,10 +34,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/background_light"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_text0" />
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_text0" />
 
     <TextView
-        android:id="@+id/reinhard_text0"
+        android:id="@+id/mantiuk_text0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -46,56 +46,41 @@
         android:text="Gamma"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_bar0"
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_bar0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
-        android:id="@+id/reinhard_text1"
+        android:id="@+id/mantiuk_text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Intensity"
+        android:text="Scale"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_bar1" />
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_bar1" />
 
     <TextView
-        android:id="@+id/reinhard_text2"
+        android:id="@+id/mantiuk_text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Light Adaptation"
+        android:text="Saturation"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_bar2" />
-
-    <TextView
-        android:id="@+id/reinhard_text3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Color Adaptation"
-        android:textAlignment="center"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_bar3" />
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_bar2" />
 
     <SeekBar
-        android:id="@+id/reinhard_bar0"
+        android:id="@+id/mantiuk_bar0"
         android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginLeft="8dp"
@@ -106,10 +91,10 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_text1" />
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_text1" />
 
     <SeekBar
-        android:id="@+id/reinhard_bar1"
+        android:id="@+id/mantiuk_bar1"
         android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginLeft="8dp"
@@ -120,24 +105,10 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_text2" />
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_text2" />
 
     <SeekBar
-        android:id="@+id/reinhard_bar2"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_text3" />
-
-    <SeekBar
-        android:id="@+id/reinhard_bar3"
+        android:id="@+id/mantiuk_bar2"
         android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginLeft="8dp"
@@ -148,10 +119,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/reinhard_rotate" />
+        app:layout_constraintBottom_toTopOf="@+id/mantiuk_rotate" />
 
     <Button
-        android:id="@+id/reinhard_back"
+        android:id="@+id/mantiuk_back"
         android:layout_width="118dp"
         android:layout_height="48dp"
         android:text="Back"
@@ -162,7 +133,7 @@
         android:layout_marginStart="8dp" />
 
     <Button
-        android:id="@+id/reinhard_save_jpg"
+        android:id="@+id/mantiuk_save_jpg"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
@@ -173,7 +144,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <Button
-        android:id="@+id/reinhard_save_hdr"
+        android:id="@+id/mantiuk_save_hdr"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
@@ -181,28 +152,28 @@
         android:layout_marginRight="8dp"
         android:text="Save hdr"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/reinhard_save_jpg" />
+        app:layout_constraintRight_toLeftOf="@+id/mantiuk_save_jpg" />
 
     <Button
-        android:id="@+id/reinhard_reset"
+        android:id="@+id/mantiuk_reset"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
         android:text="Reset"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/reinhard_back"
+        app:layout_constraintLeft_toRightOf="@+id/mantiuk_back"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp" />
 
     <Button
-        android:id="@+id/reinhard_rotate"
+        android:id="@+id/mantiuk_rotate"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:text="Rotate"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/reinhard_reset"
+        app:layout_constraintLeft_toRightOf="@+id/mantiuk_reset"
         android:layout_marginLeft="8dp" />
 
 </android.support.constraint.ConstraintLayout>

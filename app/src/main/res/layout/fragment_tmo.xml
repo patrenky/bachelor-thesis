@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:text="Reinhard global TMO" />
+            android:text="Mantiuk local TMO" />
 
         <ImageView
             android:id="@+id/tmo_image0"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:text="TextView" />
+            android:text="Reinhard global TMO" />
 
         <ImageView
             android:id="@+id/tmo_image1"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:text="TextView" />
+            android:text="Durand local TMO" />
 
         <ImageView
             android:id="@+id/tmo_image2"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:text="TextView" />
+            android:text="Drago global TMO" />
 
         <ImageView
             android:id="@+id/tmo_image3"

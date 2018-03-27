@@ -78,21 +78,21 @@ public class CameraFragment2 extends Fragment {
     private long exposureMin; // range min from camera characteristics (33 600 ns)
     private long exposureMax; // range max from camera characteristics (356 732 928 ns)
     private long[] exposures = { // range (1/2^14 <-> 1/2^2 ns)
-            (long) ((1 / (Math.pow(2, 14))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 13))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 12))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 14))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 13))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 12))) * ONE_SECOND),
             (long) ((1 / (Math.pow(2, 11))) * ONE_SECOND),
             (long) ((1 / (Math.pow(2, 10))) * ONE_SECOND), // stred svetlej
             (long) ((1 / (Math.pow(2, 9))) * ONE_SECOND),
             (long) ((1 / (Math.pow(2, 8))) * ONE_SECOND), // stred tmavej
             (long) ((1 / (Math.pow(2, 7))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 6))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 5))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 4))) * ONE_SECOND)
+//            (long) ((1 / (Math.pow(2, 6))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 5))) * ONE_SECOND),
+//            (long) ((1 / (Math.pow(2, 4))) * ONE_SECOND)
     };
 
     private boolean processImages = true;
-    private int numImages = 11;
+    private int numImages = 5;
     private int photoIndex = 0;
 
     private ImageView iv0;
