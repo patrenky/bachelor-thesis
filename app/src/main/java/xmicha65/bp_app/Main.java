@@ -15,7 +15,7 @@ import java.util.List;
 import xmicha65.bp_app.controller.hdr.HDRController;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageLDR;
-import xmicha65.bp_app.view.CameraFragment2;
+import xmicha65.bp_app.view.CameraFragment;
 import xmicha65.bp_app.view.EditDragoFragment;
 import xmicha65.bp_app.view.EditDurandFragment;
 import xmicha65.bp_app.view.EditMantiukFragment;
@@ -71,7 +71,7 @@ public class Main extends AppCompatActivity {
      * Home fragment handler
      */
     public void homeSelectCapture() {
-        CameraFragment2 cameraScreen = new CameraFragment2();
+        CameraFragment cameraScreen = new CameraFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, cameraScreen).commit();
