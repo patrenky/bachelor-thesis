@@ -12,7 +12,7 @@ import xmicha65.bp_app.R;
 import xmicha65.bp_app.controller.tmo.TMODrago;
 import xmicha65.bp_app.controller.tmo.TMODurand;
 import xmicha65.bp_app.controller.tmo.TMOMantiuk;
-import xmicha65.bp_app.controller.tmo.TMOReinhardGlobal;
+import xmicha65.bp_app.controller.tmo.TMOReinhard;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.TmoParams;
 
@@ -121,7 +121,7 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
         );
         imageView0.setImageBitmap(tmoMantiuk.getImageBmp());
 
-        TMOReinhardGlobal tmoReinhard = new TMOReinhardGlobal(
+        TMOReinhard tmoReinhard = new TMOReinhard(
                 hdrImage.getMatHdrTemp(),
                 TmoParams.getDefaultValue(TmoParams.gama),
                 TmoParams.getDefaultValue(TmoParams.rIntensity),

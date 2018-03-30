@@ -11,7 +11,7 @@ import android.widget.SeekBar;
 
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
-import xmicha65.bp_app.controller.tmo.TMOReinhardGlobal;
+import xmicha65.bp_app.controller.tmo.TMOReinhard;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageType;
 import xmicha65.bp_app.model.TmoParams;
@@ -23,7 +23,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
     public static String ARG_HDR = "ARG_HDR";
     private ImageHDR hdrImage;
     private ImageView imageView;
-    private TMOReinhardGlobal tonemapper;
+    private TMOReinhard tonemapper;
     private int rotation = 0;
 
     // seekBars
@@ -106,7 +106,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
             }
             case R.id.reinhard_save_jpg: {
                 // save original size result
-                tonemapper = new TMOReinhardGlobal(hdrImage.getMatHdrImg(), gamma, intensity, lightAdapt, colorAdapt);
+                tonemapper = new TMOReinhard(hdrImage.getMatHdrImg(), gamma, intensity, lightAdapt, colorAdapt);
                 DialogFragment saveDialog = SaveDialog.newInstance(
                         new ImageHDR(tonemapper.getImageBmp()), ImageType.LDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveLdrDialog");
@@ -198,7 +198,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
      * Tonemap and diplay result
      */
     private void displayResult() {
-        tonemapper = new TMOReinhardGlobal(hdrImage.getMatHdrTemp(), gamma, intensity, lightAdapt, colorAdapt);
+        tonemapper = new TMOReinhard(hdrImage.getMatHdrTemp(), gamma, intensity, lightAdapt, colorAdapt);
         imageView.setImageBitmap(tonemapper.getImageBmp());
     }
 
