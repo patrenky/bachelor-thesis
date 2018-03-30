@@ -13,7 +13,9 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
+import android.hardware.camera2.params.RggbChannelVector;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
@@ -33,7 +35,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import java.util.List;
 
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
-import xmicha65.bp_app.controller.camera.ImageSaver;
+import xmicha65.bp_app.model.Exposures;
 import xmicha65.bp_app.model.ImageLDR;
 
 /**
@@ -59,8 +60,6 @@ public class CameraFragment2 extends Fragment {
 
     private TextureView textureView;
     private CameraDevice cameraDevice;
-    private CameraCaptureSession cameraCaptureSessions; // only for preview
-    private CaptureRequest.Builder captureRequestBuilder; // also
     private Size previewSize;
     private ImageReader imageReader;
     private Handler mBackgroundHandler;
@@ -75,33 +74,17 @@ public class CameraFragment2 extends Fragment {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    private long exposureMin; // range min from camera characteristics (33 600 ns)
-    private long exposureMax; // range max from camera characteristics (356 732 928 ns)
-    private long[] exposures = { // range (1/2^14 <-> 1/2^2 ns)
-//            (long) ((1 / (Math.pow(2, 14))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 13))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 12))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 11))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 10))) * ONE_SECOND), // stred svetlej
-            (long) ((1 / (Math.pow(2, 9))) * ONE_SECOND),
-            (long) ((1 / (Math.pow(2, 8))) * ONE_SECOND), // stred tmavej
-            (long) ((1 / (Math.pow(2, 7))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 6))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 5))) * ONE_SECOND),
-//            (long) ((1 / (Math.pow(2, 4))) * ONE_SECOND)
-    };
+    private Exposures exposures;
 
-    private boolean processImages = true;
-    private int numImages = 5;
-    private int photoIndex = 0;
-
-    private ImageView iv0;
-    private ImageView iv1;
-    private ImageView iv2;
-    private ImageView iv3;
-    private ImageView iv4;
+    private int autoWidth = 640;
+    private int autoHeight = 480;
+    private int autoIso = 100;
+    private float autoAperture = (float) 1 / 2;
+    private long autoExposure;
+    private RggbChannelVector autoColorCorrection;
 
     private List<ImageLDR> capturedImages = new ArrayList<>();
+    private int photoIndex = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,16 +94,10 @@ public class CameraFragment2 extends Fragment {
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.camera2_save).setOnClickListener(v -> takePicture(false));
-        view.findViewById(R.id.camera2_capture).setOnClickListener(v -> takePicture(true));
+        view.findViewById(R.id.camera2_capture).setOnClickListener(v -> takePicture());
         view.findViewById(R.id.camera2_back).setOnClickListener(v -> ((Main) getActivity()).goHome());
         textureView = (TextureView) view.findViewById(R.id.camera2_texture);
         textureView.setSurfaceTextureListener(textureListener);
-        iv0 = (ImageView) view.findViewById(R.id.camera2_img0);
-        iv1 = (ImageView) view.findViewById(R.id.camera2_img1);
-        iv2 = (ImageView) view.findViewById(R.id.camera2_img2);
-        iv3 = (ImageView) view.findViewById(R.id.camera2_img3);
-        iv4 = (ImageView) view.findViewById(R.id.camera2_img4);
     }
 
     @Override
@@ -135,12 +112,18 @@ public class CameraFragment2 extends Fragment {
         }
     }
 
+    /**
+     * Starts a background thread and its Handler
+     */
     protected void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("CameraBackground");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }
 
+    /**
+     * Stops the background thread and its Handler
+     */
     protected void stopBackgroundThread() {
         mBackgroundThread.quitSafely();
         try {
@@ -152,6 +135,9 @@ public class CameraFragment2 extends Fragment {
         }
     }
 
+    /**
+     * SurfaceTextureListener handles several lifecycle events on a TextureView
+     */
     private final TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -172,6 +158,9 @@ public class CameraFragment2 extends Fragment {
         }
     };
 
+    /**
+     * StateCallback is called when CameraDevice changes its state
+     */
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(@NonNull CameraDevice camera) {
@@ -191,6 +180,10 @@ public class CameraFragment2 extends Fragment {
         }
     };
 
+    /**
+     * Opens the camera specified by CameraFragment
+     * Configure preview and image dimensions and exposure range
+     */
     private void openCamera() {
         // Check if permissions granted, request permission
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
@@ -212,16 +205,36 @@ public class CameraFragment2 extends Fragment {
             previewSize = map.getOutputSizes(SurfaceTexture.class)[0];
             manager.openCamera(cameraId, stateCallback, mBackgroundHandler);
 
-            // camera exposure time range
+            // configure image dimensions
+            Size[] jpegSizes;
+            jpegSizes = map.getOutputSizes(ImageFormat.JPEG);
+            if (jpegSizes != null && jpegSizes.length > 0) {
+                autoWidth = jpegSizes[0].getWidth();
+                autoHeight = jpegSizes[0].getHeight();
+            }
+
+            // init camera exposure time range
             Range exposureRange = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE);
-            exposureMin = (long) exposureRange.getLower();
-            exposureMax = (long) exposureRange.getUpper();
+            long exposureMin = (long) exposureRange.getLower();
+            long exposureMax = (long) exposureRange.getUpper();
+
+            // init exposure range
+            exposures = new Exposures(exposureMin, exposureMax);
+            // set autoExposure to range middle value
+            autoExposure = exposures.getMiddleValue();
+
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Creates a new CameraCaptureSession for camera preview
+     * Saves automatic preview configuration into variables
+     */
     protected void createCameraPreview() {
+        System.out.println("### starting preview");
+        CaptureRequest.Builder captureRequestBuilder;
         try {
             SurfaceTexture texture = textureView.getSurfaceTexture();
 
@@ -235,6 +248,19 @@ public class CameraFragment2 extends Fragment {
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(surface);
 
+            // on capture preview completed, catch metadata
+            CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
+                @Override
+                public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
+                    super.onCaptureCompleted(session, request, result);
+
+                    autoExposure = result.get(CaptureResult.SENSOR_EXPOSURE_TIME);
+                    autoIso = result.get(CaptureResult.SENSOR_SENSITIVITY);
+                    autoAperture = result.get(CaptureResult.LENS_APERTURE);
+                    autoColorCorrection = result.get(CaptureResult.COLOR_CORRECTION_GAINS);
+                }
+            };
+
             // create a CameraCaptureSession for camera preview
             cameraDevice.createCaptureSession(Collections.singletonList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
@@ -243,14 +269,13 @@ public class CameraFragment2 extends Fragment {
                     if (cameraDevice == null) {
                         return;
                     }
-                    cameraCaptureSessions = cameraCaptureSession;
 
                     // automatic control mode for preview
                     captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
                     try {
                         // start displaying the camera preview
-                        cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
+                        cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), captureListener, mBackgroundHandler);
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
                     }
@@ -269,32 +294,19 @@ public class CameraFragment2 extends Fragment {
     /**
      * Capture sequence of images with specific settings
      */
-    protected void takePicture(boolean process) {
-        this.processImages = process;
+    protected void takePicture() {
         Activity activity = getActivity();
         if (activity == null || cameraDevice == null) {
             return;
         }
-        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         System.out.println("### starting capturing");
 
+        // init range of exposures with autoExposure as middle value
+        exposures.initExposures(autoExposure);
+
         try {
-            int width = 640;
-            int height = 480;
-            int iso = 32;
-            float aperture = (float) 1 / 2;
-
-            // configure image dimensions TODO do this before capturing (optimalization)
-            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
-            Size[] jpegSizes;
-            jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
-            if (jpegSizes != null && jpegSizes.length > 0) {
-                width = jpegSizes[0].getWidth();
-                height = jpegSizes[0].getHeight();
-            }
-
             // output instance
-            ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
+            ImageReader reader = ImageReader.newInstance(autoWidth, autoHeight, ImageFormat.JPEG, 1);
             List<Surface> outputSurfaces = new ArrayList<>(2);
             outputSurfaces.add(reader.getSurface());
             outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
@@ -302,7 +314,7 @@ public class CameraFragment2 extends Fragment {
             // list for capture burst
             List<CaptureRequest> captureBuildersList = new ArrayList<>();
 
-            for (int i = 0; i < numImages; i++) {
+            for (int i = 0; i < exposures.getSize(); i++) {
                 // init capture builder
                 CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
                 captureBuilder.addTarget(reader.getSurface());
@@ -316,16 +328,16 @@ public class CameraFragment2 extends Fragment {
                 captureBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_OFF);
 
                 // sensor ISO
-                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, iso);
+                captureBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, autoIso);
 
                 // aperture
-                captureBuilder.set(CaptureRequest.LENS_APERTURE, aperture);
+                captureBuilder.set(CaptureRequest.LENS_APERTURE, autoAperture);
 
                 // exposure time
-                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposures[i]);
+                captureBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, exposures.getValue(i));
 
-                // lock white balance
-                captureBuilder.set(CaptureRequest.CONTROL_AWB_LOCK, true);
+                // color correction
+                captureBuilder.set(CaptureRequest.COLOR_CORRECTION_GAINS, autoColorCorrection);
 
                 // push settings
                 captureBuildersList.add(captureBuilder.build());
@@ -359,45 +371,11 @@ public class CameraFragment2 extends Fragment {
             ImageReader.OnImageAvailableListener readerListener = (readerResult) -> {
                 Image image = readerResult.acquireNextImage();
 
-                if (!processImages) {
-                    // tmp save images
-                    mBackgroundHandler.post(new ImageSaver(image, (double) exposures[photoIndex] / ONE_SECOND));
-
-//                    switch (photoIndex) {
-//                        case 0:
-//                            ShowImage shI0;
-//                            mBackgroundHandler.post(shI0 = new ShowImage(iv0, image));
-//                            shI0.display();
-//                            break;
-//                        case 1:
-//                            ShowImage shI1;
-//                            mBackgroundHandler.post(shI1 = new ShowImage(iv1, image));
-//                            shI1.display();
-//                            break;
-//                        case 2:
-//                            ShowImage shI2;
-//                            mBackgroundHandler.post(shI2 = new ShowImage(iv2, image));
-//                            shI2.display();
-//                            break;
-//                        case 3:
-//                            ShowImage shI3;
-//                            mBackgroundHandler.post(shI3 = new ShowImage(iv3, image));
-//                            shI3.display();
-//                            break;
-//                        case 4:
-//                            ShowImage shI4;
-//                            mBackgroundHandler.post(shI4 = new ShowImage(iv4, image));
-//                            shI4.display();
-//                            break;
-//                    }
-                }
-
-                if (processImages) {
-                    capturedImages.add(new ImageLDR(image, (double) exposures[photoIndex] / ONE_SECOND));
-                    image.close();
-                }
+                capturedImages.add(new ImageLDR(image, (double) exposures.getValue(photoIndex) / ONE_SECOND));
+                image.close();
                 photoIndex++;
-                if (processImages && photoIndex == numImages)
+
+                if (photoIndex == exposures.getSize())
                     ((Main) getActivity()).processImages(capturedImages);
             };
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
