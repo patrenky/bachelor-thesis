@@ -5,7 +5,6 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.photo.Photo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import xmicha65.bp_app.model.CameraCRF;
@@ -68,26 +67,16 @@ public class HDRController {
         initLnT();
 
         // select samples for algorithm (Zij)
-        System.out.println("### SamplesSelector");
         SamplesSelector samples = new SamplesSelector(capturedImages, numPixels, numExposures);
 
         // recover device's CRF
-        System.out.println("### CRFRecover");
         CRFRecover crfRecover = new CRFRecover(lambda, weights, lnT, samples);
         CameraCRF cameraCRF = crfRecover.getCameraCRF();
 
-
         // merge exposures into HDR
-        System.out.println("### HDRMerge");
         HDRMerge hdrMerge = new HDRMerge(cameraCRF, weights, lnT, numPixels, numExposures, capturedImages);
 
-        System.out.println("### HDRend");
         this.hdrImage = hdrMerge.getHdrImage();
-
-//        System.out.println("### opencv crf: [0.002659457502886653, 0.0028577358461916447, 0.000794318737462163]");
-//        System.out.println("### my crf: [" + cameraCRF.getCrfBlue()[0] + ", " + cameraCRF.getCrfGreen()[0] + ", " + cameraCRF.getCrfRed()[0] + "]");
-        System.out.println("### opencv hdr: [1.2115336656570435, 0.8641960024833679, 0.35805967450141907]");
-        System.out.println("### my hdr: " + Arrays.toString(hdrImage.getMatHdrImg().get(0, 0)));
     }
 
     /**
@@ -99,10 +88,6 @@ public class HDRController {
         int zmin = 0;
         int zmax = 255;
         return z <= (zmin + zmax) / 2 ? (z - zmin) + 1 : (zmax - z) + 1;
-        // other possible forms of function (source: internet)
-//        double w0 = z <= 127 ? z : 255 - z;
-//        double w1 = Math.max((z <= 127) ? z + 1 : 256 - z, 0.0001);
-//        double w2 = z <= 127 ? z / 128 : (256 - z) / 128;
     }
 
     private void initWeights() {

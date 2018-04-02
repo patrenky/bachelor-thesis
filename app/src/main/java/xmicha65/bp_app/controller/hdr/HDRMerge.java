@@ -71,7 +71,6 @@ public class HDRMerge {
      * Merge HDR content channels into Mat
      */
     private void mergeHDR(double[] lnERed, double[] lnEGreen, double[] lnEBlue) {
-        System.out.println("### starting merging");
         int width = images.get(0).getBmpImg().getWidth();
         int height = images.get(0).getBmpImg().getHeight();
         Mat matHdrImage = new Mat(height, width, CvType.CV_32FC3);
