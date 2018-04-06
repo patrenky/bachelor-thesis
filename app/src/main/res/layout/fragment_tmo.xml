@@ -4,78 +4,209 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/tmo_back"
-            android:layout_width="200dp"
+        <android.support.constraint.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="40dp" />
 
-        <Button
+        <ImageView
+            android:id="@+id/tmo_back"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:srcCompat="@drawable/icon_back"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+        <ImageView
             android:id="@+id/tmo_rotate"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Rotate" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tmo_save"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:srcCompat="@drawable/icon_rotate"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginRight="16dp" />
+
+        <ImageView
+            android:id="@+id/tmo_save"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tmo_hint"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:srcCompat="@drawable/icon_save"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/tmo_hint"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:srcCompat="@drawable/icon_hint"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <!-- OPERATORS -->
 
         <TextView
             android:id="@+id/tmo_text0"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/tmo_durand"
             android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:text="Mantiuk local TMO" />
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTop" />
 
         <ImageView
             android:id="@+id/tmo_image0"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:srcCompat="@android:color/background_light" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tmo_text0"
+            app:layout_constraintDimensionRatio="2:1"
+            app:srcCompat="@android:color/background_light"
+            app:layout_constraintHorizontal_bias="0.0" />
+
+        <!---->
 
         <TextView
             android:id="@+id/tmo_text1"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/tmo_reinhard"
             android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:text="Reinhard global TMO" />
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tmo_image0" />
 
         <ImageView
             android:id="@+id/tmo_image1"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:srcCompat="@android:color/background_light" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tmo_text1"
+            app:layout_constraintDimensionRatio="2:1"
+            app:srcCompat="@android:color/background_light"
+            app:layout_constraintHorizontal_bias="0.0" />
+
+        <!---->
 
         <TextView
             android:id="@+id/tmo_text2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/tmo_mantiuk"
             android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:text="Durand local TMO" />
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tmo_image1" />
 
         <ImageView
             android:id="@+id/tmo_image2"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:srcCompat="@android:color/background_light" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tmo_text2"
+            app:layout_constraintDimensionRatio="2:1"
+            app:srcCompat="@android:color/background_light"
+            app:layout_constraintHorizontal_bias="0.0" />
+
+        <!---->
 
         <TextView
             android:id="@+id/tmo_text3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/tmo_drago"
             android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:text="Drago global TMO" />
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tmo_image2" />
 
         <ImageView
             android:id="@+id/tmo_image3"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:srcCompat="@android:color/background_light" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tmo_text3"
+            app:layout_constraintDimensionRatio="2:1"
+            app:srcCompat="@android:color/background_light"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>
