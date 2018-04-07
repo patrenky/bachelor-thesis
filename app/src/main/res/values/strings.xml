@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">HDR camera</string>
-    <string name="files_title">Select a HDR file for editing</string>
-    <string name="tmo_durand">Durand local TMO</string>
-    <string name="tmo_reinhard">Reinhard global TMO</string>
-    <string name="tmo_mantiuk">Mantiuk local TMO</string>
-    <string name="tmo_drago">Drago global TMO</string>
+    <string name="app_name">HDR Camera</string>
+    <string name="files_title">Select a HDR File for Editing</string>
+    <string name="tmo_durand">Durand Local TMO</string>
+    <string name="tmo_reinhard">Reinhard Global TMO</string>
+    <string name="tmo_mantiuk">Mantiuk Local TMO</string>
+    <string name="tmo_drago">Drago Global TMO</string>
 </resources>

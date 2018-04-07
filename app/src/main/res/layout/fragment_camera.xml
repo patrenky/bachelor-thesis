@@ -9,8 +9,17 @@
         android:id="@+id/camera_texture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/camera_curtain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true" />
+        android:alpha="0.4"
+        app:srcCompat="@color/colorWhite" />
 
     <ImageView
         android:id="@+id/camera_capture"
@@ -28,14 +37,22 @@
         android:id="@+id/camera_back"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
         app:layout_constraintDimensionRatio="1:1"
-        app:srcCompat="@drawable/icon_back" />
+        app:srcCompat="@drawable/icon_back_camera" />
+
+    <ProgressBar
+        android:id="@+id/camera_loading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>
