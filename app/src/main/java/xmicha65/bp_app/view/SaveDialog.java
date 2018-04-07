@@ -41,7 +41,7 @@ public class SaveDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         EditText input = new EditText(getActivity());
 
-        builder.setTitle(imageType == ImageType.HDR ? "Save HDR file" : "Save LDR file")
+        builder.setTitle(imageType == ImageType.HDR ? "Save HDR file" : "Save JPEG file")
                 .setView(input)
                 .setPositiveButton("save", (dialog, id) -> {
                     hdrImage.save(input.getText().toString(), imageType);

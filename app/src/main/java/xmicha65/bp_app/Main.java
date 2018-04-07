@@ -1,5 +1,6 @@
 package xmicha65.bp_app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -32,12 +33,18 @@ import xmicha65.bp_app.view.TmoFragment;
  * @author xmicha65
  */
 public class Main extends AppCompatActivity {
+    private static AppCompatActivity instance;
     private boolean useOpenCVforMerge = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        instance = this;
+    }
+
+    public static Context getContext() {
+        return instance.getApplicationContext();
     }
 
     /**

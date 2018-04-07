@@ -1,6 +1,7 @@
 package xmicha65.bp_app.model;
 
 import android.graphics.Bitmap;
+import android.widget.Toast;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 
+import xmicha65.bp_app.Main;
 import xmicha65.bp_app.controller.Storages;
 
 /**
@@ -49,7 +51,11 @@ public class ImageHDR implements Serializable {
         if (imageType == ImageType.HDR) success = saveHdr(name);
         else if (imageType == ImageType.LDR) success = saveLdr(name);
 
-        System.out.println("### image saved: " + success);
+        if (success) {
+            Toast.makeText(Main.getContext(), "Saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(Main.getContext(), "Failed to save", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean saveLdr(String name) {

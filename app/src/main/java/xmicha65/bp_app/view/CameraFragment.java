@@ -35,6 +35,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -57,6 +59,9 @@ public class CameraFragment extends Fragment {
     private long MICRO_SECOND = 1000;
     private long MILI_SECOND = MICRO_SECOND * 1000;
     private long ONE_SECOND = MILI_SECOND * 1000;
+
+    private ProgressBar loading_spinner;
+    private ImageView loading_curtain;
 
     private TextureView textureView;
     private CameraDevice cameraDevice;
@@ -98,6 +103,10 @@ public class CameraFragment extends Fragment {
         textureView.setSurfaceTextureListener(textureListener);
         view.findViewById(R.id.camera_capture).setOnClickListener(v -> takePicture());
         view.findViewById(R.id.camera_back).setOnClickListener(v -> ((Main) getActivity()).goHome());
+        loading_spinner = (ProgressBar) view.findViewById(R.id.camera_loading);
+        loading_curtain = (ImageView) view.findViewById(R.id.camera_curtain);
+        loading_spinner.setVisibility(View.GONE);
+        loading_curtain.setVisibility(View.GONE);
     }
 
     @Override
@@ -300,6 +309,8 @@ public class CameraFragment extends Fragment {
             return;
         }
         System.out.println("### starting capturing");
+        loading_spinner.setVisibility(View.VISIBLE);
+        loading_curtain.setVisibility(View.VISIBLE);
 
         // init range of exposures with autoExposure as middle value
         exposures.initExposures(autoExposure);
