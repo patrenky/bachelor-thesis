@@ -84,7 +84,7 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.drago_back: {
-                ((Main) getActivity()).goHome();
+                ((Main) getActivity()).tonemapOperators(hdrImage);
                 break;
             }
             case R.id.drago_reset: {
@@ -129,7 +129,6 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.gama, seekBar.getProgress()));
             }
         });
         barSaturation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -145,7 +144,6 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.saturation, seekBar.getProgress()));
             }
         });
         barBias.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -161,7 +159,6 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.dBias, seekBar.getProgress()));
             }
         });
     }

@@ -88,7 +88,7 @@ public class ImageHDR implements Serializable {
         System.out.println("### opening HDR: " + path);
         matHdrImage = Imgcodecs.imread(path, -1);
         if (matHdrImage.empty())
-            System.out.println("### HDR not loaded!");
+            Toast.makeText(Main.getContext(), "Can't open HDR file", Toast.LENGTH_SHORT).show();
         else
             System.out.println("### HDR loaded");
     }

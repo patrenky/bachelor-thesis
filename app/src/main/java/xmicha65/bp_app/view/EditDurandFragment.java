@@ -90,7 +90,7 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.durand_back: {
-                ((Main) getActivity()).goHome();
+                ((Main) getActivity()).tonemapOperators(hdrImage);
                 break;
             }
             case R.id.durand_reset: {
@@ -135,7 +135,6 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.gama, seekBar.getProgress()));
             }
         });
         barContrast.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -151,7 +150,6 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.dContrast, seekBar.getProgress()));
             }
         });
         barSaturation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -167,7 +165,6 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.saturation, seekBar.getProgress()));
             }
         });
         barSigmaSpace.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -184,7 +181,6 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.dSigmaSpace, seekBar.getProgress()));
             }
         });
         barSigmaColor.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -201,7 +197,6 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.dSigmaColor, seekBar.getProgress()));
             }
         });
     }

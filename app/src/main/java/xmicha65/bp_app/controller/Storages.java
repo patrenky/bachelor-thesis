@@ -1,8 +1,11 @@
 package xmicha65.bp_app.controller;
 
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
+
+import xmicha65.bp_app.Main;
 
 /**
  * source: Android documentation
@@ -34,7 +37,7 @@ public class Storages {
                 Environment.DIRECTORY_PICTURES), subdir);
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
-                System.out.println("### mkdirs " + directory.toString() + " failed!");
+                Toast.makeText(Main.getContext(), "Creating directory failed", Toast.LENGTH_SHORT).show();
             }
         }
         return directory;
@@ -46,7 +49,7 @@ public class Storages {
 
         File file = new File(path, fileName);
         if (file.exists()) {
-            System.out.println("### file exists!");
+            Toast.makeText(Main.getContext(), "File exists!", Toast.LENGTH_SHORT).show();
             return null;
         }
         return file;

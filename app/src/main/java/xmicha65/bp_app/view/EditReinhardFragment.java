@@ -87,7 +87,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.reinhard_back: {
-                ((Main) getActivity()).goHome();
+                ((Main) getActivity()).tonemapOperators(hdrImage);
                 break;
             }
             case R.id.reinhard_reset: {
@@ -132,7 +132,6 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.gama, seekBar.getProgress()));
             }
         });
         barIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -148,7 +147,6 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.rIntensity, seekBar.getProgress()));
             }
         });
         barLightAdapt.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -164,7 +162,6 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.rLightAdapt, seekBar.getProgress()));
             }
         });
         barColorAdapr.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -181,7 +178,6 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("### range check: " + TmoParams.getProgressValue(TmoParams.rColorAdapt, seekBar.getProgress()));
             }
         });
     }
