@@ -5,4 +5,14 @@
     <string name="tmo_reinhard">Reinhard Global TMO</string>
     <string name="tmo_mantiuk">Mantiuk Local TMO</string>
     <string name="tmo_drago">Drago Global TMO</string>
+    <string name="tmo_gamma">Gamma</string>
+    <string name="tmo_intensity">Intensity</string>
+    <string name="tmo_light_adaptation">Light Adaptation</string>
+    <string name="tmo_color_adaptation">Color Adaptation</string>
+    <string name="tmo_scale">Scale</string>
+    <string name="tmo_saturation">Saturation</string>
+    <string name="tmo_contrast">Contrast</string>
+    <string name="tmo_sigma_space">Sigma Space</string>
+    <string name="tmo_sigma_color">Sigma Color</string>
+    <string name="tmo_bias">Bias</string>
 </resources>
