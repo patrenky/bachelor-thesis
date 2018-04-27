@@ -12,7 +12,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/settings_exposures"
-        android:textColor="@color/colorBlack" />
+        android:textColor="@color/colorBlueDark"
+        android:textSize="@dimen/textPrimary" />
 
     <Spinner
         android:id="@+id/settings_spExposures"
@@ -30,7 +31,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/settings_steps"
-        android:textColor="@color/colorBlack" />
+        android:textColor="@color/colorBlueDark"
+        android:textSize="@dimen/textPrimary" />
 
     <Spinner
         android:id="@+id/settings_spStep"

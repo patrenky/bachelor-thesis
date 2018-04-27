@@ -4,8 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import xmicha65.bp_app.R;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageType;
 
@@ -39,10 +45,19 @@ public class SaveDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        EditText input = new EditText(getActivity());
 
-        builder.setTitle(imageType == ImageType.HDR ? "Save HDR file" : "Save JPEG file")
-                .setView(input)
+        // content layout
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View layout = inflater.inflate(R.layout.dialog_save, null);
+
+        // dialog title
+        TextView title = (TextView) layout.findViewById(R.id.save_title);
+        title.setText(imageType == ImageType.HDR ? R.string.save_hdr : R.string.save_jpeg);
+
+        // text input
+        EditText input = (EditText) layout.findViewById(R.id.save_input);
+
+        builder.setView(layout)
                 .setPositiveButton("save", (dialog, id) -> {
                     hdrImage.save(input.getText().toString(), imageType);
                 })

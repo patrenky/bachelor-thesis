@@ -17,4 +17,7 @@
     <string name="tmo_bias">Bias</string>
     <string name="settings_exposures">Number of exposures</string>
     <string name="settings_steps">Step size</string>
+    <string name="save_default">Save file</string>
+    <string name="save_jpeg">Save JPEG file</string>
+    <string name="save_hdr">Save HDR file</string>
 </resources>

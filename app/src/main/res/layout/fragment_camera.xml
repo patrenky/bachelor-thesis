@@ -15,9 +15,8 @@
     <ImageView
         android:id="@+id/camera_curtain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="96dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
         android:alpha="0.4"
         app:srcCompat="@color/colorWhite" />
 
@@ -28,7 +27,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
         app:layout_constraintDimensionRatio="1:1"
         app:srcCompat="@drawable/icon_aperture" />
@@ -37,15 +35,12 @@
         android:id="@+id/camera_back"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
         app:layout_constraintDimensionRatio="1:1"
-        app:srcCompat="@drawable/icon_back_camera" />
+        app:srcCompat="@drawable/icon_back" />
 
     <ProgressBar
         android:id="@+id/camera_loading"

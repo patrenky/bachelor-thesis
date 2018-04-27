@@ -78,7 +78,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         public View getView(int position, View convertView, ViewGroup parent) {
             View vi = convertView;
             if (vi == null)
-                vi = inflater.inflate(R.layout.list_row, null);
+                vi = inflater.inflate(R.layout.item_list, null);
             TextView text = (TextView) vi.findViewById(R.id.file_text);
             text.setText(data.get(position).getTitle());
             return vi;

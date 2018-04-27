@@ -50,7 +50,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/tmo_mantiuk"
-        android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/textLarge"
         app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -103,7 +104,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/tmo_gamma"
-        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/textPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineMiddle" />
@@ -118,7 +120,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/tmo_scale"
-        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/textPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mantiuk_bar0" />
@@ -133,7 +136,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/tmo_saturation"
-        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/textPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mantiuk_bar1" />

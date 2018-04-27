@@ -15,7 +15,7 @@ import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 
 public class SettingsDialog extends DialogFragment {
-    private Integer[] optsExposures = {3, 5};
+    private Integer[] optsExposures = {3, 4, 5, 6};
     private Integer[] optsStep = {1, 2};
 
     @Override
@@ -34,13 +34,13 @@ public class SettingsDialog extends DialogFragment {
 
         // exposures dropdown
         Spinner spExposures = (Spinner) layout.findViewById(R.id.settings_spExposures);
-        ArrayAdapter<Integer> adapterE = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, optsExposures);
+        ArrayAdapter<Integer> adapterE = new ArrayAdapter<>(getActivity(), R.layout.item_spinner, optsExposures);
         spExposures.setAdapter(adapterE);
         spExposures.setSelection(Arrays.asList(optsExposures).indexOf(((Main) getActivity()).getCaptureExposures()));
 
         // steps dropdown
         Spinner spStep = (Spinner) layout.findViewById(R.id.settings_spStep);
-        ArrayAdapter<Integer> adapterS = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, optsStep);
+        ArrayAdapter<Integer> adapterS = new ArrayAdapter<>(getActivity(), R.layout.item_spinner, optsStep);
         spStep.setAdapter(adapterS);
         spStep.setSelection(Arrays.asList(optsStep).indexOf(((Main) getActivity()).getCaptureStep()));
 

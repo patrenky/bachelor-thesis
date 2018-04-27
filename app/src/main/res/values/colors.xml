@@ -2,9 +2,10 @@
 <resources>
     <color name="colorBlack">#000</color>
     <color name="colorWhite">#fff</color>
-    <color name="colorDarkGrey">#404048</color>
-    <color name="colorLightGrey">#828290</color>
-    <color name="colorPrimary">@color/colorLightGrey</color>
-    <color name="colorPrimaryDark">@color/colorDarkGrey</color>
-    <color name="colorAccent">@color/colorDarkGrey</color>
+    <color name="colorBlueLight">#4876FF</color>
+    <color name="colorBluePrimary">#4169E1</color>
+    <color name="colorBlueDark">#27408B</color>
+    <color name="colorPrimary">@color/colorBlueDark</color>
+    <color name="colorPrimaryDark">@color/colorBlueDark</color>
+    <color name="colorAccent">@color/colorBlueDark</color>
 </resources>
