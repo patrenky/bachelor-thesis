@@ -32,6 +32,9 @@ import xmicha65.bp_app.view.TmoFragment;
 public class Main extends AppCompatActivity {
     private static AppCompatActivity instance;
     private boolean useOpenCVforMerge = true;
+    private int captureExposures = 5;
+    private int captureStep = 2;
+    private int viewRotation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,5 +191,35 @@ public class Main extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, homeScreen).commit();
+    }
+
+    /**
+     * Settings setters
+     */
+    public void setCaptureExposures(int num) {
+        captureExposures = num;
+    }
+
+    public void setCaptureStep(int num) {
+        captureStep = num;
+    }
+
+    public void setViewRotation(int rotation) {
+        viewRotation = rotation;
+    }
+
+    /**
+     * Settings getters
+     */
+    public int getCaptureExposures() {
+        return captureExposures;
+    }
+
+    public int getCaptureStep() {
+        return captureStep;
+    }
+
+    public int getViewRotation() {
+        return viewRotation;
     }
 }

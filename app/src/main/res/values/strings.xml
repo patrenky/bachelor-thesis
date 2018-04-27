@@ -15,4 +15,6 @@
     <string name="tmo_sigma_space">Sigma Space</string>
     <string name="tmo_sigma_color">Sigma Color</string>
     <string name="tmo_bias">Bias</string>
+    <string name="settings_exposures">Number of exposures</string>
+    <string name="settings_steps">Step size</string>
 </resources>

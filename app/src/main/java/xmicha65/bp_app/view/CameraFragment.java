@@ -228,7 +228,12 @@ public class CameraFragment extends Fragment {
             long exposureMax = (long) exposureRange.getUpper();
 
             // init exposure range
-            exposures = new Exposures(exposureMin, exposureMax);
+            exposures = new Exposures(
+                    exposureMin,
+                    exposureMax,
+                    ((Main) getActivity()).getCaptureExposures(),
+                    ((Main) getActivity()).getCaptureStep()
+            );
             // set autoExposure to range middle value
             autoExposure = exposures.getMiddleValue();
 

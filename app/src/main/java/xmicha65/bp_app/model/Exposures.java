@@ -16,7 +16,10 @@ public class Exposures {
     private int numExposures = 5;                       // number of selected exposures
     private int step = 2;                               // select exposures in range step
 
-    public Exposures(long exposureMin, long exposureMax) {
+    public Exposures(long exposureMin, long exposureMax, int mExposures, int mStep) {
+        numExposures = mExposures;
+        step = mStep;
+
         long rangeMin = nextPowerOfTwo(exposureMin);
         long rangeMax = nextPowerOfTwo(exposureMax) / 2;
 
@@ -26,6 +29,8 @@ public class Exposures {
             range.add(exposure);
             exposure *= 2;
         }
+
+        System.out.println("### numExposures: " + numExposures + " step: " + step);
     }
 
     public void initExposures(long exposure) {

@@ -1,5 +1,6 @@
 package xmicha65.bp_app.view;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,6 +36,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.home_settings: {
+                DialogFragment settingsDialog = new SettingsDialog();
+                settingsDialog.show(getActivity().getFragmentManager(), "settingsDialog");
                 break;
             }
         }
