@@ -21,7 +21,6 @@ import xmicha65.bp_app.model.TmoParams;
 public class TmoFragment extends Fragment implements View.OnClickListener {
     public static String ARG_HDR = "ARG_HDR";
     private ImageHDR hdrImage;
-    private int rotation = 0;
 
     private ImageView imageView0; // Durand
     private ImageView imageView1; // Reinhard
@@ -69,6 +68,8 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.tmo_image1).setOnClickListener(this);
         view.findViewById(R.id.tmo_image2).setOnClickListener(this);
         view.findViewById(R.id.tmo_image3).setOnClickListener(this);
+
+        initRotateView();
     }
 
     @Override
@@ -109,12 +110,21 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
     /**
      * Rotate image views
      */
-    private void rotateView() {
-        rotation += 90;
+    private void initRotateView() {
+        int rotation = ((Main) getActivity()).getViewRotation();
         imageView0.setRotation(rotation);
         imageView1.setRotation(rotation);
         imageView2.setRotation(rotation);
         imageView3.setRotation(rotation);
+    }
+
+    private void rotateView() {
+        int rotation = ((Main) getActivity()).getViewRotation() + 90;
+        imageView0.setRotation(rotation);
+        imageView1.setRotation(rotation);
+        imageView2.setRotation(rotation);
+        imageView3.setRotation(rotation);
+        ((Main) getActivity()).setViewRotation(rotation);
     }
 
     /**

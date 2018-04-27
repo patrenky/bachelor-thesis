@@ -21,10 +21,10 @@ import xmicha65.bp_app.model.TmoParams;
  */
 public class EditDurandFragment extends Fragment implements View.OnClickListener {
     public static String ARG_HDR = "ARG_HDR";
+
     private ImageHDR hdrImage;
     private ImageView imageView;
     private TMODurand tonemapper;
-    private int rotation = 0;
 
     // seekBars
     private SeekBar barGama;
@@ -84,6 +84,7 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
         resetTmoValues();
         setSeekBarsListeners();
+        initRotateView();
     }
 
     @Override
@@ -204,9 +205,14 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
     /**
      * Rotate image view
      */
+    private void initRotateView() {
+        imageView.setRotation(((Main) getActivity()).getViewRotation());
+    }
+
     private void rotateView() {
-        rotation += 90;
+        int rotation = ((Main) getActivity()).getViewRotation() + 90;
         imageView.setRotation(rotation);
+        ((Main) getActivity()).setViewRotation(rotation);
     }
 
     /**
@@ -240,6 +246,5 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
 
         // save current state in case we need to recreate the fragment
         outState.putSerializable(ARG_HDR, hdrImage);
-
     }
 }

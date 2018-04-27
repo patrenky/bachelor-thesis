@@ -75,13 +75,35 @@ public class Main extends AppCompatActivity {
     }
 
     /**
-     * Home fragment handler
+     * Display Home screen
+     */
+    public void goHome() {
+        HomeFragment homeScreen = new HomeFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, homeScreen).commit();
+    }
+
+    /**
+     * Open camera
      */
     public void homeSelectCapture() {
+        viewRotation = 0;
         CameraFragment cameraScreen = new CameraFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, cameraScreen).commit();
+    }
+
+    /**
+     * Open list of .hdr files
+     */
+    public void homeSelectLoadHdr() {
+        viewRotation = 0;
+        FilesFragment filesScreen = new FilesFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, filesScreen).commit();
     }
 
     /**
@@ -171,26 +193,6 @@ public class Main extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, editScreen).commit();
-    }
-
-    /**
-     * Open list of .hdr files
-     */
-    public void homeSelectLoadHdr() {
-        FilesFragment filesScreen = new FilesFragment();
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, filesScreen).commit();
-    }
-
-    /**
-     * Display Home screen
-     */
-    public void goHome() {
-        HomeFragment homeScreen = new HomeFragment();
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, homeScreen).commit();
     }
 
     /**
