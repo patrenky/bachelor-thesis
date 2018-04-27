@@ -129,10 +129,12 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private void listDirectory(File path) {
         File[] files = path.listFiles();
         fileList.clear();
-        for (File file : files) {
-            String filePath = file.getPath();
-            if (filePath.endsWith(".hdr")) {
-                fileList.add(new FileItem(filePath, filePath.replace(path.toString(), "")));
+        if (files != null) {
+            for (File file : files) {
+                String filePath = file.getPath();
+                if (filePath.endsWith(".hdr")) {
+                    fileList.add(new FileItem(filePath, filePath.replace(path.toString(), "")));
+                }
             }
         }
     }
