@@ -6,11 +6,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
+    List<ImageView> hints = new ArrayList<>();
+    boolean hintsVisibility = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -22,6 +29,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.home_capture).setOnClickListener(this);
         view.findViewById(R.id.home_load).setOnClickListener(this);
         view.findViewById(R.id.home_settings).setOnClickListener(this);
+        view.findViewById(R.id.home_hint).setOnClickListener(this);
+
+        hints.add((ImageView) view.findViewById(R.id.home_hint_0));
+        hints.add((ImageView) view.findViewById(R.id.home_hint_1));
+        hints.add((ImageView) view.findViewById(R.id.home_hint_2));
+
+        setHintsVisibility(hintsVisibility);
     }
 
     @Override
@@ -40,6 +54,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 settingsDialog.show(getActivity().getFragmentManager(), "settingsDialog");
                 break;
             }
+            case R.id.home_hint: {
+                setHintsVisibility(!hintsVisibility);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Hints visibility
+     */
+    private void setHintsVisibility(boolean visible) {
+        hintsVisibility = visible;
+        for (ImageView hint : hints) {
+            hint.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 }
