@@ -21,8 +21,8 @@ import xmicha65.bp_app.controller.Storages;
  * @author xmicha65
  */
 public class ImageHDR implements Serializable {
-    private Mat matHdrImage;
-    private Mat matHdrTemp = new Mat();
+    private transient Mat matHdrImage;
+    private transient Mat matHdrTemp = new Mat();
     private Bitmap bmpImage;
 
     public ImageHDR(String path) {
