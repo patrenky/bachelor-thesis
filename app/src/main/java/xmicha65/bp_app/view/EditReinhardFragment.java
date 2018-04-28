@@ -38,6 +38,9 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
     private float lightAdapt;
     private float colorAdapt;
 
+    private ImageView hint;
+    private boolean hintVisibility = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
         imageView = (ImageView) view.findViewById(R.id.reinhard_image);
         // buttons
         view.findViewById(R.id.reinhard_back).setOnClickListener(this);
+        view.findViewById(R.id.reinhard_hint).setOnClickListener(this);
         view.findViewById(R.id.reinhard_reset).setOnClickListener(this);
         view.findViewById(R.id.reinhard_rotate).setOnClickListener(this);
         view.findViewById(R.id.reinhard_save_hdr).setOnClickListener(this);
@@ -82,6 +86,10 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
         resetTmoValues();
         setSeekBarsListeners();
         initRotateView();
+
+        hint = (ImageView) view.findViewById(R.id.reinhard_hint0);
+        hint.setVisibility(View.GONE);
+        hintVisibility = false;
     }
 
     @Override
@@ -89,6 +97,11 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
             case R.id.reinhard_back: {
                 ((Main) getActivity()).tonemapOperators(hdrImage);
+                break;
+            }
+            case R.id.reinhard_hint: {
+                hintVisibility = !hintVisibility;
+                hint.setVisibility(hintVisibility ? View.VISIBLE : View.GONE);
                 break;
             }
             case R.id.reinhard_reset: {

@@ -27,6 +27,9 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
     private ImageView imageView2; // Mantiuk
     private ImageView imageView3; // Drago
 
+    private ImageView hint;
+    private boolean hintVisibility = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.tmo_back).setOnClickListener(this);
         view.findViewById(R.id.tmo_rotate).setOnClickListener(this);
         view.findViewById(R.id.tmo_save).setOnClickListener(this);
+        view.findViewById(R.id.tmo_hint).setOnClickListener(this);
 
         view.findViewById(R.id.tmo_image0).setOnClickListener(this);
         view.findViewById(R.id.tmo_image1).setOnClickListener(this);
@@ -70,6 +74,10 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.tmo_image3).setOnClickListener(this);
 
         initRotateView();
+
+        hint = (ImageView) view.findViewById(R.id.tmo_hint0);
+        hint.setVisibility(View.GONE);
+        hintVisibility = false;
     }
 
     @Override
@@ -86,6 +94,11 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
             case R.id.tmo_save: {
                 DialogFragment saveDialog = SaveDialog.newInstance(hdrImage, ImageType.HDR);
                 saveDialog.show(getActivity().getFragmentManager(), "saveHdrDialog");
+                break;
+            }
+            case R.id.tmo_hint: {
+                hintVisibility = !hintVisibility;
+                hint.setVisibility(hintVisibility ? View.VISIBLE : View.GONE);
                 break;
             }
             case R.id.tmo_image0: {

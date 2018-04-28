@@ -15,8 +15,8 @@ import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    List<ImageView> hints = new ArrayList<>();
-    boolean hintsVisibility = false;
+    private List<ImageView> hints = new ArrayList<>();
+    private boolean hintsVisibility = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -36,6 +36,9 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
     private float saturation;
     private float bias;
 
+    private ImageView hint;
+    private boolean hintVisibility = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
         imageView = (ImageView) view.findViewById(R.id.drago_image);
         // buttons
         view.findViewById(R.id.drago_back).setOnClickListener(this);
+        view.findViewById(R.id.drago_hint).setOnClickListener(this);
         view.findViewById(R.id.drago_reset).setOnClickListener(this);
         view.findViewById(R.id.drago_rotate).setOnClickListener(this);
         view.findViewById(R.id.drago_save_hdr).setOnClickListener(this);
@@ -79,6 +83,10 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
         resetTmoValues();
         setSeekBarsListeners();
         initRotateView();
+
+        hint = (ImageView) view.findViewById(R.id.drago_hint0);
+        hint.setVisibility(View.GONE);
+        hintVisibility = false;
     }
 
     @Override
@@ -86,6 +94,11 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.drago_back: {
                 ((Main) getActivity()).tonemapOperators(hdrImage);
+                break;
+            }
+            case R.id.drago_hint: {
+                hintVisibility = !hintVisibility;
+                hint.setVisibility(hintVisibility ? View.VISIBLE : View.GONE);
                 break;
             }
             case R.id.drago_reset: {

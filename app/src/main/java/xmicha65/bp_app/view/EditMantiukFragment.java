@@ -36,6 +36,9 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
     private float scale;
     private float saturation;
 
+    private ImageView hint;
+    private boolean hintVisibility = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
         imageView = (ImageView) view.findViewById(R.id.mantiuk_image);
         // buttons
         view.findViewById(R.id.mantiuk_back).setOnClickListener(this);
+        view.findViewById(R.id.mantiuk_hint).setOnClickListener(this);
         view.findViewById(R.id.mantiuk_reset).setOnClickListener(this);
         view.findViewById(R.id.mantiuk_rotate).setOnClickListener(this);
         view.findViewById(R.id.mantiuk_save_hdr).setOnClickListener(this);
@@ -79,6 +83,10 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
         resetTmoValues();
         setSeekBarsListeners();
         initRotateView();
+
+        hint = (ImageView) view.findViewById(R.id.mantiuk_hint0);
+        hint.setVisibility(View.GONE);
+        hintVisibility = false;
     }
 
     @Override
@@ -86,6 +94,11 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
         switch (view.getId()) {
             case R.id.mantiuk_back: {
                 ((Main) getActivity()).tonemapOperators(hdrImage);
+                break;
+            }
+            case R.id.mantiuk_hint: {
+                hintVisibility = !hintVisibility;
+                hint.setVisibility(hintVisibility ? View.VISIBLE : View.GONE);
                 break;
             }
             case R.id.mantiuk_reset: {
