@@ -133,7 +133,7 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
         barGama.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                gamma = TmoParams.getProgressValue(TmoParams.gama, progress);
+                gamma = TmoParams.getProgressValue(TmoParams.gamma, progress);
                 displayResult();
             }
 
@@ -202,11 +202,11 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
      * Reset to default tmo params
      */
     private void resetTmoValues() {
-        gamma = TmoParams.getDefaultValue(TmoParams.gama);
+        gamma = TmoParams.getDefaultValue(TmoParams.gamma);
         scale = TmoParams.getDefaultValue(TmoParams.mScale);
         saturation = TmoParams.getDefaultValue(TmoParams.saturation);
 
-        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gama));
+        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gamma));
         barScale.setProgress(TmoParams.getDefaultProgressValue(TmoParams.mScale));
         barSaturation.setProgress(TmoParams.getDefaultProgressValue(TmoParams.saturation));
     }

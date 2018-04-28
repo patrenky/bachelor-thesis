@@ -136,7 +136,7 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
         barGama.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                gamma = TmoParams.getProgressValue(TmoParams.gama, progress);
+                gamma = TmoParams.getProgressValue(TmoParams.gamma, progress);
                 displayResult();
             }
 
@@ -221,12 +221,12 @@ public class EditReinhardFragment extends Fragment implements View.OnClickListen
      * Reset to default tmo params
      */
     private void resetTmoValues() {
-        gamma = TmoParams.getDefaultValue(TmoParams.gama);
+        gamma = TmoParams.getDefaultValue(TmoParams.gamma);
         intensity = TmoParams.getDefaultValue(TmoParams.rIntensity);
         lightAdapt = TmoParams.getDefaultValue(TmoParams.rLightAdapt);
         colorAdapt = TmoParams.getDefaultValue(TmoParams.rColorAdapt);
 
-        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gama));
+        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gamma));
         barIntensity.setProgress(TmoParams.getDefaultProgressValue(TmoParams.rIntensity));
         barLightAdapt.setProgress(TmoParams.getDefaultProgressValue(TmoParams.rLightAdapt));
         barColorAdapr.setProgress(TmoParams.getDefaultProgressValue(TmoParams.rColorAdapt));

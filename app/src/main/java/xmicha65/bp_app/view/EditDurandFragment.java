@@ -139,7 +139,7 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
         barGama.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                gamma = TmoParams.getProgressValue(TmoParams.gama, progress);
+                gamma = TmoParams.getProgressValue(TmoParams.duGamma, progress);
                 displayResult();
             }
 
@@ -154,7 +154,7 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
         barContrast.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                contrast = TmoParams.getProgressValue(TmoParams.dContrast, progress);
+                contrast = TmoParams.getProgressValue(TmoParams.duContrast, progress);
                 displayResult();
             }
 
@@ -184,7 +184,7 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
         barSigmaSpace.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                sigmaSpace = TmoParams.getProgressValue(TmoParams.dSigmaSpace, progress);
+                sigmaSpace = TmoParams.getProgressValue(TmoParams.duSigmaSpace, progress);
                 displayResult();
             }
 
@@ -200,7 +200,7 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
         barSigmaColor.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                sigmaColor = TmoParams.getProgressValue(TmoParams.dSigmaColor, progress);
+                sigmaColor = TmoParams.getProgressValue(TmoParams.duSigmaColor, progress);
                 displayResult();
             }
 
@@ -240,17 +240,17 @@ public class EditDurandFragment extends Fragment implements View.OnClickListener
      * Reset to default tmo params
      */
     private void resetTmoValues() {
-        gamma = TmoParams.getDefaultValue(TmoParams.gama);
-        contrast = TmoParams.getDefaultValue(TmoParams.dContrast);
+        gamma = TmoParams.getDefaultValue(TmoParams.duGamma);
+        contrast = TmoParams.getDefaultValue(TmoParams.duContrast);
         saturation = TmoParams.getDefaultValue(TmoParams.saturation);
-        sigmaSpace = TmoParams.getDefaultValue(TmoParams.dSigmaSpace);
-        sigmaColor = TmoParams.getDefaultValue(TmoParams.dSigmaColor);
+        sigmaSpace = TmoParams.getDefaultValue(TmoParams.duSigmaSpace);
+        sigmaColor = TmoParams.getDefaultValue(TmoParams.duSigmaColor);
 
-        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gama));
-        barContrast.setProgress(TmoParams.getDefaultProgressValue(TmoParams.dContrast));
+        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.duGamma));
+        barContrast.setProgress(TmoParams.getDefaultProgressValue(TmoParams.duContrast));
         barSaturation.setProgress(TmoParams.getDefaultProgressValue(TmoParams.saturation));
-        barSigmaSpace.setProgress(TmoParams.getDefaultProgressValue(TmoParams.dSigmaSpace));
-        barSigmaColor.setProgress(TmoParams.getDefaultProgressValue(TmoParams.dSigmaColor));
+        barSigmaSpace.setProgress(TmoParams.getDefaultProgressValue(TmoParams.duSigmaSpace));
+        barSigmaColor.setProgress(TmoParams.getDefaultProgressValue(TmoParams.duSigmaColor));
     }
 
     @Override

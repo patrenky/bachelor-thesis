@@ -133,7 +133,7 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
         barGama.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                gamma = TmoParams.getProgressValue(TmoParams.gama, progress);
+                gamma = TmoParams.getProgressValue(TmoParams.gamma, progress);
                 displayResult();
             }
 
@@ -163,7 +163,7 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
         barBias.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                bias = TmoParams.getProgressValue(TmoParams.dBias, progress);
+                bias = TmoParams.getProgressValue(TmoParams.drBias, progress);
                 displayResult();
             }
 
@@ -202,13 +202,13 @@ public class EditDragoFragment extends Fragment implements View.OnClickListener 
      * Reset to default tmo params
      */
     private void resetTmoValues() {
-        gamma = TmoParams.getDefaultValue(TmoParams.gama);
+        gamma = TmoParams.getDefaultValue(TmoParams.gamma);
         saturation = TmoParams.getDefaultValue(TmoParams.saturation);
-        bias = TmoParams.getDefaultValue(TmoParams.dBias);
+        bias = TmoParams.getDefaultValue(TmoParams.drBias);
 
-        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gama));
+        barGama.setProgress(TmoParams.getDefaultProgressValue(TmoParams.gamma));
         barSaturation.setProgress(TmoParams.getDefaultProgressValue(TmoParams.saturation));
-        barBias.setProgress(TmoParams.getDefaultProgressValue(TmoParams.dBias));
+        barBias.setProgress(TmoParams.getDefaultProgressValue(TmoParams.drBias));
     }
 
     @Override

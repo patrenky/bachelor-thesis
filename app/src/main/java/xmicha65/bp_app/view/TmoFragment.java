@@ -146,17 +146,17 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
     private void displayResults() {
         TMODurand tmoDurand = new TMODurand(
                 hdrImage.getMatHdrTemp(),
-                TmoParams.getDefaultValue(TmoParams.gama),
-                TmoParams.getDefaultValue(TmoParams.dContrast),
+                TmoParams.getDefaultValue(TmoParams.duGamma),
+                TmoParams.getDefaultValue(TmoParams.duContrast),
                 TmoParams.getDefaultValue(TmoParams.saturation),
-                TmoParams.getDefaultValue(TmoParams.dSigmaSpace),
-                TmoParams.getDefaultValue(TmoParams.dSigmaColor)
+                TmoParams.getDefaultValue(TmoParams.duSigmaSpace),
+                TmoParams.getDefaultValue(TmoParams.duSigmaColor)
         );
         imageView0.setImageBitmap(tmoDurand.getImageBmp());
 
         TMOReinhard tmoReinhard = new TMOReinhard(
                 hdrImage.getMatHdrTemp(),
-                TmoParams.getDefaultValue(TmoParams.gama),
+                TmoParams.getDefaultValue(TmoParams.gamma),
                 TmoParams.getDefaultValue(TmoParams.rIntensity),
                 TmoParams.getDefaultValue(TmoParams.rLightAdapt),
                 TmoParams.getDefaultValue(TmoParams.rColorAdapt)
@@ -165,7 +165,7 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
 
         TMOMantiuk tmoMantiuk = new TMOMantiuk(
                 hdrImage.getMatHdrTemp(),
-                TmoParams.getDefaultValue(TmoParams.gama),
+                TmoParams.getDefaultValue(TmoParams.gamma),
                 TmoParams.getDefaultValue(TmoParams.mScale),
                 TmoParams.getDefaultValue(TmoParams.saturation)
         );
@@ -173,9 +173,9 @@ public class TmoFragment extends Fragment implements View.OnClickListener {
 
         TMODrago tmoDrago = new TMODrago(
                 hdrImage.getMatHdrTemp(),
-                TmoParams.getDefaultValue(TmoParams.gama),
+                TmoParams.getDefaultValue(TmoParams.gamma),
                 TmoParams.getDefaultValue(TmoParams.saturation),
-                TmoParams.getDefaultValue(TmoParams.dBias)
+                TmoParams.getDefaultValue(TmoParams.drBias)
         );
         imageView3.setImageBitmap(tmoDrago.getImageBmp());
     }
