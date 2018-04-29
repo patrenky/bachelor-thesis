@@ -15,7 +15,7 @@ import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 
 public class SettingsDialog extends DialogFragment {
-    private Integer[] optsExposures = {3, 4, 5, 6};
+    private Integer[] optsExposures = {3, 4, 5};
     private Integer[] optsStep = {1, 2};
 
     @Override
