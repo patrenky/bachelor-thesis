@@ -3,6 +3,7 @@ package xmicha65.bp_app;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -72,6 +73,19 @@ public class Main extends AppCompatActivity {
 
             goHome();
         }
+    }
+
+    /**
+     * Show/hide global progress bar
+     */
+    public void showProgress() {
+        findViewById(R.id.main_curtain).setVisibility(View.VISIBLE);
+        findViewById(R.id.main_loading).setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgress() {
+        findViewById(R.id.main_curtain).setVisibility(View.GONE);
+        findViewById(R.id.main_loading).setVisibility(View.GONE);
     }
 
     /**

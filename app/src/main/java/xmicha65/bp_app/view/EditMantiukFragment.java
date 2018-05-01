@@ -1,6 +1,7 @@
 package xmicha65.bp_app.view;
 
 import android.app.DialogFragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,6 +21,34 @@ import xmicha65.bp_app.model.TmoParams;
  * Screen: control params of Mantiuk local TMO
  */
 public class EditMantiukFragment extends Fragment implements View.OnClickListener {
+    /**
+     * Class for tonemap original size image and async affecting view
+     */
+    private class SaveJpeg extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            tonemapper = new TMOMantiuk(hdrImage.getMatHdrImg(), gamma, scale, saturation);
+            DialogFragment saveDialog = SaveDialog.newInstance(
+                    new ImageHDR(tonemapper.getImageBmp()), ImageType.LDR);
+            saveDialog.show(getActivity().getFragmentManager(), "saveLdrDialog");
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            ((Main) getActivity()).hideProgress();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ((Main) getActivity()).showProgress();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
     public static String ARG_HDR = "ARG_HDR";
 
     private ImageHDR hdrImage;
@@ -116,11 +145,7 @@ public class EditMantiukFragment extends Fragment implements View.OnClickListene
                 break;
             }
             case R.id.mantiuk_save_jpg: {
-                // save original size result
-                tonemapper = new TMOMantiuk(hdrImage.getMatHdrImg(), gamma, scale, saturation);
-                DialogFragment saveDialog = SaveDialog.newInstance(
-                        new ImageHDR(tonemapper.getImageBmp()), ImageType.LDR);
-                saveDialog.show(getActivity().getFragmentManager(), "saveLdrDialog");
+                new SaveJpeg().execute("");
                 break;
             }
         }
