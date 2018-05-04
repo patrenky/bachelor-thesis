@@ -14,6 +14,10 @@ import java.util.Arrays;
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 
+/**
+ * Dialog with selects of global app settings
+ * @author xmicha65
+ */
 public class SettingsDialog extends DialogFragment {
     private Integer[] optsExposures = {3, 4, 5};
     private Integer[] optsStep = {1, 2};

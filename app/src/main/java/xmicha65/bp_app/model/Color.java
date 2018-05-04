@@ -1,5 +1,8 @@
 package xmicha65.bp_app.model;
 
+/**
+ * Enum for resolution color channels
+ */
 public enum Color {
     RED,
     GREEN,

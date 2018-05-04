@@ -11,15 +11,14 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 /**
- * Temporary class for displaying histograms and CRF curves on ImageView
- * Uses OpenCV {@link Mat} for drawing
+ * Helpfull class for displaying histograms and CRF curves on ImageView
+ * Uses OpenCV Mat for drawing
  * @author xmicha65
  */
 public class Histogram {
 
     /**
      * Display RGB response curves on ImageView
-     * (ImageView) findViewById(R.id.imageView1)
      */
     public static void displayCurves(ImageView iv, double[] red, double[] green, double[] blue) {
         int height = 400;

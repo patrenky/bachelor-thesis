@@ -14,6 +14,10 @@ import java.util.List;
 import xmicha65.bp_app.Main;
 import xmicha65.bp_app.R;
 
+/**
+ * Home screen
+ * @author xmicha65
+ */
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private List<ImageView> hints = new ArrayList<>();
     private boolean hintsVisibility = false;

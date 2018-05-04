@@ -22,6 +22,8 @@ import xmicha65.bp_app.model.ImageHDR;
 /**
  * Screen for listing .hdr files from public images directory
  * Implements selecting .hdr content for tonemap on file item click
+ * @author xmicha65
+ * source: Android Documentation
  */
 public class FilesFragment extends Fragment implements View.OnClickListener {
     private List<FileItem> fileList = new ArrayList<>();

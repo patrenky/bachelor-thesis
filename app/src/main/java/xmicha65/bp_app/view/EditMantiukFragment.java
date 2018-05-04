@@ -19,6 +19,7 @@ import xmicha65.bp_app.model.TmoParams;
 
 /**
  * Screen: control params of Mantiuk local TMO
+ * @author xmicha65
  */
 public class EditMantiukFragment extends Fragment implements View.OnClickListener {
     /**

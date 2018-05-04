@@ -35,6 +35,10 @@ public class ImageLDR {
         this.bmpImg = BitmapFactory.decodeStream(ins);
     }
 
+    /**
+     * Post process captured image and init attribut variables
+     * For save RAM memory during capturing
+     */
     public void postProcess() {
         this.width = this.bmpImg.getWidth();
         this.height = this.bmpImg.getHeight();

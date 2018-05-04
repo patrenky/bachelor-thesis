@@ -15,6 +15,10 @@ import xmicha65.bp_app.R;
 import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageType;
 
+/**
+ * Dialog for edit name of storing content
+ * @author xmicha65
+ */
 public class SaveDialog extends DialogFragment {
     public static String ARG_IMG = "ARG_IMG";
     public static String ARG_TYPE = "ARG_TYPE";

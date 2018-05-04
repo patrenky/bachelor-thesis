@@ -39,12 +39,20 @@ public class ImageHDR implements Serializable {
         this.bmpImage = bmp;
     }
 
+    /**
+     * Create resized temp image for real-time insight
+     */
     private void compressImage() {
         System.out.println("### compressing temp");
         Size dSize = new Size(matHdrImage.cols() / 5, matHdrImage.rows() / 5);
         Imgproc.resize(matHdrImage, matHdrTemp, dSize);
     }
 
+    /**
+     * Controller of storing image or HDR content
+     * @param name of file
+     * @param imageType HDR / LDR (JPEG)
+     */
     public void save(String name, ImageType imageType) {
         boolean success = false;
 
@@ -58,6 +66,11 @@ public class ImageHDR implements Serializable {
         }
     }
 
+    /**
+     * Save LDR (JPEG) image
+     * @param name of file
+     * @return success
+     */
     private boolean saveLdr(String name) {
         try {
             File file = Storages.getPublicImagesFile("/hdr", String.format("%s.jpg", name));
@@ -74,6 +87,11 @@ public class ImageHDR implements Serializable {
         }
     }
 
+    /**
+     * Save HDR content
+     * @param name of file
+     * @return success
+     */
     private boolean saveHdr(String name) {
         File file = Storages.getPublicImagesFile("/hdr", String.format("%s.hdr", name));
         if (file == null) return false;
@@ -84,6 +102,10 @@ public class ImageHDR implements Serializable {
         return Imgcodecs.imwrite(filename, matHdrImage);
     }
 
+    /**
+     * Open HDR content on defined path
+     * @param path to storage
+     */
     private void openHdr(String path) {
         System.out.println("### opening HDR: " + path);
         matHdrImage = Imgcodecs.imread(path, -1);

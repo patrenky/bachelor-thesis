@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -27,12 +28,16 @@ import xmicha65.bp_app.view.TmoFragment;
  * Main class of app
  * Init OpenCV library
  * Logic of displaying screens
+ * Variables global for app
  *
  * @author xmicha65
  */
 public class Main extends AppCompatActivity {
+    // reference to main activity
     private static AppCompatActivity instance;
+    // for merging images use OpenCV (for production app)
     private boolean useOpenCVforMerge = true;
+    // global settings
     private int captureExposures = 5;
     private int captureStep = 2;
     private int viewRotation = 0;
@@ -44,6 +49,9 @@ public class Main extends AppCompatActivity {
         instance = this;
     }
 
+    /**
+     * @return reference to main activity
+     */
     public static Context getContext() {
         return instance.getApplicationContext();
     }
@@ -99,7 +107,7 @@ public class Main extends AppCompatActivity {
     }
 
     /**
-     * Open camera
+     * Open Camera screen
      */
     public void homeSelectCapture() {
         viewRotation = 0;
@@ -122,9 +130,12 @@ public class Main extends AppCompatActivity {
 
     /**
      * Start generating HDR content
+     * @param capturedImages List<ImageLDR> of captured images
      */
     public void processImages(List<ImageLDR> capturedImages) {
-        // post process image variables
+        Toast.makeText(instance, "Images captured", Toast.LENGTH_SHORT).show();
+
+        // post process images
         capturedImages.forEach(ImageLDR::postProcess);
 
         System.out.println("### starting merging");
@@ -136,6 +147,7 @@ public class Main extends AppCompatActivity {
 
     /**
      * Display TMOs screen
+     * @param hdrImage object
      */
     public void tonemapOperators(ImageHDR hdrImage) {
         TmoFragment tmoScreen = new TmoFragment();
@@ -151,6 +163,7 @@ public class Main extends AppCompatActivity {
 
     /**
      * Display Drago controls
+     * @param hdrImage object
      */
     public void tonemapDrago(ImageHDR hdrImage) {
         EditDragoFragment editScreen = new EditDragoFragment();
@@ -166,6 +179,7 @@ public class Main extends AppCompatActivity {
 
     /**
      * Display Durand controls
+     * @param hdrImage object
      */
     public void tonemapDurand(ImageHDR hdrImage) {
         EditDurandFragment editScreen = new EditDurandFragment();
@@ -181,6 +195,7 @@ public class Main extends AppCompatActivity {
 
     /**
      * Display Reinhard controls
+     * @param hdrImage object
      */
     public void tonemapReinhard(ImageHDR hdrImage) {
         EditReinhardFragment editScreen = new EditReinhardFragment();
@@ -196,6 +211,7 @@ public class Main extends AppCompatActivity {
 
     /**
      * Display Mantiuk controls
+     * @param hdrImage object
      */
     public void tonemapMantiuk(ImageHDR hdrImage) {
         EditMantiukFragment editScreen = new EditMantiukFragment();

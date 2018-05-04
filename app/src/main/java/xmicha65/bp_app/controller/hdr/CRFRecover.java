@@ -9,6 +9,7 @@ import xmicha65.bp_app.model.CameraCRF;
 /**
  * Recover Camera Response Function
  * Result of algorithm is CRF curve double[] g
+ * source: P. Debevec
  *
  * @author xmicha65
  */
@@ -41,8 +42,6 @@ public class CRFRecover {
     /**
      * Solving quadratic objective function
      * Returns response curve for specified channel
-     * source: Debevec, P.; Malik, J.: Recovering High Dynamic Range Radiance Maps from Photographs
-     * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
      */
     public double[] recoverCRF(int[][] Z) {
         try {

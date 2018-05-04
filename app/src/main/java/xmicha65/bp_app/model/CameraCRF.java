@@ -1,11 +1,7 @@
 package xmicha65.bp_app.model;
 
 /**
- * todos:
- * - save device CRF
- * - load device CRF
- * - zlogaritmovat vysledky crf
- *
+ * Camera response function for each color channel
  * @author xmicha65
  */
 public class CameraCRF {

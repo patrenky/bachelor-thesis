@@ -34,6 +34,9 @@ public class HDRController {
         else buildHDR();
     }
 
+    /**
+     * Merge captured images with OpenCV
+     */
     private void opencvHDR() {
         Mat matHdrImage = new Mat();
         Mat matCrf = new Mat();
@@ -59,6 +62,10 @@ public class HDRController {
         this.hdrImage = new ImageHDR(matHdrImage);
     }
 
+    /**
+     * Main controller for manual merging images
+     * according of P. Debevec article
+     */
     private void buildHDR() {
         this.numPixels = capturedImages.get(0).getLength();
         this.numExposures = capturedImages.size();
@@ -81,8 +88,7 @@ public class HDRController {
 
     /**
      * Weighting function
-     * source: Debevec, P.; Malik, J.: Recovering High Dynamic Range Radiance Maps from Photographs
-     * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
+     * source: P. Debevec
      */
     private double w(int z) {
         int zmin = 0;
@@ -90,6 +96,9 @@ public class HDRController {
         return z <= (zmin + zmax) / 2 ? (z - zmin) + 1 : (zmax - z) + 1;
     }
 
+    /**
+     * Create weight function as array[256]
+     */
     private void initWeights() {
         this.weights = new double[256];
         for (int i = 0; i < this.weights.length; i++) {
@@ -97,6 +106,9 @@ public class HDRController {
         }
     }
 
+    /**
+     * Create array[numExposures] of log exposure time
+     */
     private void initLnT() {
         this.lnT = new double[this.numExposures];
         for (int i = 0; i < this.numExposures; i++) {

@@ -19,6 +19,7 @@ import xmicha65.bp_app.model.TmoParams;
 
 /**
  * Screen: control params of Reinhard global TMO
+ * @author xmicha65
  */
 public class EditReinhardFragment extends Fragment implements View.OnClickListener {
     /**

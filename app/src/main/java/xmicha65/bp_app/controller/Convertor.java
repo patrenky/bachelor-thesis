@@ -13,6 +13,10 @@ import org.opencv.imgproc.Imgproc;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * Static methods for convert data types
+ * source: Android Documentation
+ */
 public class Convertor {
     public static byte[] bitmapToByte(Bitmap bmp) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

@@ -41,8 +41,7 @@ public class HDRMerge {
     }
 
     /**
-     * source: Debevec, P.; Malik, J.: Recovering High Dynamic Range Radiance Maps from Photographs
-     * http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf
+     * source: P. Debevec
      */
     private double[] createHDR(double[] crf, Color color) {
         double[] lnE = new double[this.numPixels];

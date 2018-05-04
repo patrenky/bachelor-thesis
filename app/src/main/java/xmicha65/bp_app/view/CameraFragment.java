@@ -53,7 +53,7 @@ import xmicha65.bp_app.model.ImageLDR;
  * Capture image sequence using Camera2 API
  *
  * @author xmicha65
- *         https://github.com/googlesamples
+ * source: Android Documentation
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraFragment extends Fragment {

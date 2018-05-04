@@ -8,7 +8,8 @@ import java.io.File;
 import xmicha65.bp_app.Main;
 
 /**
- * source: Android documentation
+ * Device storage actions
+ * source: Android Documentation
  */
 public class Storages {
 

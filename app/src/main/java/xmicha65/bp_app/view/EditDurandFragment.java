@@ -19,6 +19,7 @@ import xmicha65.bp_app.model.TmoParams;
 
 /**
  * Screen: control params of Durand local TMO
+ * @author xmicha65
  */
 public class EditDurandFragment extends Fragment implements View.OnClickListener {
     /**

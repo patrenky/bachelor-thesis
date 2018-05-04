@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import xmicha65.bp_app.controller.Storages;
 
 /**
+ * Helpfull class for debug capturing exposures
  * Saves a JPEG {@link Image} into the specified {@link File}.
  * @author https://github.com/googlesamples
  */

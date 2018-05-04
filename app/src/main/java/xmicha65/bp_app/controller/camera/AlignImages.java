@@ -9,6 +9,10 @@ import java.util.List;
 
 import xmicha65.bp_app.model.ImageLDR;
 
+/**
+ * Align captured images with OpenCV createAlignMTB()
+ * TODO Method returns black MTB
+ */
 public class AlignImages {
 
     public AlignImages(List<ImageLDR> capturedImages) {
@@ -19,15 +23,10 @@ public class AlignImages {
             matUnaligned.add(i, capturedImages.get(i).getMatImg());
         }
 
-        System.out.println("### 1 " + matUnaligned.size());
-
         Photo.createAlignMTB().process(matUnaligned, matAligned);
-        // TODO vracia aligned size 0
-        System.out.println("### 2 " + matAligned.size());
 
 //        for (int i = 0; i < matAligned.size(); i++) {
 //            System.out.println("### aligned " + i);
 //        }
-        System.out.println("### 3");
     }
 }

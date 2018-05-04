@@ -6,12 +6,7 @@ import java.util.List;
 import xmicha65.bp_app.model.ImageLDR;
 
 /**
- * Select values for RecoverCRF algorithm
- * Methods to be implemented for experiment:
- * - random values (source: shortly mentioned in the book E. Reinhard, HDR Imaging)
- * - regularly arranged pixels (source: own idea)
- * - selecting samples with histogram (source: own idea) (implemented)
- * - matching samples over exposures (source: E. Reinhard, HDR Imaging)
+ * Select random values for RecoverCRF algorithm
  *
  * @author xmicha65
  */
@@ -42,7 +37,7 @@ public class SamplesSelector {
     /**
      * Get number of samples needed for algorithm
      * numSamples * (numExposures - 1) > (Zmax - Zmin)
-     * source: debevec
+     * source: P. Debevec
      */
     private void initNumSamples() {
         numSamples = (int) Math.floor(256 / (numExposures > 1 ? numExposures - 1 : 1)) + 1;

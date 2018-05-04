@@ -18,6 +18,10 @@ import xmicha65.bp_app.model.ImageHDR;
 import xmicha65.bp_app.model.ImageType;
 import xmicha65.bp_app.model.TmoParams;
 
+/**
+ * Screen: tonemap and display four implemented TMOs of captured scene
+ * @author xmicha65
+ */
 public class TmoFragment extends Fragment implements View.OnClickListener {
     public static String ARG_HDR = "ARG_HDR";
     private ImageHDR hdrImage;

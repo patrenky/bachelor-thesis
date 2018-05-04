@@ -19,6 +19,7 @@ import xmicha65.bp_app.model.TmoParams;
 
 /**
  * Screen: control params of Drago global TMO
+ * @author xmicha65
  */
 public class EditDragoFragment extends Fragment implements View.OnClickListener {
     /**
