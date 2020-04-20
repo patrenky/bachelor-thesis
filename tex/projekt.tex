@@ -1,0 +1,269 @@
+%==============================================================================
+\documentclass[slovak,zadani]{components/fitthesis} % bez zadání - pro začátek práce, aby nebyl problém s překladem
+%\documentclass[zadani]{fitthesis} % odevzdani do wisu - odkazy jsou barevné
+%\documentclass[zadani,print]{fitthesis} % pro tisk - odkazy jsou černé
+%\documentclass[zadani,cprint]{fitthesis} % pro barevný tisk - odkazy jsou černé, znak VUT barevný
+
+% Základní balíčky jsou dole v souboru šablony fitthesis.cls
+% zde muzeme vlozit vlastni balicky / you can place own packages here
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{dirtree}
+\usepackage[]{algorithm2e}
+
+%---rm---------------
+\renewcommand{\rmdefault}{lmr}%zavede Latin Modern Roman jako rm / set Latin Modern Roman as rm
+%---sf---------------
+\renewcommand{\sfdefault}{qhv}%zavede TeX Gyre Heros jako sf
+%---tt------------
+\renewcommand{\ttdefault}{lmtt}% zavede Latin Modern tt jako tt
+
+% vypne funkci šablony, která automaticky nahrazuje uvozovky,
+% aby nebyly prováděny nevhodné náhrady v popisech API apod.
+\csdoublequotesoff
+
+% štýly ukážky kódu
+\lstset {
+    basicstyle=\small\ttfamily,
+    frame=lrtb,
+    numbers=left,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=1,
+    breaklines=true,
+    breakatwhitespace=false,
+}
+
+% štýl pre ukážky algoritmov
+\RestyleAlgo{boxruled}
+
+% citácia s autorovým menom
+% \let\oldquote\quote
+% \let\endoldquote\endquote
+% \renewenvironment{quote}[2][]
+%   {\if\relax\detokenize{#1}\relax
+%      \def\quoteauthor{#2}%
+%    \else
+%      \def\quoteauthor{#2~---~#1}%
+%    \fi
+%    \oldquote}
+%   {\par\nobreak\smallskip\hfill(\quoteauthor)%
+%    \endoldquote\addvspace{\bigskipamount}}
+
+% =======================================================================
+% balíček "hyperref" vytváří klikací odkazy v pdf, pokud tedy použijeme pdflatex
+% problém je, že balíček hyperref musí být uveden jako poslední, takže nemůže
+% být v šabloně
+\ifWis
+\ifx\pdfoutput\undefined % nejedeme pod pdflatexem / we are not using pdflatex
+\else
+  \usepackage{color}
+  \usepackage[unicode,colorlinks,hyperindex,plainpages=false,pdftex]{hyperref}
+  \definecolor{links}{rgb}{0.4,0.5,0}
+  \definecolor{anchors}{rgb}{1,0,0}
+  \def\AnchorColor{anchors}
+  \def\LinkColor{links}
+  \def\pdfBorderAttrs{/Border [0 0 0] }  % bez okrajů kolem odkazů / without margins around links
+  \pdfcompresslevel=9
+\fi
+\else % pro tisk budou odkazy, na které se dá klikat, černé / for the print clickable links will be black
+\ifx\pdfoutput\undefined % nejedeme pod pdflatexem / we are not using pdflatex
+\else
+  \usepackage{color}
+  \usepackage[unicode,colorlinks,hyperindex,plainpages=false,pdftex,urlcolor=black,linkcolor=black,citecolor=black]{hyperref}
+  \definecolor{links}{rgb}{0,0,0}
+  \definecolor{anchors}{rgb}{0,0,0}
+  \def\AnchorColor{anchors}
+  \def\LinkColor{links}
+  \def\pdfBorderAttrs{/Border [0 0 0] } % bez okrajů kolem odkazů / without margins around links
+  \pdfcompresslevel=9
+\fi
+\fi
+% Řešení problému, kdy klikací odkazy na obrázky vedou za obrázek
+\usepackage[all]{hypcap}
+
+% Informace o práci/projektu / Information about the thesis
+%---------------------------------------------------------------------------
+\projectinfo{
+  %Prace / Thesis
+  project=BP,            %typ prace BP/SP/DP/DR  / thesis type (SP = term project)
+  year=2018,             %rok odevzdání / year of submission
+  date=\today,           %datum odevzdani / submission date
+  %Nazev prace / thesis title
+  title.cs={Mobilná aplikácia pre akvizíciu a úpravu\\HDR fotografií},
+  %nazev prace v cestine ci slovenstine (dle zadani) / thesis title in czech language (according to assignment)
+  title.en={Mobile application for acquisition and editing HDR images},
+  %nazev prace v anglictine / thesis title in english
+  %Autor / Author
+  author={Patrik Michalák},   %cele jmeno a prijmeni autora / full name and surname of the author
+  author.name={Patrik},   %jmeno autora (pro citaci) / author name (for reference) 
+  author.surname={Michalák},   %prijmeni autora (pro citaci) / author surname (for reference) 
+  %author.title.p=Bc., %titul pred jmenem (nepovinne) / title before the name (optional)
+  %author.title.a=PhD, %titul za jmenem (nepovinne) / title after the name (optional)
+  %Ustav / Department
+  department=UPGM, % doplnte prislusnou zkratku dle ustavu na zadani: UPSY/UIFS/UITS/UPGM
+  %Skolitel / supervisor
+  supervisor=Martin Čadík, %cele jmeno a prijmeni skolitele / full name and surname of the supervisor
+  supervisor.name={Martin},   %jmeno skolitele (pro citaci) / supervisor name (for reference) 
+  supervisor.surname={Čadík},   %prijmeni skolitele (pro citaci) / supervisor surname (for reference) 
+  supervisor.title.p={Doc. Ing.},   %titul pred jmenem (nepovinne) / title before the name (optional)
+  supervisor.title.a={Ph.D.},    %titul za jmenem (nepovinne) / title after the name (optional)
+}
+
+%Abstrakt (cesky, slovensky ci anglicky) / Abstract (in czech, slovak or english)
+\abstract[cs]{Hlavnou myšlienkou tejto práce je vytvoriť aplikáciu, ktorá by riešila nielen problémy generovania a spracovania
+  HDR obsahu, ale zamerala sa aj na interakciu s užívateľom a poskytla mu viac možností v prehľadnom a minimalistickom
+  rozhraní. V riešení bola použitá metóda generovania HDR obsahu kombinovaním LDR snímok
+	s rôznou hodnotou času expozície. Vytvorené riešenie poskytuje užívateľovi mobilnú aplikáciu pre prácu
+	s HDR fotografiou, štyri metódy mapovania tónov a rôzne nástroje, ktoré užívateľ pri práci potrebuje.
+}
+\abstract[en]{The goal of this paper is to create an application that solves HDR image processing problems and focuses
+  to interactivity with the user, offering him more opportunities in clear and minimalistic graphic user interface.
+  Application generate HDR content by merging a series of low dynamic range images with different exposure time
+  values. The solution provides work with HDR photography, four tone mapping methods and various tools for user.
+}
+
+%Klicova slova (cesky, slovensky ci anglicky) / Keywords (in czech, slovak or english)
+\keywords[cs]{digitálna fotografia, spracovanie obrazu, mobilná aplikácia, vysoký dynamický rozsah,\\mapovanie tónov}
+\keywords[en]{digital photography, image processing, mobile application, high dynamic range, tone\\mapping}
+
+%Prohlaseni (u anglicky psane prace anglicky, u slovensky psane prace slovensky)
+\declaration{Prehlasujem, že som túto bakalársku prácu vypracoval samostatne pod vedením pána docenta Ing. Martina Čadíka, Ph.D.
+Uviedol som všetky literárne pramene a publikácie, z~ktorých som čerpal.}
+
+%Podekovani (nepovinne, nejlepe v jazyce prace) / Acknowledgement (optional, ideally in the language of the thesis)
+\acknowledgment{Rád by som poďakoval pánovi docentovi Ing. Martinovi Čadíkovi, Ph.D. za odbornú pomoc, pripomienky a rady
+poskytnuté počas tvorby tejto práce. Taktiež ďakujem za podporu pri~kvalifikácii a konečnej prezentácii práce
+na konferencii Excel@FIT 2018. Za úvodnú motiváciu a pomoc ďakujem Ing. Romanovi Tábimu, zásluhou ktorého už matematické
+funkcie nie sú až tak náročné.}
+
+% řeší první/poslední řádek odstavce na předchozí/následující stránce
+\clubpenalty=10000
+\widowpenalty=10000
+
+\begin{document}
+  % Vysazeni titulnich stran / Typesetting of the title pages
+  % ----------------------------------------------
+  \maketitle
+  % Obsah
+  % ----------------------------------------------
+  \setlength{\parskip}{0pt}
+
+  {\hypersetup{hidelinks}\tableofcontents}
+  
+  % Seznam obrazku a tabulek (pokud prace obsahuje velke mnozstvi obrazku, tak se to hodi)
+  \ifczech
+    \renewcommand\listfigurename{Seznam obrázků}
+  \fi
+  \ifslovak
+    \renewcommand\listfigurename{Zoznam obrázkov}
+  \fi
+  % \listoffigures
+  
+  \ifczech
+    \renewcommand\listtablename{Seznam tabulek}
+  \fi
+  \ifslovak
+    \renewcommand\listtablename{Zoznam tabuliek}
+  \fi
+  % \listoftables 
+
+  \ifODSAZ
+    \setlength{\parskip}{0.5\bigskipamount}
+  \else
+    \setlength{\parskip}{0pt}
+  \fi
+
+  % vynechani stranky v oboustrannem rezimu
+  % Skip the page in the two-sided mode
+  \iftwoside
+    \cleardoublepage
+  \fi
+
+  % Text prace
+  % ----------------------------------------------
+  \input{components/index}
+
+  % Pouzita literatura / Bibliography
+  % ----------------------------------------------
+\ifslovak
+  \makeatletter
+  \def\@openbib@code{\addcontentsline{toc}{chapter}{Literatúra}}
+  \makeatother
+  \bibliographystyle{bib-styles/czechiso}
+\else
+  \ifczech
+    \makeatletter
+    \def\@openbib@code{\addcontentsline{toc}{chapter}{Literatura}}
+    \makeatother
+    \bibliographystyle{bib-styles/czechiso}
+  \else 
+    \makeatletter
+    \def\@openbib@code{\addcontentsline{toc}{chapter}{Bibliography}}
+    \makeatother
+    \bibliographystyle{bib-styles/englishiso}
+  %  \bibliographystyle{alpha}
+  \fi
+\fi
+  \begin{flushleft}
+  \bibliography{components/x1-literatura}
+  \end{flushleft}
+
+  % vynechani stranky v oboustrannem rezimu
+  % Skip the page in the two-sided mode
+  \iftwoside
+    \cleardoublepage
+  \fi
+
+  % Prilohy / Appendices
+  % ---------------------------------------------
+  \appendix
+\ifczech
+  \renewcommand{\appendixpagename}{Přílohy}
+  \renewcommand{\appendixtocname}{Přílohy}
+  \renewcommand{\appendixname}{Příloha}
+\fi
+\ifslovak
+  \renewcommand{\appendixpagename}{Prílohy}
+  \renewcommand{\appendixtocname}{Prílohy}
+  \renewcommand{\appendixname}{Príloha}
+\fi
+%  \appendixpage
+
+% vynechani stranky v oboustrannem rezimu
+% Skip the page in the two-sided mode
+%\iftwoside
+%  \cleardoublepage
+%\fi
+  
+\ifslovak
+%  \section*{Zoznam príloh}
+%  \addcontentsline{toc}{section}{Zoznam príloh}
+\else
+  \ifczech
+%    \section*{Seznam příloh}
+%    \addcontentsline{toc}{section}{Seznam příloh}
+  \else
+%    \section*{List of Appendices}
+%    \addcontentsline{toc}{section}{List of Appendices}
+  \fi
+\fi
+  \startcontents[chapters]
+  \setlength{\parskip}{0pt}
+  % seznam příloh / list of appendices
+  % \printcontents[chapters]{l}{0}{\setcounter{tocdepth}{2}}
+  
+  \ifODSAZ
+    \setlength{\parskip}{0.5\bigskipamount}
+  \else
+    \setlength{\parskip}{0pt}
+  \fi
+  
+  % vynechani stranky v oboustrannem rezimu
+  \iftwoside
+    \cleardoublepage
+  \fi
+  \input{components/x2-prilohy}
+\end{document}

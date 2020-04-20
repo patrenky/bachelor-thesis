@@ -1,0 +1,23 @@
+Hlavnou myšlienkou tejto práce je vytvoriť aplikáciu, ktorá by riešila nielen problémy generovania a spracovania
+HDR obsahu, ale zamerala sa aj na interakciu s užívateľom a poskytla mu viac možností v prehľadnom a minimalistickom rozhraní.
+
+Výsledná analýza preukázala, že aj napriek množstvu mobilných aplikácií s rozmanitou funkcionalitou
+existuje priestor pre aplikácie, ktoré by ponúkali lepšie riešenie alebo užívateľsky prívetivejšie
+prostredie. Účelom je užívateľovi ponúknuť rozhranie s funkciami, ktoré potrebuje a dokáže sa v aplikácii
+ľahko a intuitívne pohybovať.
+
+Aplikácia rieši tvorbu HDR fotografie vytvorením série snímok s rôznym nastavením expozičného času, ktoré sa následne
+zarovnajú metódou Median Threshold Bitmap od Grega Warda. Pre generovanie HDR obsahu je potrebná krivka odozvy fotoaparátu,
+ktorú získame algoritmom Paula Debeveca a Jitendru Malika. Využitím tejto krivky odozvy a~váhovej funkcie sa vygeneruje
+HDR obsah, ktorý je sám o sebe nezobraziteľný. Obsah je možné zobraziť pomocou operátorov mapovania tónov. Aplikácia implementuje
+celkovo štyri operátory: globálne operátory Reinharda a Draga a lokálne operátory od Duranda a Mantiuka. Výberom jedného
+z týchto operátorov aplikácia ponúka prispôsobenie výsledného obrázku definovaním vstupných parametrov algoritmu.
+Zmeny sú aplikované na HDR obsah zmenšený bilineárnou interpoláciou, čo umožňuje náhľad výsledku v reálnom čase.
+
+Keďže sa užívateľ nemusí vždy nachádzať práve v situácii, kedy môže editovať svoj HDR obrázok do výslednej podoby,
+aplikácia umožňuje uloženie HDR obsahu a jeho neskoršie načítanie. Túto možnosť nepodporuje žiadna aplikácia z prieskumu
+existujúcich riešení.
+
+Táto práca položila základ pre vývoj prepracovanejších metód, ktoré možno v budúcnosti vytvoria komplexnú mobilnú aplikáciu
+s využiteľnosťou pre širokú škálu užívateľov. Jednou z možností ďalšej práce je obohatenie aplikácie o pokročilejšie grafické
+funkcie pre editáciu výsledného obrazu a vytvorenie kópie aplikácie pre ďalšie platformy.

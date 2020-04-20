@@ -1,0 +1,135 @@
+\section{Časová a priestorová zložitosť aplikácie}
+
+V rámci analýzy časovej a priestorovej zložitosti sa porovnávala rýchlosť a pamäťová náročnosť jednotlivých krokov
+procesu vytvárania HDR fotografie z~rôzneho počtu snímok. Merali sa časy a alokovaná pamäť nielen celkov, ale
+aj ich podproblémov. 
+
+V tabuľke \ref{table:testCapturing} vidíme, že algoritmus spomenutý v podkapitole \ref{sec:Practice-ExpoSelector},
+ktorý inicializuje zoznam expozičných časov, nezaťažuje plynulý chod aplikácie. Výsledná doba vytvárania snímok
+samozrejme závisí od počtu snímaných fotografií a ich časov expozícií.
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{||l|c|c|c|c|c||} 
+    \hline
+    \makecell[l]{Počet snímok}
+      & 3 & 5 & 7 & 9 & 11 \\
+    \hline\hline
+    \makecell[l]{Inicializácia snímača}
+      & $\simeq$ 400 ms &&&& \\
+    \hline
+    \makecell[l]{Inicializácia expozičných \\časov}
+      & \textless 1 ms & \textless 1 ms & \textless 1 ms & 1 ms & 1 ms \\
+    \hline
+    \makecell[l]{Inicializácia požiadavku \\na snímanie}
+      & 170 ms & 180 ms & 185 ms & 190 ms & 190 ms \\
+    \hline
+    \multirow{2}{12em}{Celková doba vytvárania snímok} 
+    & 760 ms & 1 050 ms & 1 320 ms & 1 585 ms & 1 825 ms \\
+    & 61 MB & 100 MB & 138 MB & 177 MB & 215 MB \\
+    \hline
+  \end{tabular}
+  \caption{Časová a priestorová náročnosť vytvárania série snímok}
+  \label{table:testCapturing}
+\end{table}
+
+Pri generovaní HDR obsahu sme sa zamerali na výber vzoriek pixelov, získavanie krivky odozvy a vytváranie funkcie žiarenia.
+Vo vlastnej implementácii algoritmu na generovanie HDR obsahu (tab. \ref{table:testGenerate}) najviac času spotrebovalo
+vytvorenie výslednej matice (okolo 15 sekúnd), ktorá by bola použiteľná pre ďalšie kroky vykonávané knižnicou OpenCV.
+
+V tabuľke \ref{table:testGenerateOCV} môžeme vidieť, že knižnica OpenCV má dostatočne optimalizovaný algoritmus so~skoro
+polovičnou spotrebou pamäte. Výhodou knižnice OpenCV je aj jej implementácia v jazyku C++, čo zaručuje výrazne rýchlejšiu prácu.
+
+Tabuľka \ref{table:testTMOs} ukazuje, že aplikovanie operátora mapovania tónov na zmenšený obrázok nám ušetrilo dostatok času na to,
+aby užívateľ videl výsledok v reálnom čase pri zmene vstupných parametrov. Originálny rozmer obrázku sa použije, až keď užívateľ
+zvolí možnosť uloženia výslednej HDR fotografie vo formáte \texttt{JPEG}. V takomto prípade, sa ale čas ukladania (tabuľka \ref{table:testIO})
+zvýši o čas aplikovania operátora mapovania tónov na originálny HDR obsah.
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{||l|c|c|c|c|c||} 
+    \hline
+    \makecell[l]{Počet snímok}
+      & 3 & 5 & 7 & 9 & 11 \\
+    \hline\hline
+    \makecell[l]{Výber vzoriek pixelov}
+      & \textless 1 ms & 1 ms & 1 ms & 1 ms & x \\
+    \hline
+    \makecell[l]{Získanie CRF}
+      & 14 556 ms & 9 314 ms & 7 687 ms & 6 941 ms & x \\
+    \hline
+    \makecell[l]{Vytvorenie funkcie žiarenia}
+      & 26 039 ms & 28 973 ms & 29 931 ms & 31 173 ms & x \\
+    \hline
+    \multirow{2}{12.2em}{Celková doba generovania\\HDR obsahu} 
+    & 40 495 ms & 38 285 ms & 37 619 ms & 38 115 ms & x \\
+    & 235 MB & 312 MB & 389 MB & 466 MB & \textgreater 550 MB \\
+    \hline
+  \end{tabular}
+  \caption{Časová a priestorová náročnosť generovania HDR obsahu}
+  \label{table:testGenerate}
+\end{table}
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{||l|c|c|c|c|c||} 
+    \hline
+    \makecell[l]{Počet snímok}
+      & 3 & 5 & 7 & 9 & 11 \\
+    \hline\hline
+    \makecell[l]{Získanie CRF}
+      & 4 540 ms & 5 283 ms & 6 432 ms & 7 264 ms & 8 320 ms \\
+    \hline
+    \makecell[l]{Vytvorenie funkcie žiarenia}
+      & 1 717 ms & 2 786 ms & 3 570 ms & 4 330 ms & 5 904 ms \\
+    \hline
+    \multirow{2}{12em}{Celková doba generovania\\HDR obsahu} 
+    & 6 512 ms & 8 349 ms & 10 392 ms & 12 292 ms & 15 094 ms \\
+    & 141 MB & 218 MB & 295 MB & 372 MB & 450 MB \\
+    \hline
+  \end{tabular}
+  \caption{Časová a priestorová náročnosť generovania HDR obsahu knižnicou OpenCV}
+  \label{table:testGenerateOCV}
+\end{table}
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{||l|c|c|c|c||} 
+    \hline
+    \makecell[l]{Operátor mapovania tónov}
+      & Mantiuk & Reinhard & Durand & Drago \\
+    \hline\hline
+    \makecell[l]{Spracovanie obrázku s orig. rozmermi}
+      & 1 299 ms & 1 524 ms & 1 423 ms & 1 234 ms \\
+    \hline
+    \makecell[l]{Zmenšenie obrázku}
+      & \textless 15 ms &&& \\
+    \hline
+    \makecell[l]{Spracovanie zmenšeného obrázku}
+      & 73 ms & 64 ms & 72 ms & 56 ms \\
+    \hline
+  \end{tabular}
+  \caption{Časová náročnosť operátorov mapovania tónov}
+  \label{table:testTMOs}
+\end{table}
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{||l|c||} 
+    \hline
+    \makecell[l]{Operácia}
+      & časová náročnosť \\
+    \hline\hline
+    \makecell[l]{Načítanie HDR obsahu}
+      & $\simeq$ 400 ms \\
+    \hline
+    \makecell[l]{Uloženie HDR obsahu}
+      & $\simeq$ 1 200 ms \\
+    \hline
+    \makecell[l]{Uloženie LDR snímky}
+      & $\simeq$ 520 ms \\
+    \hline
+  \end{tabular}
+  \caption{Časová náročnosť vstupno-výstupných operácií}
+  \label{table:testIO}
+\end{table}

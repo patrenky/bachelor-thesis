@@ -1,0 +1,81 @@
+Výber technológií pre implementáciu časovo a priestorovo náročných algoritmov je dôležitá a často 
+náročná časť práce. Vzhľadom k tomu, že natívna aplikácia fotoaparátu pre iOS podporuje vytváranie
+HDR fotografie, táto práca bude zameraná na platformu Android. Použité vývojové prostredie je
+Android Studio, ktoré poskytuje širokú škálu nástrojov pre editovanie kódu a zároveň ponúka tvorbu 
+viziálneho návrhu grafického užívateľského rozhrania. Zvoleným programovacím jazykom je objektovo 
+orientovaná Java. Pre riešenie náročných matematických a grafických operácií je použitá knižnica
+OpenCV. Knižnica je implementovaná v jazyku C++, čo znamená, že metódy sú v operačnom systéme Android
+vykonávané natívne a tým nám prináša výhodu v rýchlosti spracovania.
+
+Aplikácia implementuje štandardný postup vytvárania HDR fotografie na základe spájania série snímok
+(obr. \ref{fig:app_pipeline}). Užívateľské rozhranie aplikácie poskytuje užívateľovi možnosti
+interaktivity pri vytváraní výslednej fotografie. Pre zarovnanie snímok je použitá metóda Median
+Threshold Bitmap od Grega Warda (viac v podkapitole \ref{sec:Practice-Alignment}). 
+Využitím krivky odozvy zariadenia, ktorú dosiahneme metódou od Paula E. Debeveca a Jitendru Malika,
+popísanou v podkapitole \ref{sec:Theory-Generating} a váhovej funkcie, vygenerujeme HDR obsah,
+ktorý je sám o~sebe nezobraziteľný. Vygenerovaný HDR obsah možno zobraziť pomocou operátorov mapovania
+tónov. Aplikácia implementuje celkovo štyri operátory mapovania tónov: globálny operátor Erika Reinharda,
+operátor Frederika Draga a lokálne operátory od Duranda a~Mantiuka (podkapitola \ref{sec:Theory-Operators}).
+
+Zdrojový kód aplikácie je členený podľa architektonického vzoru model-view-controller, ktorý rozdeľuje
+aplikáciu do troch hlavných častí:
+\begin{description}
+  \item [Dátový model] uchováva dáta naprieč aplikáciou a operácie nad týmito dátami.
+\end{description}
+\setlength{\DTbaselineskip}{2em}
+\dirtree{%
+.1 model.
+.2 CameraCRF \DTcomment{Krivka odozvy zariadenia}.
+.2 Exposures \DTcomment{Vybrané expozičné časy pre aktuálnu scénu}.
+.2 ImageHDR \DTcomment{HDR obsah}.
+.2 ImageLDR \DTcomment{Vytvorená fotografia}.
+.2 TmoParams \DTcomment{Východzie hodnoty a prevod relatívnych hodnôt na absolútne}.
+}
+
+\begin{description}
+  \item [Užívateľské rozhranie] umožňuje prezentáciu dát. V našom prípade \texttt{view} obsahuje
+  triedy pracujúce s Android Fragmentmi (viac v podkapitole \ref{sec:Practice-UI}) a dialógovými oknami.
+\end{description}
+\setlength{\DTbaselineskip}{2em}
+\dirtree{%
+.1 view.
+.2 CameraFragment.
+.2 EditDragoFragment.
+.2 EditDurandFragment.
+.2 EditMantiukFragment.
+.2 EditReinhardFragment.
+.2 FilesFragment.
+.2 HomeFragment.
+.2 SaveDialog.
+.2 SettingsDialog.
+.2 TmoFragment.
+}
+
+\begin{description}
+  \item [Riadiaca logika aplikácie] riadi tok udalostí v programe a modifikuje dáta v dátovom modeli.
+\end{description}
+\setlength{\DTbaselineskip}{2em}
+\dirtree{%
+.1 controller.
+.2 camera.
+.3 AlignImages \DTcomment{Zarovnanie série fotografií}.
+.2 hdr.
+.3 CRFRecover \DTcomment{Získanie krivky odozvy zariadenia}.
+.3 HDRController \DTcomment{Kontrolér postupu vytvárania HDR obsahu}.
+.3 HDRMerge \DTcomment{Generovanie HDR obsahu}.
+.3 SamplesSelector \DTcomment{Výber vzorky pixelov}.
+.2 tmo \DTcomment{Metódy operátov mapovania tónov}.
+.3 TMODrago.
+.3 TMODurand.
+.3 TMOMantiuk.
+.3 TMOReinhard.
+.2 Convertor \DTcomment{Prevody medzi dátovými typmi}.
+.2 Storages \DTcomment{Správa úložísk zariadenia}.
+}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1\textwidth]{figures/ui/pipeline}
+  \caption{Postup vytvárania HDR fotografie pomocou aplikácie}
+  \label{fig:app_pipeline}
+\end{figure}

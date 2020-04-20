@@ -1,7 +1,7 @@
 ## Mobile application for acquisition and editing HDR images
 
 <div style="text-align:center">
-    <img src ="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100" />
+    <img src ="./src/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100" />
 </div>
 
 Mobile application that solves HDR image processing problems and focuses to interactivity with the user, offering him more opportunities in clear and minimalistic graphic user interface.

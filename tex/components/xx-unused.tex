@@ -1,0 +1,112 @@
+% CIE photometic curve [HDRI]
+% Colorimetria
+% zarovnanie vzorec
+% farebne modely? sRGB, cie xyz
+% HDR monitors?
+
+%%%%%%% \subsection*{Čo ovplyvňuje dynamický rozsah scény?}
+
+% \begin{itemize}
+%     \item Na obrázku \ref{fig:scene1} vidíme scénu krajiny, zachytenú za jasného počasia s citlivosťou ISO 100
+%     časom expozície 1/125 a clonou f/5.6. Ak sa na scéne nenachádza nič jasné, napríklad obloha alebo
+%     jej odraz, senzor fotoaparátu zachytí celý dynamický rozsah jasu.
+%     Pri vhodnej expozícii teda nedôjde k obmedzeniu záznamu svetlých ani tmavých miest.
+%     Hovoríme, že scéna má malý dynamický rozsah.
+%     \item Scéna \ref{fig:scene2} zachytáva krajinu s oblohou so stredným dynamickým rozsahom. Jasné slnečné
+%     svetlo vytvára spolu s tieňmi väčšinu kontrastu a taktiež rozšírilo horný koniec stupnice 
+%     odrazivosti bielych mrakov.
+%     \item Pridajme do scény \ref{fig:scene3} Slnko priamo nad obzorom, ktoré so svojou svietivosťou
+%     $10^{8}$ až $10^{9}$ $cd/m^{2}$ \cite{ZakladyHDR} nastaví hornú hranicu dynamického rozsahu poriadne
+%     vysoko a prehlbí tiene proti fotoaparátu. Vysoký dynamický rozsah má taktiež scéna zachytená 
+%     v miestnosti s výhľadom von.
+%     \item Ak scéna \ref{fig:scene4} zachytáva aj slnečný kotúč s lesklým povrchom odrážajúcim
+%     jasné slnečné svetlo, zvýši sa rozsah scény na veľmi vysoké hodnoty, teda viac ako 20 EV.
+% \end{itemize}
+
+% \begin{figure}[h!]
+%     \centering
+%     \begin{subfigure}{0.2\textwidth}
+%         \includegraphics[width=\textwidth]{figures/theory/sceneDR1}
+%         \caption{malý dynamický rozsah}
+%         \label{fig:scene1}
+%     \end{subfigure}
+%     ~
+%     \begin{subfigure}{0.2\textwidth}
+%         \includegraphics[width=\textwidth]{figures/theory/sceneDR2}
+%         \caption{stredný dynamický rozsah}
+%         \label{fig:scene2}
+%     \end{subfigure}
+%     ~
+%     \begin{subfigure}{0.18\textwidth}
+%         \includegraphics[width=\textwidth]{figures/theory/sceneDR3}
+%         \caption{vysoký dynamický rozsah}
+%         \label{fig:scene3}
+%     \end{subfigure}
+%     ~
+%     \begin{subfigure}{0.2\textwidth}
+%         \includegraphics[width=\textwidth]{figures/theory/sceneDR4}
+%         \caption{veľmi vysoký dynamický rozsah}
+%         \label{fig:scene4}
+%     \end{subfigure}
+%     \caption{Dynamický rozsah scény (zdroj: \cite{ZakladyHDR})}
+%     \label{fig:scene_dynamic_range}
+% \end{figure}
+
+%%%%%% TMO
+
+% Vývoj filmovej fotografie vytvorilo problémy so zachtením enormného dynamického rozsahu 
+% jasu reálneho sveta na chemicky obmedzený negatív snímacieho zariadenia. Vývojári v oblasti filmu sa 
+% pokúsili vyriešiť tento problém navrhnutím filmových pásov a systémov vývoja tlače, ktoré poskytli požadovanú 
+% tónovú krivku v tvare S s mierne zvýšeným kontrastom (okolo 15\%) v strednom rozsahu a postupne skomprimované 
+% osvetlenia a tiene.
+
+% Nástup digitálnej fotografie vytvoril nádej na lepšie riešenie tohto problému. Jeden z prvých algoritmov,
+% ktorý využívali Land a McCann v roku 1971, bol Retinex, inšpirovaný teóriami vnímania jasu človekom. Táto metóda
+% je inšpirovaná biologickými mechanizmami adaptácie oka, keď sú problémové svetelné podmienky. Algoritmy mapovacie
+% gamut (dosiahnuteľná oblasť farieb v určitom farebnom priestore) boli tiež rozsiahle študované v kontexte farebnej
+% tlače. Výpočtové modely ako CIECAM02 alebo iCAM sa použili na predpovedanie farebného vzhľadu. Napriek tomu, ak by 
+% algoritmy nemohli dostatočne mapovať tóny a farby, stále je potrebný kvalifikovaný umelec, ako je tomu v prípade 
+% dodatočného spracovania kinematografického filmu.
+
+% Počítačové grafické techniky schopné vykresliť scény s vysokým kontrastom posunuli zameranie sa z farby na jas ako 
+% hlavný obmedzujúci faktor zobrazovacích zariadení. Bolo vyvinutých niekoľko operátorov mapovania tónov na mapovanie 
+% obrazov s vysokým dynamickým rozsahom na štandardné zobrazenia. Nedávno sa táto práca odklonila od využívania 
+% jasu na rozšírenie kontrastu obrazu a smerom k iným metódam, ako je napríklad reprodukcia obrázkov podporovaná interakciou
+% používateľa. V súčasnej dobe sa reprodukcia obrazu posunula smerom k riešeniam riadeným displejmi, pretože displeje 
+% teraz disponujú pokročilými algoritmami spracovania obrazu, ktoré pomáhajú prispôsobiť vykresľovanie obrazu pre 
+% podmienky zobrazenia, šetriť energiu, farebný a dynamický rozsah.
+
+% \begin{figure}[t!]
+%   \centering
+%   \begin{subfigure}{0.3\textwidth}
+%       \includegraphics[width=\textwidth]{figures/theory/tmo/tmo-bilateral}
+%       \caption{Bilaterálny filter}
+%   \end{subfigure}
+%   ~
+%   \begin{subfigure}{0.3\textwidth}
+%       \includegraphics[width=\textwidth]{figures/theory/tmo/tmo-ashikhmin}
+%       \caption{Ashikhmin}
+%   \end{subfigure}
+%   ~
+%   \begin{subfigure}{0.3\textwidth}
+%       \includegraphics[width=\textwidth]{figures/theory/tmo/tmo-drago}
+%       \caption{Drago}
+%   \end{subfigure}
+%   ~
+%   \begin{subfigure}{0.3\textwidth}
+%       \includegraphics[width=\textwidth]{figures/theory/tmo/tmo-reinhard}
+%       \caption{Reinhard}
+%   \end{subfigure}
+%   ~
+%   \begin{subfigure}{0.3\textwidth}
+%       \includegraphics[width=\textwidth]{figures/theory/tmo/tmo-pattanaik}
+%       \caption{Pattanaik}
+%   \end{subfigure}
+%   ~
+%   \begin{subfigure}{0.3\textwidth}
+%       \includegraphics[width=\textwidth]{figures/theory/tmo/tmo-ward}
+%       \caption{Ward}
+%   \end{subfigure}
+%   \caption{Rozličné operátory mapovania tónov použité na jednu scénu (zdroj: \cite{AHDR})}
+%   \label{fig:tmo_examples}
+% \end{figure}

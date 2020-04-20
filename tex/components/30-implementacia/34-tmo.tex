@@ -1,0 +1,105 @@
+\section{Prevod HDR obsahu na LDR}
+
+Dostali sme sa do stavu, kedy máme vytvorený HDR obsah z $n$ nasnímaných fotografií. Tento obsah je nutné vhodne užívateľovi prezentovať.
+Po vytvorení HDR obsahu sa preto zobrazí obrazovka, na ktorej je zoznam implementovaných operátorov mapovania tónov s~ich náhľadom.
+Jednotlivé operátory mapovania tónov sú implementované pomocou knižnice OpenCV, ktorá poskytuje globálne operátory \texttt{Reinhard},
+\texttt{Drago} a lokálne operátory \texttt{Durand} a \texttt{Mantiuk}.
+
+\subsection{Operátory mapovania tónov}
+
+Ak si užívateľ vyberie jeden zo zoznamu ponúkaných operátorov mapovania tónov, zob-razí sa obrazovka pre editovanie parametrov operátora.
+Obrazovka obsahuje posuvníky (\texttt{SeekBar}) parametrov, ktoré operátor umožňuje nastavovať na vstupe. Parametre majú definovaný svoj
+platný rozsah a východzie hodnoty pre optimálny výsledok, ktoré sú vymenované v enume \texttt{TmoParams}. Keďže parametre na vstupe metódy
+môžu mať rozličný rozsah v obore reálnych čísel, ale posuvník môže nadobudnúť iba hodnoty v rozsahu 0 - 100, musia sa tieto absolútne hodnoty
+prevádzať na relatívne hodnoty v rozsahu posuvníka. Enum \texttt{TmoParams} obsahuje východzie hodnoty parametrov operátorov v absolútnom
+a relatívnom tvare a metódu na prevod relatívnej hodnoty zadanej užívateľom na posuvníku na absolútnu hodnotu pre vstup metódy. Viac o týchto
+parametroch je popísané v tabuľke \ref{table:tmoParams}.
+
+Každý posuvník na obrazovke má vlastný callback \texttt{OnSeekBarChangeListener}, ktorý pri manipulovaní s posuvníkom vracia v metóde
+\texttt{onProgressChanged} objekt \texttt{SeekBar} s~aktuálnymi nastaveniami posuvníka. Z tohoto objektu sme schopní vybrať hodnotu posuvníka
+v rozsahu 0 - 100, túto hodnotu previesť na absolútnu hodnotu pre metódu operátora mapovania tónov a nakoniec zobraziť výsledný obrázok.
+
+Okrem posuvníkov obsahuje obrazovka náhľadový obrázok a tlačidlá pre uloženie HDR obsahu a výslednej LDR fotografie, tlačidlo pre resetovanie
+nastavení posuvníkov na východzie hodnoty a tlačidlo pre otočenie náhľadového obrázku.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{||c|m{14em}|m{6em}|c|m{4.2em}||} 
+    \hline
+    Parameter 
+    & \makecell{Popis}
+    & \makecell{Operátor}
+    & \makecell{Rozsah}
+    & \makecell{Východzia\\hodnota} \\
+    \hline\hline
+    gamma
+    & \makecell{hodnota gama korekcie}
+    & \makecell{všetky\\operátory}
+    & \makecell{1.0 - 3.0}
+    & \makecell{2.2} \\
+    \hline
+    saturation
+    & \makecell{hodnota sýtosti farieb }
+    & \makecell{Drago,\\Durand,\\Mantiuk}
+    & \makecell{0.0 - 4.0}
+    & \makecell{1.0} \\
+    \hline
+    scale
+    & \makecell{faktor kontrastu, ktorým sa\\násobí hodnota vizuálnej\\odozvy, čím sa komprimuje\\dynamický rozsah}
+    & \makecell{Mantiuk}
+    & \makecell{0.6 - 0.9}
+    & \makecell{0.7} \\
+    \hline
+    intensity
+    & \makecell{intenzita svetla\\vo výslednom obraze}
+    & \makecell{Reinhard}
+    & \makecell{-8.0 - 8.0}
+    & \makecell{0.0} \\
+    \hline
+    light adapt
+    & \makecell{prispôsobenie svetla\\(1 = adaptácia je počítaná iba\\z hodnoty pixelu)}
+    & \makecell{Reinhard}
+    & \makecell{0.0 - 1.0}
+    & \makecell{0.0} \\
+    \hline
+    color adapt
+    & \makecell{prispôsobenie farieb\\(1 = farebné kanály\\sú spracované nezávisle)}
+    & \makecell{Reinhard}
+    & \makecell{0.0 - 1.0}
+    & \makecell{0.0} \\
+    \hline
+    contrast
+    & \makecell{výsledný kontrast\\v logaritmickej mierke\\($\ln{\frac{max}{min}}$ hodnoty\\jasu výsledného obrazu)}
+    & \makecell{Durand}
+    & \makecell{0.0 - 8.0}
+    & \makecell{4.0} \\
+    \hline
+    sigma space
+    & \makecell{hodnota bilaterálneho filtra\\v súradnicovom priestore}
+    & \makecell{Durand}
+    & \makecell{0.0 - 4.0}
+    & \makecell{2.0} \\
+    \hline
+    sigma color
+    & \makecell{hodnota bilaterálneho filtra\\vo farebnom priestore}
+    & \makecell{Durand}
+    & \makecell{0.0 - 4.0}
+    & \makecell{2.0} \\
+    \hline
+    bias
+    & \makecell{hodnota pre funkciu bias}
+    & \makecell{Drago}
+    & \makecell{0.0 - 1.0}
+    & \makecell{0.85} \\
+    \hline
+  \end{tabular}
+  \caption{Hodnoty a rozsahy parametrov operátorov mapovania tónov \cite{OpenCV}}
+  \label{table:tmoParams}
+\end{table}
+
+\subsection{Zmenšenie náhľadového obrázku}
+
+Operátory mapovania tónov sa pre náhľadové obrázky aplikujú na zmenšený HDR obsah. To zaručí menšiu časovú náročnosť zobrazenia
+obrazovky s operátormi mapovania tónov. Zmenšenie náhľadového obrázku je implementovaná pomocou metódy \texttt{resize} triedy \texttt{Imgproc}
+knižnice OpenCV, využitím bilineárnej interpolácie. Na obrazovke vybraného operátora mapovania tónov, kde je možné modifikovať
+vstupné parametre algoritmu, môže byť vďaka zmenšeniu zobrazovaný náhľad v reálnom čase bez väčších oneskorení.
